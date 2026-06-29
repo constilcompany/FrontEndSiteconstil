@@ -3,7 +3,9 @@ import { motion } from "framer-motion";
 import { Check, Loader2 } from "lucide-react";
 import axios from "axios";
 
-const API_BASE = 'https://hasrpxdysyoukmsxveba.supabase.co/functions/v1/user-api';
+const API_BASE = 'https://avppbvsxayehguepyjkb.supabase.co/functions/v1/user-api';
+
+const PLAN_TIERS = ['basic', 'professional', 'enterprise'] as const;
 
 const PricingSection = () => {
   const [yearly, setYearly] = useState(false);
@@ -29,8 +31,10 @@ const PricingSection = () => {
   const displayedPackages = useMemo(() => {
     const interval = yearly ? 'yearly' : 'monthly';
     const filtered = packages.filter((pkg) => pkg.billing_interval === interval);
-    // Same template_tier can map to multiple products (e.g. Standard + Business both "professional"); order by price.
-    return [...filtered].sort((a, b) => Number(a.price) - Number(b.price));
+
+    return PLAN_TIERS.map((tier) =>
+      filtered.find((pkg) => (pkg.template_tier || '').toLowerCase() === tier)
+    ).filter(Boolean);
   }, [packages, yearly]);
 
   return (
@@ -85,14 +89,23 @@ const PricingSection = () => {
               const tier = (plan.template_tier || '').toLowerCase();
               const isPremium = ['premium', 'professional'].includes(tier);
               const planName = (plan.name || '').trim();
-              const popular = planName.toLowerCase() === 'business';
+              const isFreeTrialTier = tier === 'basic';
+              const displayName = isFreeTrialTier ? 'Free-trial' : planName;
+              const popular = planName.toLowerCase() === 'pro';
 
-              const features = [
-                { label: `Blueprints`, value: plan.ai_estimate_credits, healthy: plan.ai_estimate_unlimited },
-                { label: `Invoices`, value: plan.invoice_credits, healthy: plan.invoice_unlimited },
-                { label: `Estimates`, value: plan.estimate_credits, healthy: plan.estimate_unlimited },
-                { label: `${tier === 'enterprise' ? 'Unlimited' : isPremium ? '8' : '3'} Invoice & Estimate Templates`, simple: true }
-              ];
+              const features = isFreeTrialTier
+                ? [
+                    { label: 'Blueprints (Credits)', simple: true },
+                    { label: 'Invoices (Credits)', simple: true },
+                    { label: 'Estimates (Credits)', simple: true },
+                    { label: '3 Invoice & Estimate Templates', simple: true },
+                  ]
+                : [
+                    { label: `Blueprints`, value: plan.ai_estimate_credits, healthy: plan.ai_estimate_unlimited },
+                    { label: `Invoices`, value: plan.invoice_credits, healthy: plan.invoice_unlimited },
+                    { label: `Estimates`, value: plan.estimate_credits, healthy: plan.estimate_unlimited },
+                    { label: `${tier === 'enterprise' ? 'Unlimited' : isPremium ? '8' : '3'} Invoice & Estimate Templates`, simple: true }
+                  ];
 
               return (
                 <motion.div
@@ -111,15 +124,20 @@ const PricingSection = () => {
                       Most Popular
                     </span>
                   )}
-                  <h3 className="text-lg sm:text-xl font-bold mb-2 text-foreground break-words">{planName || 'Plan'}</h3>
-                  {tier === 'professional' && (
+                  <h3 className="text-lg sm:text-xl font-bold mb-2 text-foreground break-words">{displayName || 'Plan'}</h3>
+                  {isFreeTrialTier && yearly && plan.trial_days && (
+                    <p className="text-xs sm:text-sm text-primary font-medium mb-2">{plan.trial_days}-day free trial</p>
+                  )}
+                  {tier === 'professional' && !plan.trial_enabled && (
                     <p className="text-xs sm:text-sm text-muted-foreground mb-2">Professional tier</p>
                   )}
                   <div className="mb-4 sm:mb-6">
                     <span className="text-3xl sm:text-4xl font-extrabold text-primary">
-                      ${yearly ? Math.round(plan.price) : plan.price}
+                      {isFreeTrialTier ? '$0.00' : `$${yearly ? Math.round(plan.price) : plan.price}`}
                     </span>
-                    <span className="text-muted-foreground text-sm"> / {plan.billing_interval}</span>
+                    <span className="text-muted-foreground text-sm">
+                      {isFreeTrialTier ? ' / 7 days' : ` / ${plan.billing_interval}`}
+                    </span>
                   </div>
                   {/* {yearly && (
                     <p className="text-sm text-primary mb-2 -mt-4 font-medium">Billed ${plan.price} annually</p>
