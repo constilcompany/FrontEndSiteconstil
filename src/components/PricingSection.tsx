@@ -35,6 +35,8 @@ type PlanContent = {
   features: PlanFeature[];
 };
 
+const FREE_TRIAL_DAYS = 7;
+
 const PLAN_CONTENT: Record<string, PlanContent> = {
   'free-trial': {
     name: 'Free Trial',
@@ -206,7 +208,7 @@ const PricingSection = () => {
                 ? '$0'
                 : `$${yearly ? Math.round(plan.price) : plan.price}`;
               const pricePeriod = isFreeTrial
-                ? `${plan.trial_days || 14} days`
+                ? `${FREE_TRIAL_DAYS} days`
                 : yearly
                   ? 'per year'
                   : 'per month';
