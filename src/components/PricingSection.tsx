@@ -1,11 +1,107 @@
 import { useState, useEffect, useMemo } from "react";
 import { motion } from "framer-motion";
-import { Check, Loader2 } from "lucide-react";
+import { Check, Loader2, Minus } from "lucide-react";
 import axios from "axios";
 
 const API_BASE = 'https://avppbvsxayehguepyjkb.supabase.co/functions/v1/user-api';
 
-const PLAN_TIERS = ['basic', 'professional', 'enterprise'] as const;
+const matchesBillingInterval = (billingInterval: string | undefined, yearly: boolean) => {
+  const billing = (billingInterval || '').toLowerCase();
+  if (yearly) return ['yearly', 'year', 'annual'].includes(billing);
+  return ['monthly', 'month'].includes(billing);
+};
+
+const isFreeTrialPackage = (pkg: { trial_enabled?: boolean; name?: string }) =>
+  Boolean(pkg.trial_enabled) || (pkg.name || '').toLowerCase() === 'free trial';
+
+const isStarterPackage = (pkg: {
+  trial_enabled?: boolean;
+  name?: string;
+  template_tier?: string;
+}) => {
+  if (pkg.trial_enabled || isFreeTrialPackage(pkg)) return false;
+
+  const name = (pkg.name || '').toLowerCase();
+  if (name.includes('starter')) return true;
+
+  return (pkg.template_tier || '').toLowerCase() === 'basic';
+};
+
+type PlanFeature = { text: string; included: boolean };
+
+type PlanContent = {
+  name: string;
+  tagline: string;
+  features: PlanFeature[];
+};
+
+const PLAN_CONTENT: Record<string, PlanContent> = {
+  'free-trial': {
+    name: 'Free Trial',
+    tagline: 'Try Constil with your own blueprints. No credit card required.',
+    features: [
+      { text: '5 blueprint estimates', included: true },
+      { text: 'Full trade breakdown', included: true },
+      { text: 'PDF export', included: true },
+      { text: 'Email estimate to customer', included: true },
+      { text: 'Saved estimate history', included: false },
+      { text: 'Unlimited estimates', included: false },
+    ],
+  },
+  starter: {
+    name: 'Starter',
+    tagline: 'For solo contractors bidding up to 20 jobs a month.',
+    features: [
+      { text: '20 estimates per month', included: true },
+      { text: 'Full trade breakdown', included: true },
+      { text: 'PDF export', included: true },
+      { text: 'Email estimate to customer', included: true },
+      { text: 'Saved estimate history', included: true },
+      { text: 'Unlimited estimates', included: false },
+    ],
+  },
+  pro: {
+    name: 'Pro',
+    tagline: 'Unlimited estimates. For contractors who bid seriously.',
+    features: [
+      { text: 'Unlimited estimates', included: true },
+      { text: 'Full trade breakdown', included: true },
+      { text: 'PDF export + branded cover', included: true },
+      { text: 'Email estimate to customer', included: true },
+      { text: 'Full estimate history', included: true },
+      { text: 'Edit any line item', included: true },
+    ],
+  },
+  team: {
+    name: 'Team',
+    tagline: 'For crews with multiple estimators. 3 seats included.',
+    features: [
+      { text: 'Everything in Pro', included: true },
+      { text: '3 team seats', included: true },
+      { text: 'Shared estimate library', included: true },
+      { text: 'Admin dashboard', included: true },
+      { text: 'Priority support', included: true },
+      { text: 'Custom branding on PDFs', included: true },
+    ],
+  },
+};
+
+const getPlanKey = (plan: {
+  name?: string;
+  template_tier?: string;
+  trial_enabled?: boolean;
+}) => {
+  if (isFreeTrialPackage(plan)) return 'free-trial';
+
+  const name = (plan.name || '').toLowerCase();
+  const tier = (plan.template_tier || '').toLowerCase();
+
+  if (name.includes('starter')) return 'starter';
+  if (name.includes('pro') || tier === 'professional') return 'pro';
+  if (name.includes('team') || tier === 'enterprise') return 'team';
+
+  return 'starter';
+};
 
 const PricingSection = () => {
   const [yearly, setYearly] = useState(false);
@@ -29,12 +125,28 @@ const PricingSection = () => {
   }, []);
 
   const displayedPackages = useMemo(() => {
-    const interval = yearly ? 'yearly' : 'monthly';
-    const filtered = packages.filter((pkg) => pkg.billing_interval === interval);
+    const activePackages = packages.filter((pkg) => pkg.is_active !== false);
+    const filtered = activePackages.filter((pkg) =>
+      matchesBillingInterval(pkg.billing_interval, yearly)
+    );
 
-    return PLAN_TIERS.map((tier) =>
-      filtered.find((pkg) => (pkg.template_tier || '').toLowerCase() === tier)
-    ).filter(Boolean);
+    const freeTrial = yearly
+      ? activePackages.find(
+          (pkg) =>
+            matchesBillingInterval(pkg.billing_interval, false) &&
+            isFreeTrialPackage(pkg)
+        )
+      : filtered.find((pkg) => isFreeTrialPackage(pkg));
+
+    const starter = filtered.find((pkg) => isStarterPackage(pkg));
+    const pro = filtered.find(
+      (pkg) => (pkg.template_tier || '').toLowerCase() === 'professional'
+    );
+    const team = filtered.find(
+      (pkg) => (pkg.template_tier || '').toLowerCase() === 'enterprise'
+    );
+
+    return [freeTrial, starter, pro, team].filter(Boolean);
   }, [packages, yearly]);
 
   return (
@@ -86,26 +198,18 @@ const PricingSection = () => {
               }
             >
             {displayedPackages.map((plan, i) => {
-              const tier = (plan.template_tier || '').toLowerCase();
-              const isPremium = ['premium', 'professional'].includes(tier);
-              const planName = (plan.name || '').trim();
-              const isFreeTrialTier = tier === 'basic';
-              const displayName = isFreeTrialTier ? 'Free-trial' : planName;
-              const popular = planName.toLowerCase() === 'pro';
-
-              const features = isFreeTrialTier
-                ? [
-                    { label: 'Blueprints (Credits)', simple: true },
-                    { label: 'Invoices (Credits)', simple: true },
-                    { label: 'Estimates (Credits)', simple: true },
-                    { label: '3 Invoice & Estimate Templates', simple: true },
-                  ]
-                : [
-                    { label: `Blueprints`, value: plan.ai_estimate_credits, healthy: plan.ai_estimate_unlimited },
-                    { label: `Invoices`, value: plan.invoice_credits, healthy: plan.invoice_unlimited },
-                    { label: `Estimates`, value: plan.estimate_credits, healthy: plan.estimate_unlimited },
-                    { label: `${tier === 'enterprise' ? 'Unlimited' : isPremium ? '8' : '3'} Invoice & Estimate Templates`, simple: true }
-                  ];
+              const planKey = getPlanKey(plan);
+              const content = PLAN_CONTENT[planKey];
+              const isFreeTrial = planKey === 'free-trial';
+              const popular = planKey === 'pro';
+              const price = isFreeTrial
+                ? '$0'
+                : `$${yearly ? Math.round(plan.price) : plan.price}`;
+              const pricePeriod = isFreeTrial
+                ? `${plan.trial_days || 14} days`
+                : yearly
+                  ? 'per year'
+                  : 'per month';
 
               return (
                 <motion.div
@@ -124,38 +228,30 @@ const PricingSection = () => {
                       Most Popular
                     </span>
                   )}
-                  <h3 className="text-lg sm:text-xl font-bold mb-2 text-foreground break-words">{displayName || 'Plan'}</h3>
-                  {isFreeTrialTier && yearly && plan.trial_days && (
-                    <p className="text-xs sm:text-sm text-primary font-medium mb-2">{plan.trial_days}-day free trial</p>
-                  )}
-                  {tier === 'professional' && !plan.trial_enabled && (
-                    <p className="text-xs sm:text-sm text-muted-foreground mb-2">Professional tier</p>
-                  )}
+                  <h3 className="text-lg sm:text-xl font-bold mb-2 text-foreground break-words">
+                    {content.name}
+                  </h3>
+                  <p className="text-xs sm:text-sm text-muted-foreground mb-4 leading-relaxed">
+                    {content.tagline}
+                  </p>
                   <div className="mb-4 sm:mb-6">
-                    <span className="text-3xl sm:text-4xl font-extrabold text-primary">
-                      {isFreeTrialTier ? '$0.00' : `$${yearly ? Math.round(plan.price) : plan.price}`}
-                    </span>
-                    <span className="text-muted-foreground text-sm">
-                      {isFreeTrialTier ? ' / 7 days' : ` / ${plan.billing_interval}`}
-                    </span>
+                    <div className="text-3xl sm:text-4xl font-extrabold text-primary">{price}</div>
+                    <div className="text-muted-foreground text-sm mt-1">{pricePeriod}</div>
                   </div>
-                  {/* {yearly && (
-                    <p className="text-sm text-primary mb-2 -mt-4 font-medium">Billed ${plan.price} annually</p>
-                  )} */}
-                  <ul className="space-y-2 sm:space-y-3 mb-6 sm:mb-8 flex-1">
-                    {features.map((f, idx) => (
-                      <li key={idx} className="flex items-start gap-2 sm:gap-3 text-muted-foreground min-w-0">
-                        <Check className="w-4 h-4 text-primary mt-0.5 shrink-0" />
-                        <div className="text-xs sm:text-sm min-w-0 break-words">
-                          {f.simple ? (
-                            f.label
-                          ) : (
-                            <>
-                              <span className="font-medium text-foreground">{f.healthy ? 'Unlimited' : f.value} {f.label}</span>
-                              {!f.healthy && <span className="text-muted-foreground ml-1">({f.value} Credits)</span>}
-                            </>
-                          )}
-                        </div>
+                  <ul className="space-y-2 sm:space-y-2.5 mb-6 sm:mb-8 flex-1">
+                    {content.features.map((feature, idx) => (
+                      <li
+                        key={idx}
+                        className={`flex items-start gap-2 sm:gap-3 min-w-0 ${
+                          feature.included ? 'text-muted-foreground' : 'text-muted-foreground/50'
+                        }`}
+                      >
+                        {feature.included ? (
+                          <Check className="w-4 h-4 text-primary mt-0.5 shrink-0" />
+                        ) : (
+                          <Minus className="w-4 h-4 mt-0.5 shrink-0" />
+                        )}
+                        <span className="text-xs sm:text-sm min-w-0 break-words">{feature.text}</span>
                       </li>
                     ))}
                   </ul>

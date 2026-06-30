@@ -122,6 +122,14 @@ const Navbar = () => {
             </DropdownMenuContent>
           </DropdownMenu>
 
+          <Link
+            to="/#pricing"
+            className={`text-sm font-medium px-3 py-1.5 rounded-full transition-colors duration-200 ${scrolled || isActive ? "text-foreground hover:bg-primary/10 hover:text-primary" : "text-primary-foreground/90 hover:bg-primary/10 hover:text-primary"
+              }`}
+          >
+            Price
+          </Link>
+
           {mainLinks.map((l) => (
             <Link
               key={l.to}
@@ -208,6 +216,14 @@ const Navbar = () => {
                   ))}
                 </div>
               </div>
+
+              <Link
+                to="/#pricing"
+                onClick={() => setOpen(false)}
+                className="text-sm font-medium text-foreground px-3 py-2 rounded-lg hover:bg-primary/10 hover:text-primary transition-colors"
+              >
+                Price
+              </Link>
 
               <div className="flex flex-col gap-3 pt-4 border-t border-border">
                 <a
