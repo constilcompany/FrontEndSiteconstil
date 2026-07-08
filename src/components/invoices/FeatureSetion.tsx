@@ -15,7 +15,7 @@ export interface TabData {
 
 export interface FeatureSectionProps {
   heading?: string;
-  description?: string;
+  description?: React.ReactNode;
   tabsData?: TabData[];
   image?: string;
 }

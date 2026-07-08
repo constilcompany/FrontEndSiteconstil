@@ -4,7 +4,7 @@ import React, { useEffect, useRef, useState } from "react";
 export interface StepData {
   id: number;
   title: string;
-  text: string[];
+  text: React.ReactNode[];
 }
 
 export interface HowWorkProps {

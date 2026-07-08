@@ -17,8 +17,8 @@ const WhyChooseUs = () => (
       backgroundSize: '80px 80px'
     }} />
 
-    <div className="relative z-10 container mx-auto px-4">
-      <div className="grid md:grid-cols-2 gap-16 items-center max-w-6xl mx-auto">
+    <div className="relative z-10 container mx-auto md:px-10 px-4">
+      <div className="grid md:grid-cols-2 gap-16 items-center">
         <motion.div
           initial={{ opacity: 0, x: -30 }}
           whileInView={{ opacity: 1, x: 0 }}
@@ -29,13 +29,14 @@ const WhyChooseUs = () => (
             Why choose AI construction estimating software
 
           </h2>
-          <p className="text-primary-foreground/90 font-semibold leading-relaxed text-lg mb-4">
-            CONSITL is designed as the best software for residential construction estimating, and it is able to provide the most accurate results to home builders and remodelers.          </p>
+          <p className="text-primary-foreground/70 leading-relaxed text-lg mb-4">
+            CONSTIL is designed as the best software for residential construction estimating, and it is able to provide the most accurate results to home builders and remodelers.          </p>
           <p className="text-primary-foreground/70 leading-relaxed text-lg mb-4">
             Our smart system minimizes human mistakes and enhances bid competition, and at the same time, profitability.
           </p>
           <p className="text-primary-foreground/70 leading-relaxed text-lg mb-4">
-            In the case of large companies, we also offer sophisticated <Link to={'/estimates_software'}>commercial construction estimating software</Link> in order to take complicated projects with certainty.          </p>
+            In the case of large companies, we also offer sophisticated <Link to={'/estimates-software'}>commercial construction estimating software</Link> in order to take complicated projects with certainty.
+          </p>
 
         </motion.div>
 

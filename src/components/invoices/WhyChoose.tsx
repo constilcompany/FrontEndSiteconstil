@@ -2,7 +2,7 @@ import React from "react";
 
 interface Card {
   title: string;
-  text: string;
+  text: React.ReactNode;
   dark?: boolean;
 }
 

@@ -2,7 +2,7 @@ import React from 'react'
 
 export interface BenefitCard {
   title: string;
-  description: string;
+  description: React.ReactNode;
   icon?: React.ReactNode;
 }
 

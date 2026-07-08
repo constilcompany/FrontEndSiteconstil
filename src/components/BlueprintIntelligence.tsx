@@ -15,7 +15,7 @@ const items = [
 
 const BlueprintIntelligence = () => (
   <section className="section-white py-24">
-    <div className="container mx-auto px-4">
+    <div className="container mx-auto md:px-10 px-4">
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -25,13 +25,13 @@ const BlueprintIntelligence = () => (
       >
         {/* <span className="text-primary text-sm font-semibold uppercase tracking-wider">Blueprint Intelligence</span> */}
         <h2 className="text-3xl md:text-4xl font-bold mt-3 mb-2 text-foreground">
-Turn All Blueprints into Stepped-out Project Insights        </h2>
- <p className="text-muted-foreground leading-relaxed mb-4">
+          Turn All Blueprints into Stepped-out Project Insights        </h2>
+        <p className="text-muted-foreground leading-relaxed mb-4">
 
-Post any blueprint for construction and leave the heavy work to our smart engine.
+          Post any blueprint for construction and leave the heavy work to our smart engine.
 
 
-          </p>
+        </p>
       </motion.div>
 
       <div className="grid md:grid-cols-2 lg:grid-cols-5 gap-6 max-w-7xl mx-auto">

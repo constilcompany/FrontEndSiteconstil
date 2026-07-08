@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 interface IntegrationsSectionProps {
   heading: string;
-  points: string[];
+  points: React.ReactNode[];
   image?: string;
 }
 
@@ -32,14 +32,14 @@ const IntegrationsSection = ({ heading, points = [], image }: IntegrationsSectio
               </p>
             ))}
           </div>
- <Link to={'https://app.constil.com/signup'}>
-          <button
-            type="button"
-            className="inline-flex items-center rounded-xl border border-zinc-600 bg-zinc-800 px-6 py-3 text-sm font-semibold text-white transition-all duration-300 hover:bg-white hover:text-black hover:scale-105 active:scale-95 shadow-lg"
-          >
-            See All Integrations
-            <span className="ml-2 text-xl leading-none">›</span>
-          </button>
+          <Link to={'https://app.constil.com/signup'}>
+            <button
+              type="button"
+              className="inline-flex items-center rounded-xl border border-zinc-600 bg-zinc-800 px-6 py-3 text-sm font-semibold text-white transition-all duration-300 hover:bg-white hover:text-black hover:scale-105 active:scale-95 shadow-lg"
+            >
+              See All Integrations
+              <span className="ml-2 text-xl leading-none">›</span>
+            </button>
           </Link>
         </motion.div>
 

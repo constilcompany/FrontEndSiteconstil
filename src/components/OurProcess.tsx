@@ -10,7 +10,7 @@ const steps = [
 
 const OurProcess = () => (
   <section className="section-light py-24">
-    <div className="container mx-auto px-4">
+    <div className="container mx-auto md:px-10 px-4">
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -21,7 +21,7 @@ const OurProcess = () => (
         <h2 className="text-3xl md:text-4xl text-primary font-bold mt-3 text-foreground">Our Artificial Intelligence Construction Estimating Process</h2>
       </motion.div>
 
-      <div className="grid md:grid-cols-4 gap-8 max-w-6xl mx-auto">
+      <div className="grid md:grid-cols-4 gap-8">
         {steps.map((s, i) => (
           <motion.div
             key={s.title}

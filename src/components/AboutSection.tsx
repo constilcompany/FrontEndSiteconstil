@@ -4,8 +4,8 @@ import { Link } from "react-router-dom";
 
 const AboutSection = () => (
   <section id="about" className="section-light py-24">
-    <div className="container mx-auto px-4">
-      <div className="grid md:grid-cols-2 gap-16 items-center max-w-6xl mx-auto">
+    <div className="container mx-auto md:px-10 px-4">
+      <div className="grid md:grid-cols-2 gap-16 items-center">
         <motion.div
           initial={{ opacity: 0, x: -30 }}
           whileInView={{ opacity: 1, x: 0 }}
@@ -24,7 +24,7 @@ const AboutSection = () => (
 
           </p>
           <p className="text-muted-foreground leading-relaxed mb-4">
-            CONSITL was developed to bridge the gap between traditional and modern technologies. Our AI blueprint analysis software is technologically advanced, and it reads and analyzes plans immediately, enabling contractors to transition to the budget within minutes.
+            CONSTIL was developed to bridge the gap between traditional and modern technologies. Our AI blueprint analysis software is technologically advanced, and it reads and analyzes plans immediately, enabling contractors to transition to the budget within minutes.
           </p>
 
 
@@ -36,7 +36,7 @@ const AboutSection = () => (
 
           <p className="text-muted-foreground leading-relaxed mb-4">
 
-            Provide construction estimating and <Link to={'/client_management_software'}>Client management</Link> software that is the most reliable, saves time, costs, and increases profits.
+            Provide construction estimating and <Link to={'/client-management-software'}>Client management</Link> software that is the most reliable, saves time, costs, and increases profits.
           </p>
           <a
             href="https://app.constil.com/signup"

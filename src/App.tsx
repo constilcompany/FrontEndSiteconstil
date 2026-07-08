@@ -17,6 +17,9 @@ import ClientManagementSoftwarePage from "./pages/ClientManagementSoftwarePage";
 import PaymentTrackingManagementPage from "./pages/PaymentTrackingManagementPage";
 import ContactPage from "./pages/ContactPage";
 import Blog from "./pages/Blog";
+import BlogDetail from "./pages/BlogDetail";
+import AboutPage from "./pages/AboutPage";
+import ScrollToTop from "./components/ScrollToTop";
 
 const queryClient = new QueryClient();
 
@@ -26,6 +29,7 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
+        <ScrollToTop />
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/smart-construction" element={<SmartConstructionPage />} />
@@ -33,12 +37,14 @@ const App = () => (
           <Route path="/construction-estimating" element={<ConstructionEstimatingPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignupPage />} />
-          <Route path="/invoices_management" element={<InvoiceManagementPage />} />
-          <Route path="/estimates_software" element={<EstimatesSoftwarePage />} />
-          <Route path="/payment_tracking" element={<PaymentTrackingManagementPage />} />
-          <Route path="/client_management_software" element={<ClientManagementSoftwarePage />} />
+          <Route path="/invoices-management-software" element={<InvoiceManagementPage />} />
+          <Route path="/estimates-software" element={<EstimatesSoftwarePage />} />
+          <Route path="/payment-tracking-software" element={<PaymentTrackingManagementPage />} />
+          <Route path="/client-management-software" element={<ClientManagementSoftwarePage />} />
           <Route path="/contact" element={<ContactPage />} />
-          <Route path="/blog" element={<Blog />} />
+          <Route path="/blogs" element={<Blog />} />
+          <Route path="/blogs/:slug" element={<BlogDetail />} />
+          <Route path="/about" element={<AboutPage />} />
 
           <Route path="*" element={<NotFound />} />
         </Routes>

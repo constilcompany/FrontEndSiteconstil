@@ -1,9 +1,10 @@
-import { Linkedin, Instagram, Facebook } from "lucide-react";
+import { Linkedin, Instagram, Facebook, Mail, MapPin, Phone } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const socialLinks = [
   { href: "https://web.facebook.com/app.constil", icon: Facebook, label: "Facebook" },
   { href: "https://www.instagram.com/app.constil/", icon: Instagram, label: "Instagram" },
-  { href: "https://www.tiktok.com/@app.constil?is_from_webapp=1&sender_device=pc", label: "TikTok", isTikTok: true },
+  { href: "https://www.tiktok.com/@constilofficial7?lang=en", label: "TikTok", isTikTok: true },
   { href: "https://www.linkedin.com/in/app-constil-2a0887394/", icon: Linkedin, label: "LinkedIn" },
 ];
 
@@ -26,31 +27,112 @@ const Footer = () => (
           </p>
         </div>
 
+        <div className="text-center md:text-left">
+
+          <Link to={'/'}><p className="text-primary-foreground/60 mt-2 text-sm leading-relaxed max-w-xs">
+            Home
+          </p>
+          </Link>
+          <Link to={'/about'}><p className="text-primary-foreground/60 mt-2 text-sm leading-relaxed max-w-xs">
+            About
+          </p>
+          </Link>
+          <Link to={'/contact'}><p className="text-primary-foreground/60 mt-2 text-sm leading-relaxed max-w-xs">
+            Contact
+          </p>
+          </Link>
+          <Link to={'/blogs'}><p className="text-primary-foreground/60 mt-2 text-sm leading-relaxed max-w-xs">
+            Blogs
+          </p>
+          </Link>
+
+        </div>
+
+
+
+
+        <div className="text-center md:text-left">
+
+          <div className="text-2xl font-bold tracking-tight text-primary-foreground mb-2">
+            Services
+          </div>
+          <Link to={'/invoices-management-software'}><p className="text-primary-foreground/60 mt-2 text-sm leading-relaxed max-w-xs">
+            Invoicing Management Software
+          </p>
+          </Link>
+          <Link to={'/client-management-software'}><p className="text-primary-foreground/60 mt-2 text-sm leading-relaxed max-w-xs">
+            Client Management Software
+          </p>
+          </Link>
+          <Link to={'/estimates-software'}><p className="text-primary-foreground/60 text-sm mt-2 leading-relaxed max-w-xs">
+            Estimates Software
+          </p>
+          </Link>
+          <Link to={'/payment-tracking-software'}><p className="text-primary-foreground/60 mt-2 text-sm leading-relaxed max-w-xs">
+            Payment Tracking Software
+          </p>
+          </Link>
+
+        </div>
+
         <div className="flex flex-col items-center md:items-end gap-3">
-            <a
-              href="mailto:support@constil.com"
-              className="text-sm text-primary-foreground/60 hover:text-primary transition-colors duration-200"
-            >
-              support@constil.com
-            </a>
-            <div className="flex gap-2">
-              {socialLinks.map((item) => (
-                <a
-                  key={item.label}
-                  href={item.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-9 h-9 rounded-lg bg-primary-foreground/10 border border-primary-foreground/10 flex items-center justify-center text-primary-foreground/60 hover:text-primary hover:border-primary/30 hover:bg-primary/10 transition-all duration-200"
-                  aria-label={item.label}
-                >
-                  {item.isTikTok ? (
-                    <TikTokIcon className="w-4 h-4" />
-                  ) : (
-                    <item.icon className="w-4 h-4" />
-                  )}
-                </a>
-              ))}
-            </div>
+          {/* Admin Email */}
+          {/* <a
+            href="mailto:Admin@consti.com"
+            className="text-sm text-primary-foreground/60 items-center flex gap-2 hover:text-primary transition-colors duration-200"
+          >
+            <Mail size={16} />
+            Admin@consti.com
+          </a> */}
+
+          {/* Support Email - Fix: Added prefix for email and corrected href */}
+          <a
+            href="mailto:support@constil.com"
+            className="text-sm items-center text-primary-foreground/60 flex gap-2 hover:text-primary transition-colors duration-200"
+          >
+            <Mail size={16} />
+            Support@constil.com
+          </a>
+
+          {/* Address - Fix: Changed to Google Maps link */}
+          <a
+            href="https://www.google.com/maps/search/?api=1&query=525+Forest+Avenue+Portland+Maine+04073"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-sm items-center text-primary-foreground/60 flex gap-2 hover:text-primary transition-colors duration-200"
+          >
+            <MapPin size={16} />
+            Portland Maine 04073
+          </a>
+
+          {/* Phone - Fix: Changed mailto to tel: */}
+          {/* <a
+            href="tel:+18579301710"
+            className="text-sm items-center text-primary-foreground/60 flex gap-2 hover:text-primary transition-colors duration-200"
+          >
+            <Phone size={16} />
+            +1 (857) 930-1710
+          </a> */}
+
+          {/* Social Links */}
+          <div className="flex gap-2 mt-1">
+            {socialLinks.map((item) => (
+              <a
+                key={item.label}
+                href={item.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-9 h-9 rounded-lg bg-primary-foreground/10 border border-primary-foreground/10 flex items-center justify-center text-primary-foreground/60 hover:text-primary hover:border-primary/30 hover:bg-primary/10 transition-all duration-200"
+                aria-label={item.label}
+              >
+                {item.isTikTok ? (
+                  <TikTokIcon className="w-4 h-4" />
+                ) : (
+                  <item.icon className="w-4 h-4" />
+                )}
+              </a>
+            ))}
+          </div>
         </div>
       </div>
 

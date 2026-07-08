@@ -125,7 +125,7 @@ const ConstructionEstimatingPage = () => (
               calculations—leading to inaccurate bids, over-budgeting, and missed margins.
             </p>
             <p className="text-muted-foreground leading-relaxed">
-              CONSITL brings cost information, materials, labour rates, and subcontractor prices together on one
+              CONSTIL brings cost information, materials, labour rates, and subcontractor prices together on one
               platform so you can estimate accurately, revise quickly, and keep workflows clear and transparent.
             </p>
           </motion.div>
@@ -186,7 +186,7 @@ const ConstructionEstimatingPage = () => (
               Powerful Functionality In Our Estimating Platform, Contractor-built
             </h2>
             <p className="text-muted-foreground leading-relaxed mt-4">
-              CONSITL offers smart systems within its estimating software to assist contractors in preparing
+              CONSTIL offers smart systems within its estimating software to assist contractors in preparing
               accurate estimates, tabulating project costs, and maintaining monetary simplicity during planning.
             </p>
           </motion.div>
@@ -305,7 +305,7 @@ const ConstructionEstimatingPage = () => (
               The Right System Makes Smarter Construction Estimating
             </h2>
             <p className="text-muted-foreground leading-relaxed mt-4">
-              CONSITL links financial preparation with project planning through a robust construction estimator
+              CONSTIL links financial preparation with project planning through a robust construction estimator
               system built for modern contractors. Maintain cost libraries, monitor estimate revisions, and analyse
               budgets in a single connected platform.
             </p>
@@ -539,7 +539,7 @@ const ConstructionEstimatingPage = () => (
               ],
             },
             {
-              title: "CONSITL estimating platform",
+              title: "CONSTIL estimating platform",
               badge: "Contractor-built",
               points: [
                 "Structured estimates with real-time tracking",
@@ -576,7 +576,7 @@ const ConstructionEstimatingPage = () => (
               {c.featured && (
                 <div className="mt-6">
                   <a href="https://app.constil.com/signup" className={`${btnPrimary} w-full glow-primary`}>
-                    Try CONSITL
+                    Try CONSTIL
                     <ArrowRight className="w-4 h-4" />
                   </a>
                 </div>

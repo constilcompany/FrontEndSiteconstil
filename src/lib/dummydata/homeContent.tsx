@@ -17,7 +17,7 @@ const faqs = [
 const tryItContent = {
     heading: "The Future of Automated Construction Estimating Begins Here",
     title: "Find out why contractors are moving to smart construction company software that saves time and is more likely to boost margins.",
-    description: "Experience precision. Experience automation. Experience the CONSITL.",
+    description: "Experience precision. Experience automation. Experience the CONSTIL.",
     buttonText: "Start Free Trial",
     path: "/contact"
 };
@@ -25,14 +25,14 @@ const tryItContent = {
 const testimonialsData = {
     heading: "Modern Construction Professionals' Success Stories",
     description:
-        'CONSITL is relied upon by contractors to ease the processes of estimating and project management and enhance financial clarity and operational efficiency.',
+        'CONSTIL is relied upon by contractors to ease the processes of estimating and project management and enhance financial clarity and operational efficiency.',
     testimonialCards: [
         {
             id: 1,
             name: "Matt",
             company: "Residential Contractor",
             image: banner1,
-            quote: "CONSITL has revamped the way project estimation and project management are done. It is all quicker, more distinct and much more precise.",
+            quote: "CONSTIL has revamped the way project estimation and project management are done. It is all quicker, more distinct and much more precise.",
             location: "Brownsburg, IN",
         },
         {

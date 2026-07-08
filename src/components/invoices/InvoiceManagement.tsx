@@ -50,7 +50,7 @@ const InvoiceManagement = () => {
           </h2>
 
           <p className="mb-3 text-[15px] text-slate-600">
-            <Link to="/"> CONSITL </Link> has been trusted with construction businesses since it is created in their reality.
+            <Link to="/"> CONSTIL </Link> has been trusted with construction businesses since it is created in their reality.
             Independent contractors to growing construction companies, the teams will use our client tracking software to
           </p>
 
@@ -98,7 +98,7 @@ const InvoiceManagement = () => {
             })}
           </div>
           <p className="mt-3 text-[15px] text-slate-600">
-            CONSITL assists in transforming reactive communication into proactive engagement with the clients.
+            CONSTIL assists in transforming reactive communication into proactive engagement with the clients.
           </p>
         </div>
         {/* LEFT */}

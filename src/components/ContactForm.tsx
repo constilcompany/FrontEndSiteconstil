@@ -41,7 +41,7 @@ const ContactForm = () => {
 
 
   return (
-    <section id="contact" className="section-light py-24">
+    <section id="contact" className="section-light pt-24">
       <div className="container mx-auto px-4">
         <motion.div
           initial={{ opacity: 0, y: 30 }}

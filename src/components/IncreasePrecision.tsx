@@ -3,8 +3,8 @@ import contractorImg from "@/assets/images/Constructioncostestimatingsoftware.jp
 
 const IncreasePrecision = () => (
   <section id="about" className="section-light py-24">
-    <div className="container mx-auto px-4">
-      <div className="grid md:grid-cols-2 gap-16 items-center max-w-6xl mx-auto">
+    <div className="container mx-auto md:px-10 px-4">
+      <div className="grid md:grid-cols-2 gap-16 items-center">
         <motion.div
           initial={{ opacity: 0, x: -30 }}
           whileInView={{ opacity: 1, x: 0 }}
@@ -17,7 +17,7 @@ const IncreasePrecision = () => (
 
           </h2>
           <p className="text-muted-foreground leading-relaxed mb-2">
-            Modernize your construction company software, which will revolutionize the manner in which you structure, control and execute projects. CONSITL simplifies the working process, elevates the level of cost accuracy, and strengthens team cooperation. Start using it today and start to enjoy the benefits of genuine automated construction estimating designed with the modern building professional in mind and the need to achieve efficiency, precision and long-term development.
+            Modernize your construction company software, which will revolutionize the manner in which you structure, control and execute projects. CONSTIL simplifies the working process, elevates the level of cost accuracy, and strengthens team cooperation. Start using it today and start to enjoy the benefits of genuine automated construction estimating designed with the modern building professional in mind and the need to achieve efficiency, precision and long-term development.
 
 
           </p>

@@ -59,7 +59,7 @@ const SmartClientManagement = {
 
         },
         {
-            title: <p>Contractors do not have to use disconnected tools to prepare, review, and approve all estimates; they can manage everything clearly within a single environment. This enhances teamwork in the workplace and enables starting each project with proper, clear <Link to="/payment_tracking">cost planning.</Link></p>,
+            title: <p>Contractors do not have to use disconnected tools to prepare, review, and approve all estimates; they can manage everything clearly within a single environment. This enhances teamwork in the workplace and enables starting each project with proper, clear <Link to="/payment-tracking-software">cost planning.</Link></p>,
 
         },
 
@@ -79,7 +79,7 @@ const tryItContent = {
 const featureSectionData = {
     heading: "Powerful Functionality In Our Estimating Platform Contractor-built",
     image: featureImage,
-    description: "CONSITL offers smart systems within its estimating software to assist contractors in preparing accurate estimates, tabulating project costs, and maintaining monetary simplicity during the planning process.",
+    description: "CONSTIL offers smart systems within its estimating software to assist contractors in preparing accurate estimates, tabulating project costs, and maintaining monetary simplicity during the planning process.",
     tabsData: [
         {
             label: "Prepare and Arrangement of Full Cost Estimates",
@@ -98,7 +98,7 @@ const featureSectionData = {
 
             content: (
                 <p className="text-sm text-slate-800">
-                    Minimise errors in all estimates with advanced construction project estimating software. Real-time tracking of material quantities, labour rates, and budget adjustments. <Link to="/payment_tracking">Automated calculations</Link> eliminate manual errors, help the contractor produce credible estimates more quickly, and ensure that each project budget reflects the correct project requirements.
+                    Minimise errors in all estimates with advanced construction project estimating software. Real-time tracking of material quantities, labour rates, and budget adjustments. <Link to="/payment-tracking-software">Automated calculations</Link> eliminate manual errors, help the contractor produce credible estimates more quickly, and ensure that each project budget reflects the correct project requirements.
                 </p>
             )
         },
@@ -120,7 +120,7 @@ const featureSectionData = {
 
             content: (
                 <p className="text-sm text-slate-800">
-                    CONSITL supplies residential construction estimating software as well as commercial construction estimating software requirements. Contractors can feel confident in managing the complex structure of costs, whether they are preparing small estimates for home renovations or large development budgets, without resorting to disorganised estimating processes.
+                    CONSTIL supplies residential construction estimating software as well as commercial construction estimating software requirements. Contractors can feel confident in managing the complex structure of costs, whether they are preparing small estimates for home renovations or large development budgets, without resorting to disorganised estimating processes.
                 </p>
             )
         }
@@ -208,9 +208,9 @@ const integrationsSectionData = {
     heading: "Strong Integrations to a Networked Construction Ecosystem",
     image: brandImage,
     points: [
-        <p>We integrate with key construction equipment using sophisticated integrations. Contractors are able to connect the <Link to={'/invoices_management'}>accounting software,</Link> document storage solutions, <Link to={'/client_management_software'}>Client management</Link> solutions and communication tools to form a single operational environment.</p>,
+        <p>We integrate with key construction equipment using sophisticated integrations. Contractors are able to connect the <Link to={'/invoices-management-software'}>accounting software,</Link> document storage solutions, <Link to={'/client-management-software'}>Client management</Link> solutions and communication tools to form a single operational environment.</p>,
         "With construction estimator accounting software integration, the financial data would run between the estimating and accounting systems. This will remove manual data, enhance financial accuracy and keep budgets and costs of projects in check.",
-        <p>The entire cost planning, project management, and <Link to={'/payment_tracking'}>financial tracking</Link> are then integrated into a single connected ecosystem using your estimating software for construction.</p>
+        <p>The entire cost planning, project management, and <Link to={'/payment-tracking-software'}>financial tracking</Link> are then integrated into a single connected ecosystem using your estimating software for construction.</p>
     ]
 };
 

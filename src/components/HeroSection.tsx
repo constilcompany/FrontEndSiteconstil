@@ -18,7 +18,7 @@ const HeroSection = () => {
   };
 
   return (
-    <section id="home" className="relative min-h-screen flex items-center overflow-hidden">
+    <section id="home" className="relative min-h-screen flex items-center overflow-hidden pb-5">
       {/* Video background */}
       <video
         autoPlay
@@ -39,7 +39,7 @@ const HeroSection = () => {
         backgroundSize: '60px 60px'
       }} />
 
-      <div className="relative z-10 container mx-auto px-4 pt-24">
+      <div className="relative z-10 container mx-auto md:px-10 px-4 pt-24">
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
@@ -51,10 +51,10 @@ const HeroSection = () => {
           </span>
           <h1 className="text-4xl md:text-3xl lg:text-5xl font-extrabold leading-tight text-primary-foreground mb-6">
             Make Your Construction Process Smarter with
-            <span className="text-primary">AI Construction Estimating Software</span>
+            <span className="text-primary"> AI Construction Estimating Software</span>
           </h1>
           <p className="text-lg md:text-lg text-primary-foreground/70 mb-4 max-w-lg">
-            Build your projects with AI construction estimating software constructed to give you the power to take charge of your projects. CONSITL changes the way you estimate, plan, and manage with blueprint uploads through to precise cost estimates.          </p>
+            Build your projects with AI construction estimating software constructed to give you the power to take charge of your projects. CONSTIL changes the way you estimate, plan, and manage with blueprint uploads through to precise cost estimates.          </p>
 
           <p className="text-lg md:text-lg text-primary-foreground/70 mb-10 max-w-lg">
             See how construction estimating will be revamped in the future with high-level automation that is seamlessly coupled with intuitive project control, all on a single smart intelligent platform that optimizes your workflow and increases your productivity.

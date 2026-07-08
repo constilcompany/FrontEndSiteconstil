@@ -76,7 +76,7 @@ const SmartConstructionPage = () => (
           </h1>
           <p className="text-lg text-primary-foreground/90 leading-relaxed mb-4">
             Build your projects with AI construction estimating software constructed to give you the power to take
-            charge of your projects. CONSITL changes the way you estimate, plan, and manage with blueprint uploads
+            charge of your projects. CONSTIL changes the way you estimate, plan, and manage with blueprint uploads
             through to precise cost estimates.
           </p>
           <p className="text-primary-foreground/80 leading-relaxed mb-8">
@@ -112,7 +112,7 @@ const SmartConstructionPage = () => (
             variants={fadeInUp}
             className="text-muted-foreground leading-relaxed mt-4"
           >
-            CONSITL is a combination of robust construction estimating software and smooth workflow applications that
+            CONSTIL is a combination of robust construction estimating software and smooth workflow applications that
             eliminate human mistakes and hours of lost time.
           </motion.p>
         </div>
@@ -177,7 +177,7 @@ const SmartConstructionPage = () => (
               Smart construction tools should be granted to construction professionals.
             </p>
             <p className="text-muted-foreground leading-relaxed mb-6">
-              CONSITL was developed to bridge the gap between traditional and modern technologies. Our AI blueprint
+              CONSTIL was developed to bridge the gap between traditional and modern technologies. Our AI blueprint
               analysis software is technologically advanced, and it reads and analyzes plans immediately, enabling
               contractors to transition to the budget within minutes.
             </p>
@@ -289,13 +289,13 @@ const SmartConstructionPage = () => (
               We are the best professionals in construction.
             </p>
             <p className="text-muted-foreground leading-relaxed mb-4">
-              CONSITL is a company that assists a contractor at all levels of development and provides strong
+              CONSTIL is a company that assists a contractor at all levels of development and provides strong
               building construction project software that facilitates planning, budgeting and implementation. Our
               intelligent system streamlines complicated processes and enhances project visibility all the way to
               completion.
             </p>
             <p className="text-muted-foreground leading-relaxed">
-              Using the CONSITL software in <Link to="/estimates_software">estimating costs</Link>, materials, and labor to build the structure, advanced
+              Using the CONSTIL software in <Link to="/estimates-software">estimating costs</Link>, materials, and labor to build the structure, advanced
               residential construction estimating software allows one to make correct cost and material estimates
               and labor estimates. Our system scales to any business needs and your project, whether it is a small
               housing project or a large commercial project.
@@ -323,7 +323,7 @@ const SmartConstructionPage = () => (
             likely to boost margins.
           </p>
           <p className="text-foreground font-semibold mb-8">
-            Experience precision. Experience automation. Experience the CONSITL.
+            Experience precision. Experience automation. Experience the CONSTIL.
           </p>
           <a href="https://app.constil.com/signup" className={`${btnPrimary} glow-primary`}>
             Get Started
@@ -428,7 +428,7 @@ const SmartConstructionPage = () => (
             className="space-y-4 text-muted-foreground leading-relaxed"
           >
             <p>
-              CONSITL is designed as the best software for residential construction estimating, and it is able to
+              CONSTIL is designed as the best software for residential construction estimating, and it is able to
               provide the most accurate results to home builders and remodelers.
             </p>
             <p>
@@ -576,7 +576,7 @@ const SmartConstructionPage = () => (
             variants={fadeInUp}
             className="text-muted-foreground mt-4"
           >
-            CONSITL is relied upon by contractors to ease the processes of estimating and project management and
+            CONSTIL is relied upon by contractors to ease the processes of estimating and project management and
             enhance financial clarity and operational efficiency.
           </motion.p>
         </div>
@@ -586,7 +586,7 @@ const SmartConstructionPage = () => (
           viewport={{ once: true }}
           className="text-center text-muted-foreground mb-10 max-w-2xl mx-auto"
         >
-          CONSITL has revamped the way project estimation and project management are done. It is all quicker, more
+          CONSTIL has revamped the way project estimation and project management are done. It is all quicker, more
           distinct and much more precise.
         </motion.p>
         <motion.div
@@ -612,7 +612,7 @@ const SmartConstructionPage = () => (
             },
             {
               quote:
-                "CONSITL has revamped the way we estimate and manage projects. Quicker, clearer, and much more precise.",
+                "CONSTIL has revamped the way we estimate and manage projects. Quicker, clearer, and much more precise.",
               author: "Construction Company",
             },
           ].map((item) => (

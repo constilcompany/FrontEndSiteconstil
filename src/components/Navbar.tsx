@@ -11,23 +11,23 @@ import {
 
 
 const solutionsLinks = [
-  { label: "Invoices Management", to: "/invoices_management" },
-  { label: "Client Management", to: "/client_management_software" },
-  { label: "Estimating", to: "/estimates_software" },
-  { label: "Payment Tracking", to: "/payment_tracking" },
+  { label: "Invoices-Management Software", to: "/invoices-management-software" },
+  { label: "Client-Management Software", to: "/client-management-software" },
+  { label: "Estimating Software", to: "/estimates-software" },
+  { label: "Payment-Tracking Software", to: "/payment-tracking-software" },
 ];
 
 const mainLinks = [
-  { label: "About", to: "/#about" },
+  { label: "About", to: "/about" },
   // { label: "Features", to: "/#features" },
   // { label: "Pricing", to: "/#pricing" },
   { label: "Contact", to: "/contact" },
-  { label: "Blog", to: "/blog" },
+  { label: "Blogs", to: "/blogs" },
 ];
 
 const Navbar = () => {
   const location = useLocation();
-  const isActive = ['/blog', '/contact'].includes(location.pathname);
+  const isActive = ['/blogs', '/contact', '/blogs/slug'].includes(location.pathname) || location.pathname.startsWith('/blogs/');
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
@@ -40,11 +40,11 @@ const Navbar = () => {
   return (
     <nav
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled
-        ? "bg-background/95 backdrop-blur-md shadow-sm border-b border-border"
+        ? "bg-background shadow-sm"
         : "bg-transparent"
         }`}
     >
-      <div className="container mx-auto flex items-center justify-between h-16 px-4 max-w-7xl">
+      <div className="container mx-auto md:px-10 px-4 flex items-center justify-between h-16">
         <Link
           to="/"
           className={`text-xl md:text-2xl font-bold tracking-tight transition-colors duration-200 ${scrolled || isActive ? "text-foreground hover:text-primary" : "text-primary-foreground"
@@ -121,14 +121,6 @@ const Navbar = () => {
               ))}
             </DropdownMenuContent>
           </DropdownMenu>
-
-          <Link
-            to="/#pricing"
-            className={`text-sm font-medium px-3 py-1.5 rounded-full transition-colors duration-200 ${scrolled || isActive ? "text-foreground hover:bg-primary/10 hover:text-primary" : "text-primary-foreground/90 hover:bg-primary/10 hover:text-primary"
-              }`}
-          >
-            Price
-          </Link>
 
           {mainLinks.map((l) => (
             <Link
@@ -216,14 +208,6 @@ const Navbar = () => {
                   ))}
                 </div>
               </div>
-
-              <Link
-                to="/#pricing"
-                onClick={() => setOpen(false)}
-                className="text-sm font-medium text-foreground px-3 py-2 rounded-lg hover:bg-primary/10 hover:text-primary transition-colors"
-              >
-                Price
-              </Link>
 
               <div className="flex flex-col gap-3 pt-4 border-t border-border">
                 <a

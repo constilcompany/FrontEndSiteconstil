@@ -5,8 +5,8 @@ import { Link } from "react-router-dom";
 
 const FeatureShowcase = () => (
   <section className="section-light py-24 overflow-hidden">
-    <div className="container mx-auto px-4">
-      <div className="grid md:grid-cols-2 gap-16 items-center max-w-6xl mx-auto">
+    <div className="container mx-auto md:px-10 px-4">
+      <div className="grid md:grid-cols-2 gap-16 items-center">
         <motion.div
           initial={{ opacity: 0, x: -30 }}
           whileInView={{ opacity: 1, x: 0 }}
@@ -20,10 +20,10 @@ const FeatureShowcase = () => (
           <div className="space-y-4 text-muted-foreground leading-relaxed text-lg">
             <p className="text-foreground/90 font-medium">We are the best professionals in construction.</p>
 
-            <p>CONSITL is a company that assists a contractor at all levels of development and provides strong building construction project software that facilitates planning, budgeting and implementation. Our intelligent system streamlines complicated processes and enhances project visibility all the way to completion.
+            <p>CONSTIL is a company that assists a contractor at all levels of development and provides strong building construction project software that facilitates planning, budgeting and implementation. Our intelligent system streamlines complicated processes and enhances project visibility all the way to completion.
             </p>
             <p>
-              Using the CONSITL software in <Link to="/estimates_software">estimating costs</Link>, materials, and labor to build the structure, advanced residential construction estimating software allows one to make correct cost and material estimates and labor estimates. Our system scales to any business needs and your project, whether it is a small housing project or a large commercial project.
+              Using the CONSTIL software in <Link to="/estimates-software">estimating costs</Link>, materials, and labor to build the structure, advanced residential construction estimating software allows one to make correct cost and material estimates and labor estimates. Our system scales to any business needs and your project, whether it is a small housing project or a large commercial project.
             </p>
           </div>
         </motion.div>

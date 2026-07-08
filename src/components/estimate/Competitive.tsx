@@ -62,10 +62,10 @@ const Competitive = () => {
         {/* Heading */}
         <div className="text-center mb-10">
           <h2 className="text-3xl font-bold text-slate-900 md:text-4xl">
-            How CONSITL Compares to the Competition
+            How CONSTIL Compares to the Competition
           </h2>
           <p className="mt-3 text-slate-600">
-            See why CONSITL is the best choice for estimating and invoicing.
+            See why CONSTIL is the best choice for estimating and invoicing.
           </p>
         </div>
 
@@ -129,7 +129,7 @@ const Competitive = () => {
           {/* Bottom CTA */}
           <div className="flex flex-col md:flex-row items-center justify-between gap-4 bg-blue-600 px-6 py-5 text-white">
             <p className="text-center md:text-left font-medium">
-              Switch to CONSITL and get the edge on your estimates!
+              Switch to CONSTIL and get the edge on your estimates!
             </p>
 
             <Link to="https://app.constil.com/signup">

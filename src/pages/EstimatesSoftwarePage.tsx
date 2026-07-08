@@ -1,4 +1,3 @@
-
 import Footer from '@/components/Footer'
 import BannerInvoice from '@/components/invoices/BannerInvoice'
 import Benefits from '@/components/invoices/Benefits'
@@ -11,19 +10,52 @@ import Navbar from '@/components/Navbar'
 import Testimonials from '@/components/Testimonials'
 import TryIt from '@/components/TryIt'
 import FAQSection from '@/components/FAQSection'
-import { bannerContent, InvoiceAboutContent, SmartClientManagement, tryItContent, featureSectionData, howWorkSectionData, testimonialsData, faqs, benefitsSectionData, tryItContentCenter, integrationsSectionData, WhyChooseData, SmartSystemtContent, tryItContentBottom } from '@/lib/dummydata/EstimatesManagement'
-
+import {
+    bannerContent,
+    InvoiceAboutContent,
+    SmartClientManagement,
+    tryItContent,
+    featureSectionData,
+    howWorkSectionData,
+    testimonialsData,
+    faqs,
+    benefitsSectionData,
+    tryItContentCenter,
+    integrationsSectionData,
+    WhyChooseData,
+    SmartSystemtContent,
+    tryItContentBottom
+} from '@/lib/dummydata/EstimatesManagement'
+import { Helmet } from 'react-helmet'
+import { breadcrumbSchema, faqSchema, softwareSchema } from '@/lib/schema/estimateSchema'
 
 const EstimatesSoftwarePage = () => {
+
     return (
         <>
+            <Helmet>
+                <title>Construction Estimating Software for Confident Decision Making</title>
+                <meta name="description" content="Make confident project decisions with construction estimating software that provides clear cost insights and accurate forecasts." />
+                <link rel="canonical" href="https://constil.com/estimates-software" />
+
+                <script type="application/ld+json">
+                    {JSON.stringify(softwareSchema)}
+                </script>
+                <script type="application/ld+json">
+                    {JSON.stringify(breadcrumbSchema)}
+                </script>
+                <script type="application/ld+json">
+                    {JSON.stringify(faqSchema)}
+                </script>
+            </Helmet>
+
             <Navbar />
             <BannerInvoice bannerContent={bannerContent} />
             <InvoiceAbout InvoiceAboutContent={InvoiceAboutContent} />
             <FeatureSetion {...featureSectionData} />
             <TryIt tryItContent={tryItContent} />
             <InvoiceAbout InvoiceAboutContent={SmartClientManagement} />
-            <HowWork  {...howWorkSectionData} />
+            <HowWork {...howWorkSectionData} />
             <Benefits {...benefitsSectionData} />
             <TryIt tryItContent={tryItContentCenter} />
             <IntegrationsSection {...integrationsSectionData} />

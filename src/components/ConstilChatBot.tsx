@@ -12,16 +12,16 @@ type Message = {
 const WELCOME_MESSAGE: Message = {
   id: "welcome",
   role: "bot",
-  text: "Hi! I'm the CONSITL assistant. How can I help with estimates, invoices, or our Construction Intelligence platform?",
+  text: "Hi! I'm the CONSTIL assistant. How can I help with estimates, invoices, or our Construction Intelligence platform?",
   timestamp: new Date(),
 };
 
 const MOCK_REPLIES = [
-  "CONSITL offers AI-powered estimates from blueprints, professional invoicing, and smart benchmarking. Would you like to know more about any feature?",
+  "CONSTIL offers AI-powered estimates from blueprints, professional invoicing, and smart benchmarking. Would you like to know more about any feature?",
   "You can get started by creating an account at app.constil.com/signup. We have plans for different needs.",
   "Our edge is Construction Intelligence: estimate intelligence, payment intelligence, and smart benchmarking in one platform.",
   "For technical or sales support, email support@constil.com. We're here to help!",
-  "Thanks for reaching out. If you have more questions about CONSITL, just ask.",
+  "Thanks for reaching out. If you have more questions about CONSTIL, just ask.",
 ];
 
 const ConstilChatBot = () => {
@@ -91,7 +91,7 @@ const ConstilChatBot = () => {
                   <Bot className="w-4 h-4 text-primary" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-foreground text-sm">CONSITL Chat</h3>
+                  <h3 className="font-semibold text-foreground text-sm">CONSTIL Chat</h3>
                   <p className="text-xs text-muted-foreground">Construction Intelligence</p>
                 </div>
               </div>
@@ -164,7 +164,7 @@ const ConstilChatBot = () => {
         type="button"
         onClick={() => setIsOpen((o) => !o)}
         className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-40 w-14 h-14 min-w-[56px] min-h-[56px] rounded-2xl bg-primary text-primary-foreground shadow-lg hover:bg-primary-hover flex items-center justify-center transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background touch-manipulation"
-        aria-label={isOpen ? "Close chat" : "Open CONSITL chat"}
+        aria-label={isOpen ? "Close chat" : "Open CONSTIL chat"}
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.98 }}
       >

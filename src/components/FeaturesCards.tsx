@@ -23,7 +23,7 @@ const FeaturesCards = () => (
           Smart Construction Company Software Engineered to Thrive
         </h2>
         <p className="text-muted-foreground max-w-3xl mx-auto text-lg">
-          CONSITL is a combination of robust construction estimating software and smooth workflow applications that eliminate human mistakes and hours of lost time.
+          CONSTIL is a combination of robust construction estimating software and smooth workflow applications that eliminate human mistakes and hours of lost time.
         </p>
       </motion.div>
 

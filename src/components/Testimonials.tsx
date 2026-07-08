@@ -27,7 +27,7 @@ const Testimonials = ({
 }: TestimonialsProps) => {
   return (
     <section className="bg-white py-16 md:py-24">
-      <div className="container mx-auto px-4 md:px-8">
+      <div className="container mx-auto md:px-10 px-4">
 
         <div className="mb-12 text-center max-w-3xl mx-auto">
           <h2 className="text-3xl font-bold text-gray-900 md:text-4xl mb-2">
@@ -50,7 +50,7 @@ const Testimonials = ({
         >
           {testimonialCards.map((testimonial) => (
             <SwiperSlide key={testimonial.id} className="flex">
-              <div className="flex h-80 w-full flex-col rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
+              <div className="flex h-60 w-full flex-col rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
 
                 <div className="mb-4 flex items-center gap-3">
                   <img

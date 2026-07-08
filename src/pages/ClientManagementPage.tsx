@@ -78,7 +78,7 @@ const ClientManagementPage = () => (
             <span className="text-primary"> for Contractors</span> Starts Here
           </h1>
           <p className="text-lg text-primary-foreground/90 leading-relaxed mb-4">
-            CONSITL offers a powerful Construction Client Management Software that targets builders, contractors,
+            CONSTIL offers a powerful Construction Client Management Software that targets builders, contractors,
             and real estate professionals. Manage all relationships, documentation, and interaction, simplify
             communication and ensure your entire client pipeline is organised with one intelligent system, which
             is easy to use since it starts with the first inquiry to final project completion.
@@ -126,7 +126,7 @@ const ClientManagementPage = () => (
               away.
             </p>
             <p className="text-muted-foreground leading-relaxed">
-              CONSITL is a single, strong client management solution designed specifically to help contractors keep
+              CONSTIL is a single, strong client management solution designed specifically to help contractors keep
               their teams organised and in full control of every client relationship.
             </p>
           </motion.div>
@@ -150,7 +150,7 @@ const ClientManagementPage = () => (
               </div>
               <div className="grid grid-cols-2 gap-4 text-sm">
                 <div className="rounded-2xl bg-muted/50 p-4">
-                  <p className="text-xs font-semibold text-muted-foreground mb-2">Without CONSITL</p>
+                  <p className="text-xs font-semibold text-muted-foreground mb-2">Without CONSTIL</p>
                   <ul className="space-y-1 text-xs text-muted-foreground">
                     <li>• Scattered email trails</li>
                     <li>• Missed approvals</li>
@@ -159,7 +159,7 @@ const ClientManagementPage = () => (
                   </ul>
                 </div>
                 <div className="rounded-2xl bg-primary/10 border border-primary/40 p-4">
-                  <p className="text-xs font-semibold text-primary mb-2">With CONSITL</p>
+                  <p className="text-xs font-semibold text-primary mb-2">With CONSTIL</p>
                   <ul className="space-y-1 text-xs text-foreground">
                     <li>• Unified records</li>
                     <li>• Structured workflows</li>
@@ -189,7 +189,7 @@ const ClientManagementPage = () => (
               Relied on by construction teams who treasure client clarity
             </h2>
             <p className="text-muted-foreground leading-relaxed mb-6">
-              <Link to="/"> CONSITL </Link> has been trusted by construction businesses because it was built around their reality. From
+              <Link to="/"> CONSTIL </Link> has been trusted by construction businesses because it was built around their reality. From
               independent contractors to growing construction companies, teams use our client tracking software to:
             </p>
           </motion.div>
@@ -235,7 +235,7 @@ const ClientManagementPage = () => (
         </motion.div>
         <div className="max-w-3xl mx-auto text-center mt-8">
           <p className="text-muted-foreground">
-            CONSITL helps transform reactive communication into proactive engagement with your clients.
+            CONSTIL helps transform reactive communication into proactive engagement with your clients.
           </p>
         </div>
       </div>
@@ -261,7 +261,7 @@ const ClientManagementPage = () => (
               journey.
             </p>
             <p className="text-muted-foreground leading-relaxed">
-              From the first enquiry to final delivery, CONSITL keeps every step structured so nothing falls through
+              From the first enquiry to final delivery, CONSTIL keeps every step structured so nothing falls through
               the cracks.
             </p>
           </motion.div>
@@ -382,7 +382,7 @@ const ClientManagementPage = () => (
               A smarter client management strategy
             </h2>
             <p className="text-muted-foreground leading-relaxed mb-4">
-              CONSITL connects project activities with a powerhouse client management tool tailored to contractors.
+              CONSTIL connects project activities with a powerhouse client management tool tailored to contractors.
               With a built-in client data management system, your team operates on a single platform.
             </p>
             <p className="text-muted-foreground leading-relaxed mb-4">
@@ -605,7 +605,7 @@ const ClientManagementPage = () => (
             transition={{ duration: 0.6 }}
             variants={fadeInUp}
           >
-            Sub-services inside CONSITL Client Management
+            Sub-services inside CONSTIL Client Management
           </motion.h2>
           <p className="text-muted-foreground leading-relaxed">
             Configure specific services such as pre-construction communication, variation management, and
@@ -735,7 +735,7 @@ const ClientManagementPage = () => (
                 ))}
               </div>
               <div className="mt-6 rounded-2xl bg-primary/10 border border-primary/40 px-4 py-3 text-xs text-primary">
-                CONSITL sits at the centre, syncing client and project data between all your operational tools.
+                CONSTIL sits at the centre, syncing client and project data between all your operational tools.
               </div>
             </div>
           </motion.div>
@@ -755,7 +755,7 @@ const ClientManagementPage = () => (
             variants={fadeInUp}
           >
             <h2 className="text-3xl md:text-4xl font-bold mb-4 text-foreground">
-              Why construction businesses choose CONSITL
+              Why construction businesses choose CONSTIL
             </h2>
             <p className="text-muted-foreground leading-relaxed">
               We combine construction-specific automation and structured systems to streamline client operations,
@@ -836,7 +836,7 @@ const ClientManagementPage = () => (
               and long-term retention.
             </p>
             <p className="text-muted-foreground leading-relaxed mb-6">
-              As your organisation grows, CONSITL grows with you – keeping every client relationship structured and
+              As your organisation grows, CONSTIL grows with you – keeping every client relationship structured and
               traceable.
             </p>
             <a href="https://app.constil.com/signup" className={`${btnPrimary} glow-primary`}>
@@ -868,11 +868,11 @@ const ClientManagementPage = () => (
               from first touch to final handover.
             </p>
             <p className="text-muted-foreground leading-relaxed mb-6">
-              With CONSITL, you do more than manage contacts – you build systematic structures that help you grow,
+              With CONSTIL, you do more than manage contacts – you build systematic structures that help you grow,
               retain, and secure long-term revenue.
             </p>
             <a href="https://app.constil.com/signup" className={`${btnPrimary} glow-primary`}>
-              Get Started with CONSITL
+              Get Started with CONSTIL
               <ArrowRight className="w-4 h-4" />
             </a>
           </motion.div>
@@ -914,17 +914,17 @@ const ClientManagementPage = () => (
           {[
             {
               quote:
-                "Using CONSITL’s Client Management for Contractors has completely changed how we track and manage client information. Everything is organised and clear, and our team has never moved faster.",
+                "Using CONSTIL’s Client Management for Contractors has completely changed how we track and manage client information. Everything is organised and clear, and our team has never moved faster.",
               author: "Residential Contractor",
             },
             {
               quote:
-                "Our projects are more streamlined since all client communication is centralised. CONSITL’s platform has reduced mistakes and aligned our teams.",
+                "Our projects are more streamlined since all client communication is centralised. CONSTIL’s platform has reduced mistakes and aligned our teams.",
               author: "Commercial Construction Firm",
             },
             {
               quote:
-                "Managing clients is easier with CONSITL. The construction client management software keeps us on top of documentation and follow-ups so we can focus on growing the business.",
+                "Managing clients is easier with CONSTIL. The construction client management software keeps us on top of documentation and follow-ups so we can focus on growing the business.",
               author: "General Contractor",
             },
           ].map((item) => (

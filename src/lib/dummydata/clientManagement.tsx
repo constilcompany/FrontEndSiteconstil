@@ -111,7 +111,7 @@ const featureSectionData = {
             image: featureImage4,
             content: (
                 <p className="text-sm text-slate-800">
-                    Organise customers, sellers, and investors with ease through client management software for real estate. Automate workflows, client profile organisation, and add scaling to your system as your project and client base increase. CONSITL is adjusted to residential and commercial needs and may help a contractor to establish a proper communication structure, monitor the progress, and enhance the overall client satisfaction, preserving data and making operations effective.
+                    Organise customers, sellers, and investors with ease through client management software for real estate. Automate workflows, client profile organisation, and add scaling to your system as your project and client base increase. CONSTIL is adjusted to residential and commercial needs and may help a contractor to establish a proper communication structure, monitor the progress, and enhance the overall client satisfaction, preserving data and making operations effective.
                 </p>
             )
         }
@@ -133,7 +133,7 @@ const howWorkSectionData = {
             id: 2,
             title: "Organise and Structure",
             text: [
-                <p>Automatically organise client profiles in your management software with predefined fields based on construction workflow. Contracts, documents,<Link to={'/estimates_software'}>estimates</Link> and history of communication are sorted appropriately and hence, retrieval is quick, precise and available to authorized team members.</p>
+                <p>Automatically organise client profiles in your management software with predefined fields based on construction workflow. Contracts, documents,<Link to={'/estimates-software'}>estimates</Link> and history of communication are sorted appropriately and hence, retrieval is quick, precise and available to authorized team members.</p>
             ]
         },
         {
@@ -199,7 +199,7 @@ const integrationsSectionData = {
     heading: "Strong Integrations to a smarter construction Ecosystem",
     image: brandImage,
     points: [
-        <p>Connect the <Link to="/invoices_management">accounting software</Link>, email platforms, project management software, cloud storage systems and payment gateways with seamless integrations and a push of a button, you can expand and automate your workflows.</p>,
+        <p>Connect the <Link to="/invoices-management-software">accounting software</Link>, email platforms, project management software, cloud storage systems and payment gateways with seamless integrations and a push of a button, you can expand and automate your workflows.</p>,
         "Your Construction Client Management Software is made to be the core of the operation and synchronise data between the systems and make sure that your team operates within a single, connected, and smart ecosystem designed to operate construction businesses."
     ]
 };
@@ -243,8 +243,8 @@ const WhyChooseData = {
 
 const tryItContentBottom = {
     heading: "Take Full Control of Your Client Operations",
-    title: <p>No more disconnected tools and manual tracking. Migrate to a client management platform that will provide your <Link to={'/client_management_software'}>construction company</Link> with full visibility, enhanced coordination and a uniform client experience through first touch to final handover.</p>,
-    description: "And with CONSITL, you never simply manage contacts but create systematic structures that help you grow, retain and secure long term income.",
+    title: <p>No more disconnected tools and manual tracking. Migrate to a client management platform that will provide your <Link to={'/client-management-software'}>construction company</Link> with full visibility, enhanced coordination and a uniform client experience through first touch to final handover.</p>,
+    description: "And with CONSTIL, you never simply manage contacts but create systematic structures that help you grow, retain and secure long term income.",
     buttonText: "Start Free Trial",
     path: "https://app.constil.com/signup",
 };
@@ -278,7 +278,7 @@ const testimonialsData = {
             name: "Matt",
             company: "Residential Contractor",
             image: banner1,
-            quote: "“Using CONSITLS Client Management for Contractors has completely changed how we track and manage client information. It is all organised, clear, and our team has never been quicker than it is at this point",
+            quote: "“Using CONSTILS Client Management for Contractors has completely changed how we track and manage client information. It is all organised, clear, and our team has never been quicker than it is at this point",
             location: "Brownsburg, IN",
         },
         {
@@ -286,7 +286,7 @@ const testimonialsData = {
             name: "Scott",
             company: " Commercial Construction Firm",
             image: banner3,
-            quote: "We have more streamlined projects since all communication with clients is centralised. The client management platform offered by CONSITL allowed us to minimise mistakes and make each team member work in one direction.",
+            quote: "We have more streamlined projects since all communication with clients is centralised. The client management platform offered by CONSTIL allowed us to minimise mistakes and make each team member work in one direction.",
             location: "Omaha, NE",
         },
         {
@@ -294,7 +294,7 @@ const testimonialsData = {
             name: "haryy",
             company: "General Contractor",
             image: banner1,
-            quote: "The management of clients is easy with CONSITL. The Construction Client Management Software has made us stay in documentation, follow-ups, and better positioned to develop our business.",
+            quote: "The management of clients is easy with CONSTIL. The Construction Client Management Software has made us stay in documentation, follow-ups, and better positioned to develop our business.",
             location: "Omaha, NE",
         },
     ],

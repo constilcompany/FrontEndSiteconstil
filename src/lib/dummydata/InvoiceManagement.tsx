@@ -48,11 +48,11 @@ const SmartClientManagement = {
     image: clientmanagement,
     details: [
         {
-            title: <h1 className="mb-4 text-base leading-relaxed text-gray-600">The way the <Link to="/">construction companies </Link> handle the financial documentation has changed with modern generative ai invoice management software. The AI technology has replaced manual entries of invoice data by automatically capturing invoice specifications, sorting costs, and sending invoices through formal approvals.</h1>
+            title: <h2 className="mb-4 text-base leading-relaxed text-gray-600">The way the <Link to="/">construction companies </Link> handle the financial documentation has changed with modern generative ai invoice management software. The AI technology has replaced manual entries of invoice data by automatically capturing invoice specifications, sorting costs, and sending invoices through formal approvals.</h2>
 
         },
         {
-            title: <h1 className="mb-4 text-base leading-relaxed text-gray-600">Through an AI invoice management tool, contractors can use the software to track supplier bills, identify anomalies, and keep well-structured <Link to="/payment_tracking">records of payments</Link> by using artificial intelligence to manage invoices. This smart system enhances financial visibility and ease in the way project invoices are processed throughout the organisation.</h1>
+            title: <h2 className="mb-4 text-base leading-relaxed text-gray-600">Through an AI invoice management tool, contractors can use the software to track supplier bills, identify anomalies, and keep well-structured <Link to="/payment-tracking-software">records of payments</Link> by using artificial intelligence to manage invoices. This smart system enhances financial visibility and ease in the way project invoices are processed throughout the organisation.</h2>
 
         },
     ],
@@ -177,7 +177,7 @@ const benefitsSectionData = {
         },
         {
             title: "More Financial Transparency over Construction Projects",
-            description: <p>Contractors traced with the help of special construction invoice management software, obtain clear information about the expenses of the supplier and the <Link to="/payment_tracking">state of payment.</Link> This enables the construction companies to have organised financial planning in the projects.</p>,
+            description: <p>Contractors traced with the help of special construction invoice management software, obtain clear information about the expenses of the supplier and the <Link to="/payment-tracking-software">state of payment.</Link> This enables the construction companies to have organised financial planning in the projects.</p>,
             icon: (
                 <svg className="h-6 w-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
@@ -212,7 +212,7 @@ const WhyChooseData = {
     cards: [
         {
             title: "Constructed for Financial Workflow Construction",
-            text: <p>Specialised construction invoice management software that is based on the invoicing of contractors, suppliers, <Link to="/payment_tracking">payment, and project expenses.</Link></p>,
+            text: <p>Specialised construction invoice management software that is based on the invoicing of contractors, suppliers, <Link to="/payment-tracking-software">payment, and project expenses.</Link></p>,
             dark: true
         },
         {

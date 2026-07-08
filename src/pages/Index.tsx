@@ -14,14 +14,16 @@ import PricingSection from "@/components/PricingSection";
 import ContactForm from "@/components/ContactForm";
 import FAQSection from "@/components/FAQSection";
 import Footer from "@/components/Footer";
-import ConstilChatBot from "@/components/ConstilChatBot";
-import Chat from "@/components/Chat";
+// import ConstilChatBot from "@/components/ConstilChatBot";
+// import Chat from "@/components/Chat";
 import TryIt from "@/components/TryIt";
 import IncreasePrecision from "@/components/IncreasePrecision";
 import Testimonials from "@/components/Testimonials";
-import banner1 from "@/assets/images/banner1.jpg";
-import banner3 from "@/assets/images/banner3.jpg";
+// import banner1 from "@/assets/images/banner1.jpg";
+// import banner3 from "@/assets/images/banner3.jpg";
 import { faqs, testimonialsData, tryItContent } from "@/lib/dummydata/homeContent";
+import { breadcrumbSchema, faqSchema, organizationSchema } from "@/lib/schema/homeSchema";
+
 const Index = () => {
   const { hash } = useLocation();
 
@@ -38,9 +40,23 @@ const Index = () => {
   return (
     <main className="bg-background min-h-screen scroll-smooth">
       <Helmet>
-        <title>AI Construction Estimating Software with Smart Planning</title>
-        <meta name="description" content="Simplify construction planning with AI construction estimating software. Create accurate estimates from blueprints and manage projects with ease." />
+        <title>AI Construction Estimating Software for Smart Costing</title>
+        <meta name="description" content="Improve efficiency with AI construction estimating software. Generate fast, reliable estimates and optimize project costs." />
+        <link rel="canonical" href="https://constil.com/" />
+
+        <script type="application/ld+json">
+          {JSON.stringify(organizationSchema)}
+        </script>
+
+        <script type="application/ld+json">
+          {JSON.stringify(breadcrumbSchema)}
+        </script>
+
+        <script type="application/ld+json">
+          {JSON.stringify(faqSchema)}
+        </script>
       </Helmet>
+
       <Navbar />
       {/* <ConstilChatBot /> */}
       <HeroSection />
@@ -58,7 +74,7 @@ const Index = () => {
       <TryIt tryItContent={tryItContent} />
       <ContactForm />
       <FAQSection faqs={faqs} />
-      <Chat />
+      {/* <Chat /> */}
       <Footer />
     </main>
   );

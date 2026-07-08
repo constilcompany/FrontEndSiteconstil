@@ -30,11 +30,11 @@ const InvoiceAboutContent = {
     image: constructionclient,
     details: [
         {
-            title: <p>Construction projects come with <Link to={'/invoices_management'}>various invoices</Link>, advances, client approvals and follow-ups. Contractors are using spreadsheets and tools dotted about without an appropriate payment monitoring software, resulting in delayed payments, uncollected amounts, and a lack of financial visibility.</p>
+            title: <p>Construction projects come with <Link to={'/invoices-management-software'}>various invoices</Link>, advances, client approvals and follow-ups. Contractors are using spreadsheets and tools dotted about without an appropriate payment monitoring software, resulting in delayed payments, uncollected amounts, and a lack of financial visibility.</p>
 
         },
         {
-            title: <p>All payment processes are put under a single system with the help of a digital payment tracking platform. The invoices, outstanding bills and schedules can be efficiently tracked by contractors and the collections can be streamlined, and proper <Link to={'/invoices_management'}>financial tracking</Link> of residential and commercial projects can be maintained with the help of this software."</p>,
+            title: <p>All payment processes are put under a single system with the help of a digital payment tracking platform. The invoices, outstanding bills and schedules can be efficiently tracked by contractors and the collections can be streamlined, and proper <Link to={'/invoices-management-software'}>financial tracking</Link> of residential and commercial projects can be maintained with the help of this software."</p>,
 
         },
 
@@ -48,7 +48,7 @@ const InvoiceAboutContent = {
 
 const featureSectionData = {
     heading: "Potent Functionality in Our Pay Track System built for contractors",
-    description: "CONSITL has smart systems as part of its payment management system that assist the contractors to monitor and keep track of payment, collection and ensure financial clarity at all phases of the project lifecycle.",
+    description: "CONSTIL has smart systems as part of its payment management system that assist the contractors to monitor and keep track of payment, collection and ensure financial clarity at all phases of the project lifecycle.",
     image: featureImage,
     tabsData: [
         {
@@ -57,7 +57,7 @@ const featureSectionData = {
             image: featureImage1,
             content: (
                 <p className="text-sm text-slate-800">
-                    Reduce confusion with a smart<Link to={'/invoices_management'}> invoice payment monitoring tool</Link> that provides real-time updates on payment status across multiple projects and clients. This enables the contractors to monitor paid, pending invoices and those outstanding invoices and have a clear view of all financial transactions under a single roof, which enhances transparency and accountability.
+                    Reduce confusion with a smart<Link to={'/invoices-management-software'}> invoice payment monitoring tool</Link> that provides real-time updates on payment status across multiple projects and clients. This enables the contractors to monitor paid, pending invoices and those outstanding invoices and have a clear view of all financial transactions under a single roof, which enhances transparency and accountability.
                 </p>
             )
         },
@@ -67,7 +67,7 @@ const featureSectionData = {
             image: featureImage2,
             content: (
                 <p className="text-sm text-slate-800">
-                    Minimize confusion by using a smart invoice payment monitoring system that offers real-time payment status information on a series of projects and <Link to={'/client_management_software'}>clients. Contractors</Link> are able to know the outstanding balances instantly and make sure that none of the payments are missed in the course of the project implementation and avoid expensive delays.
+                    Minimize confusion by using a smart invoice payment monitoring system that offers real-time payment status information on a series of projects and <Link to={'/client-management-software'}>clients. Contractors</Link> are able to know the outstanding balances instantly and make sure that none of the payments are missed in the course of the project implementation and avoid expensive delays.
                 </p>
             )
         },
@@ -115,7 +115,7 @@ const SmartClientManagement = {
 
 const tryItContent = {
     heading: "Transform Payments Tracking into an apparent Financial Process",
-    title: <p><Link to={'/'}>Construction enterprises</Link> handle hundreds of payments and <Link to={'/invoices_management'}>invoices involving clients</Link> and projects. Payment tracking Application assists teams to capture invoices automatically, approvals and deal with financial processes easily. Automate tracking payment collection software and provide a clear and well-structured payment management Network to facilitate a smooth cash flow.</p>,
+    title: <p><Link to={'/'}>Construction enterprises</Link> handle hundreds of payments and <Link to={'/invoices-management-software'}>invoices involving clients</Link> and projects. Payment tracking Application assists teams to capture invoices automatically, approvals and deal with financial processes easily. Automate tracking payment collection software and provide a clear and well-structured payment management Network to facilitate a smooth cash flow.</p>,
     description: "",
     buttonText: "Start Free Trail",
     path: "https://app.constil.com/signup",
@@ -244,7 +244,7 @@ const WhyChooseData = {
         },
         {
             title: "Supports All Payment Types",
-            text: <p>Manage full, partial, and milestone payments with a complex <Link to={'/invoices_management'}>invoice payment control system.</Link></p>,
+            text: <p>Manage full, partial, and milestone payments with a complex <Link to={'/invoices-management-software'}>invoice payment control system.</Link></p>,
             dark: false
         }
     ]

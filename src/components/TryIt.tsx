@@ -3,8 +3,8 @@ import officeImg from "@/assets/professionals-office.jpg";
 import showcaseImg from "@/assets/feature-showcase.jpg";
 import { Link } from "react-router-dom";
 
-const TryIt = ({ tryItContent }: { tryItContent?: { heading: string, title: string, description: string, buttonText: string,path:string } }) => (
-  <section className="section-light py-24 overflow-hidden border-2 border-blue-600 rounded-lg">
+const TryIt = ({ tryItContent }: { tryItContent?: { heading: string, title: React.ReactNode, description: React.ReactNode, buttonText: string, path: string } }) => (
+  <section className="section-light py-24 overflow-hidden border-2 border-blue-600">
     <div className="container mx-auto px-4">
       <div className="grid  justify-content-center gap-16 items-center max-w-6xl mx-auto">
         <motion.div
