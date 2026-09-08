@@ -9,6 +9,7 @@ import {
 
 const HeroSection = () => {
   const [demoOpen, setDemoOpen] = useState(false);
+  const [demoReady, setDemoReady] = useState(false);
   const [videoFailed, setVideoFailed] = useState(false);
 
   return (
@@ -89,18 +90,34 @@ const HeroSection = () => {
         </motion.div>
       </div>
 
-      <Dialog open={demoOpen} onOpenChange={setDemoOpen}>
+      <Dialog
+        open={demoOpen}
+        onOpenChange={(open) => {
+          setDemoOpen(open);
+          if (!open) setDemoReady(false);
+        }}
+      >
         <DialogContent
           className="max-w-[98vw] w-[98vw] max-h-[95vh] h-[95vh] p-0 gap-0 border-0 bg-black overflow-hidden rounded-xl [&>button]:absolute [&>button]:right-3 [&>button]:top-3 [&>button]:z-10 [&>button]:bg-white/10 [&>button]:text-white [&>button]:hover:bg-white/20"
         >
           <DialogTitle className="sr-only">Watch Demo Video</DialogTitle>
-          <iframe
-            src="https://www.youtube.com/embed/D3hHYLcnMao?autoplay=1&rel=0"
-            title="Demo Video"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-            allowFullScreen
-            className="w-full h-full rounded-xl border-0"
-          />
+          <div className="relative w-full h-full">
+            <img
+              src="/cover.png"
+              alt=""
+              aria-hidden="true"
+              className="absolute inset-0 w-full h-full object-cover rounded-xl"
+            />
+            <iframe
+              src="https://www.youtube.com/embed/D3hHYLcnMao?autoplay=1&rel=0"
+              title="Demo Video"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowFullScreen
+              onLoad={() => setDemoReady(true)}
+              className="absolute inset-0 w-full h-full rounded-xl border-0 transition-opacity duration-500"
+              style={{ opacity: demoReady ? 1 : 0 }}
+            />
+          </div>
         </DialogContent>
       </Dialog>
     </section>
