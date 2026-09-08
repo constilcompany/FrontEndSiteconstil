@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import heroVideo from "@/assets/hero-video-diverse.mp4";
 import heroPoster from "@/assets/hero-construction.jpg";
 import {
   Dialog,
@@ -29,7 +28,7 @@ const HeroSection = () => {
           setVideoFailed(true);
         }}
       >
-        <source src={heroVideo} type="video/mp4" />
+        <source src="/videos/hero-video-diverse.mp4" type="video/mp4" />
         {/* Fallback poster image if video fails to load */}
       </video>
 
