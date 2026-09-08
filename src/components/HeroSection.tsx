@@ -1,7 +1,7 @@
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
 import heroVideo from "@/assets/hero-video-diverse.mp4";
-import demoVideo from "@/assets/demo.mp4";
+import heroPoster from "@/assets/hero-construction.jpg";
 import {
   Dialog,
   DialogContent,
@@ -10,13 +10,7 @@ import {
 
 const HeroSection = () => {
   const [demoOpen, setDemoOpen] = useState(false);
-  const demoVideoRef = useRef<HTMLVideoElement>(null);
-
-  const handleDemoOpenChange = (open: boolean) => {
-    setDemoOpen(open);
-    if (open) demoVideoRef.current?.play();
-    else demoVideoRef.current?.pause();
-  };
+  const [videoFailed, setVideoFailed] = useState(false);
 
   return (
     <section id="home" className="relative min-h-screen flex items-center overflow-hidden pb-5">
@@ -26,10 +20,27 @@ const HeroSection = () => {
         loop
         muted
         playsInline
+        preload="metadata"
+        poster={heroPoster}
         className="absolute inset-0 w-full h-full object-cover"
+        onError={(e) => {
+          const el = e.currentTarget;
+          el.style.display = "none";
+          setVideoFailed(true);
+        }}
       >
         <source src={heroVideo} type="video/mp4" />
+        {/* Fallback poster image if video fails to load */}
       </video>
+
+      {/* Fallback background image (only shown if video cannot load) */}
+      {videoFailed && (
+        <div
+          className="absolute inset-0 w-full h-full object-cover bg-cover bg-center"
+          style={{ backgroundImage: `url(${heroPoster})` }}
+          aria-hidden="true"
+        />
+      )}
 
       {/* Dark overlay */}
       <div className="absolute inset-0 bg-gradient-to-r from-foreground/80 via-foreground/60 to-foreground/40" />
@@ -79,19 +90,17 @@ const HeroSection = () => {
         </motion.div>
       </div>
 
-      <Dialog open={demoOpen} onOpenChange={handleDemoOpenChange}>
+      <Dialog open={demoOpen} onOpenChange={setDemoOpen}>
         <DialogContent
           className="max-w-[98vw] w-[98vw] max-h-[95vh] h-[95vh] p-0 gap-0 border-0 bg-black overflow-hidden rounded-xl [&>button]:absolute [&>button]:right-3 [&>button]:top-3 [&>button]:z-10 [&>button]:bg-white/10 [&>button]:text-white [&>button]:hover:bg-white/20"
-          onPointerDownOutside={() => demoVideoRef.current?.pause()}
         >
           <DialogTitle className="sr-only">Watch Demo Video</DialogTitle>
-          <video
-            ref={demoVideoRef}
-            src={demoVideo}
-            autoPlay
-            controls
-            className="w-full h-full object-contain rounded-xl"
-            playsInline
+          <iframe
+            src="https://www.youtube.com/embed/D3hHYLcnMao?autoplay=1&rel=0"
+            title="Demo Video"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowFullScreen
+            className="w-full h-full rounded-xl border-0"
           />
         </DialogContent>
       </Dialog>
