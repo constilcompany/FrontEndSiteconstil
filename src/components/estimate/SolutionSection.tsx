@@ -40,13 +40,13 @@ const SolutionSection = () => {
             </li>
           </ul>
 
-          <button
-            type="button"
+          <a
+            href="https://app.constil.com/"
             className="inline-flex items-center text-sm font-semibold text-orange-500 hover:text-orange-600"
           >
-           Get Started Now
+            Get Started Now
             <span className="ml-1 text-lg leading-none">→</span>
-          </button>
+          </a>
         </div>
 
         {/* RIGHT: Screenshot / app preview */}

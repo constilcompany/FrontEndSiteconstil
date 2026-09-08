@@ -219,7 +219,7 @@ export const blogPosts = [
                     },
                     {
                         title: <h3>Online Payment Tracking</h3>,
-                        para: <>Construction projects often involve multiple payments, vendors, subcontractors, and billing schedules. A <a href="https://constil.com/payment-tracking-software" target="_blank" className="text-primary"> digital payment tracking platform</a> provides real-time visibility into payment status, helping companies monitor incoming and outgoing transactions more effectively. With centralised tracking and automated updates, teams can improve cash flow management, reduce payment delays, and maintain better financial oversight across multiple projects at the same time.</>
+                        para: <>Construction projects often involve multiple payments, vendors, subcontractors, and billing schedules. A digital payment tracking platform provides real-time visibility into payment status, helping companies monitor incoming and outgoing transactions more effectively. With centralised tracking and automated updates, teams can improve cash flow management, reduce payment delays, and maintain better financial oversight across multiple projects at the same time.</>
                     }
                 ]
 
@@ -352,7 +352,7 @@ export const blogPosts = [
                         In older estimating workflows, digital takeoff often meant moving from paper plans to a computer screen, but the fundamental task was still manual, repetitive, and slow. We have seen how estimators on complex commercial projects can spend hours making thousands of clicks just to measure walls, areas, counts, and other standard elements. This process creates more risk of human error, especially when the estimator has to work from scratch and keep every plan detail under control.
                     </>,
                     <>
-                        <a href="https://constil.com/payment-tracking-software" target="_blank" className="text-primary">AI-powered software</a> changes this by creating a clear shift between old methods and automated review. The AI tool can identify and measure plans automatically, can generate a preliminary takeoff, and reduces the time needed to get a strong head start.
+                        AI-powered software changes this by creating a clear shift between old methods and automated review. The AI tool can identify and measure plans automatically, can generate a preliminary takeoff, and reduces the time needed to get a strong head start.
                     </>,
                     <>
                         A system like Constil processes plan pages in seconds, which helps drywall professionals move faster while they focus on strategy, accuracy, decision-making, and project organization.

@@ -12,13 +12,12 @@ import ConstructionEstimatingPage from "./pages/ConstructionEstimatingPage";
 import SmartConstructionPage from "./pages/SmartConstructionPage";
 import InvoiceManagementPage from "./pages/InvoicesManagementPage";
 import EstimatesSoftwarePage from "./pages/EstimatesSoftwarePage";
-import PaymentTrackingPage from "./pages/PaymentTrackingPage";
 import ClientManagementSoftwarePage from "./pages/ClientManagementSoftwarePage";
-import PaymentTrackingManagementPage from "./pages/PaymentTrackingManagementPage";
 import ContactPage from "./pages/ContactPage";
 import Blog from "./pages/Blog";
 import BlogDetail from "./pages/BlogDetail";
 import AboutPage from "./pages/AboutPage";
+import ConstilChatBot from "./components/ConstilChatBot";
 import ScrollToTop from "./components/ScrollToTop";
 
 const queryClient = new QueryClient();
@@ -30,6 +29,7 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <ScrollToTop />
+        <ConstilChatBot />
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/smart-construction" element={<SmartConstructionPage />} />
@@ -39,7 +39,6 @@ const App = () => (
           <Route path="/signup" element={<SignupPage />} />
           <Route path="/invoices-management-software" element={<InvoiceManagementPage />} />
           <Route path="/estimates-software" element={<EstimatesSoftwarePage />} />
-          <Route path="/payment-tracking-software" element={<PaymentTrackingManagementPage />} />
           <Route path="/client-management-software" element={<ClientManagementSoftwarePage />} />
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/blogs" element={<Blog />} />

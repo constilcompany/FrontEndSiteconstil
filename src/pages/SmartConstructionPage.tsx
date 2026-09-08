@@ -1,6 +1,6 @@
 import Navbar from "@/components/Navbar";
-import ConstilChatBot from "@/components/ConstilChatBot";
 import Footer from "@/components/Footer";
+import BlueprintScanner from "@/components/BlueprintScanner";
 import { motion } from "framer-motion";
 import heroImg from "@/assets/diverse-engineers.jpg";
 import overviewImg from "@/assets/professionals-office.jpg";
@@ -41,7 +41,6 @@ const btnSecondary =
 const SmartConstructionPage = () => (
   <main className="bg-background min-h-screen scroll-smooth">
     <Navbar />
-    <ConstilChatBot />
 
     {/* Hero */}
     <section className="relative min-h-[85vh] flex items-center overflow-hidden pt-24">
@@ -84,7 +83,7 @@ const SmartConstructionPage = () => (
             seamlessly coupled with intuitive project control, all on a single smart intelligent platform that
             optimizes your workflow and increases your productivity.
           </p>
-          <a href="https://app.constil.com/signup" className={`${btnPrimary} glow-primary`}>
+          <a href="https://app.constil.com/" className={`${btnPrimary} glow-primary`}>
             Get Started Now
             <ArrowRight className="w-4 h-4" />
           </a>
@@ -306,30 +305,51 @@ const SmartConstructionPage = () => (
     </section>
 
     {/* 6th – The Future of Automated Construction Estimating */}
-    <section className="section-dark py-20">
-      <div className="container mx-auto px-4">
-        <div className="max-w-6xl mx-auto text-center rounded-3xl border border-primary/30 bg-primary/10 p-10">
-          <motion.h2
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.3 }}
-            variants={fadeInUp}
-            className="text-3xl md:text-4xl font-bold text-foreground mb-4"
-          >
+    <section className="relative section-navy py-28 overflow-hidden">
+      {/* Scanner as background */}
+      <BlueprintScanner />
+
+      {/* Dimming overlay for readability */}
+      <div className="absolute inset-0 bg-gradient-to-b from-navy/75 via-navy/55 to-navy/85" />
+
+      <div className="relative z-10 container mx-auto px-4">
+        <motion.div
+          initial={{ opacity: 0, y: 32 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{ duration: 0.7 }}
+          className="max-w-3xl mx-auto text-center"
+        >
+          <span className="inline-block px-4 py-1.5 rounded-full bg-primary/20 border border-primary/40 text-primary text-xs font-semibold tracking-wider uppercase mb-6 backdrop-blur-sm">
+            Scan · Analyze · Estimate
+          </span>
+          <h2 className="text-3xl md:text-4xl font-bold text-primary-foreground mb-5">
             The Future of Automated Construction Estimating Begins Here
-          </motion.h2>
-          <p className="text-muted-foreground leading-relaxed mb-6">
+          </h2>
+          <p className="text-primary-foreground/80 font-medium leading-relaxed mb-4">
             Find out why contractors are moving to smart construction company software that saves time and is more
             likely to boost margins.
           </p>
-          <p className="text-foreground font-semibold mb-8">
+          <p className="text-primary-foreground/65 leading-relaxed mb-8">
             Experience precision. Experience automation. Experience the CONSTIL.
           </p>
-          <a href="https://app.constil.com/signup" className={`${btnPrimary} glow-primary`}>
+          <ul className="flex flex-wrap justify-center gap-x-8 gap-y-3 mb-9">
+            {[
+              "Real-time blueprint analysis",
+              "Automated quantity takeoff",
+              "Instant cost breakdown",
+            ].map((item) => (
+              <li key={item} className="flex items-center gap-2 text-sm text-primary-foreground/80">
+                <CheckCircle2 className="w-4 h-4 text-primary flex-shrink-0" />
+                <span>{item}</span>
+              </li>
+            ))}
+          </ul>
+          <a href="https://app.constil.com/" className={`${btnPrimary} glow-primary`}>
             Get Started
             <ArrowRight className="w-4 h-4" />
           </a>
-        </div>
+        </motion.div>
       </div>
     </section>
 
@@ -560,6 +580,9 @@ const SmartConstructionPage = () => (
     <section className="section-light py-20">
       <div className="container mx-auto px-4">
         <div className="max-w-4xl mx-auto text-center mb-12">
+          <span className="inline-block px-4 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-semibold tracking-wider uppercase mb-4">
+            Testimonials
+          </span>
           <motion.h2
             initial="hidden"
             whileInView="visible"
@@ -574,21 +597,12 @@ const SmartConstructionPage = () => (
             whileInView="visible"
             viewport={{ once: true, amount: 0.3 }}
             variants={fadeInUp}
-            className="text-muted-foreground mt-4"
+            className="text-muted-foreground mt-4 leading-relaxed max-w-2xl mx-auto"
           >
             CONSTIL is relied upon by contractors to ease the processes of estimating and project management and
             enhance financial clarity and operational efficiency.
           </motion.p>
         </div>
-        <motion.p
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-          className="text-center text-muted-foreground mb-10 max-w-2xl mx-auto"
-        >
-          CONSTIL has revamped the way project estimation and project management are done. It is all quicker, more
-          distinct and much more precise.
-        </motion.p>
         <motion.div
           className="grid md:grid-cols-3 gap-6 max-w-6xl mx-auto"
           initial="hidden"
@@ -618,11 +632,25 @@ const SmartConstructionPage = () => (
           ].map((item) => (
             <motion.div
               key={item.author}
-              className={`rounded-2xl border border-border/60 bg-background/80 p-6 flex flex-col justify-between ${cardHover}`}
               variants={fadeInUp}
+              className={`group flex flex-col rounded-2xl border border-border/60 bg-background/80 p-7 shadow-sm transition-all duration-300 hover:shadow-xl hover:shadow-primary/5 hover:border-primary/30 hover:-translate-y-1 ${cardHover}`}
             >
-              <p className="text-sm text-muted-foreground mb-4">&ldquo;{item.quote}&rdquo;</p>
-              <p className="text-xs font-semibold text-foreground">{item.author}</p>
+              <p className="grow text-sm text-muted-foreground leading-relaxed mb-6">
+                &ldquo;{item.quote}&rdquo;
+              </p>
+              <div className="flex items-center gap-3 border-t border-border/60 pt-5">
+                <div className="flex items-center justify-center rounded-full bg-gradient-to-br from-primary to-primary-hover text-primary-foreground w-11 h-11 text-sm font-bold shrink-0">
+                  {item.author
+                    .split(" ")
+                    .map((s) => s[0])
+                    .join("")
+                    .slice(0, 2)
+                    .toUpperCase()}
+                </div>
+                <div className="min-w-0">
+                  <p className="font-semibold text-foreground truncate">{item.author}</p>
+                </div>
+              </div>
             </motion.div>
           ))}
         </motion.div>

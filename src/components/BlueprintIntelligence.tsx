@@ -7,7 +7,6 @@ const items = [
   { icon: DollarSign, title: "Instant Cost Breakdown", desc: "Creates cost estimates for construction with a couple of clicks." },
   { icon: FileText, title: "AI-Based Interpretation of a Plan", desc: "Smarts up smartly analysis of complex drawings." },
   { icon: FileText, title: "Continuous Takeoff Integration", desc: "Relates takeoffs with workflow estimation." },
-
 ];
 
 
@@ -25,12 +24,10 @@ const BlueprintIntelligence = () => (
       >
         {/* <span className="text-primary text-sm font-semibold uppercase tracking-wider">Blueprint Intelligence</span> */}
         <h2 className="text-3xl md:text-4xl font-bold mt-3 mb-2 text-foreground">
-          Turn All Blueprints into Stepped-out Project Insights        </h2>
+          Turn All Blueprints into Stepped-out Project Insights
+        </h2>
         <p className="text-muted-foreground leading-relaxed mb-4">
-
           Post any blueprint for construction and leave the heavy work to our smart engine.
-
-
         </p>
       </motion.div>
 

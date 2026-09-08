@@ -1,7 +1,6 @@
 import React from "react";
 import { Button } from "../ui/button";
 import heroImage from "@/assets/images/banner1.jpg";
-import { Link } from "react-router-dom";
 
 
 interface BannerContentProps {
@@ -42,13 +41,13 @@ const BannerInvoice: React.FC<BannerContentProps> = ({ bannerContent }) => {
         <p className="mb-10 md:max-w-3xl text-sm leading-relaxed text-white/90 md:text-lg ">
           {description}
         </p>
-        <Link to={path}>
+        <a href={path}>
           <Button
             className="rounded-lg bg-[#448AFF] px-8 py-6 text-base font-semibold text-white transition-colors hover:bg-blue-600"
           >
          {btnText}
           </Button>
-        </Link>
+        </a>
       </div>
     </section>
   );

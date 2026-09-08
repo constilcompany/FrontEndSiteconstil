@@ -19,7 +19,7 @@ const tryItContent = {
     title: "Find out why contractors are moving to smart construction company software that saves time and is more likely to boost margins.",
     description: "Experience precision. Experience automation. Experience the CONSTIL.",
     buttonText: "Start Free Trial",
-    path: "/contact"
+    path: "https://app.constil.com/"
 };
 
 const testimonialsData = {

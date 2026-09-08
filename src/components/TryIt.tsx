@@ -1,37 +1,57 @@
 import { motion } from "framer-motion";
-import officeImg from "@/assets/professionals-office.jpg";
-import showcaseImg from "@/assets/feature-showcase.jpg";
-import { Link } from "react-router-dom";
+import { CheckCircle2, ArrowRight } from "lucide-react";
+import BlueprintScanner from "@/components/BlueprintScanner";
 
 const TryIt = ({ tryItContent }: { tryItContent?: { heading: string, title: React.ReactNode, description: React.ReactNode, buttonText: string, path: string } }) => (
-  <section className="section-light py-24 overflow-hidden border-2 border-blue-600">
-    <div className="container mx-auto px-4">
-      <div className="grid  justify-content-center gap-16 items-center max-w-6xl mx-auto">
-        <motion.div
-          initial={{ opacity: 0, x: -30 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.7 }}
+  <section className="relative section-navy py-28 overflow-hidden">
+    {/* Scanner as background */}
+    <BlueprintScanner />
+
+    {/* Dimming overlay for readability */}
+    <div className="absolute inset-0 bg-gradient-to-b from-navy/75 via-navy/55 to-navy/85" />
+
+    <div className="relative z-10 container mx-auto px-4">
+      <motion.div
+        initial={{ opacity: 0, y: 32 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, amount: 0.3 }}
+        transition={{ duration: 0.7 }}
+        className="max-w-3xl mx-auto text-center"
+      >
+        <span className="inline-block px-4 py-1.5 rounded-full bg-primary/20 border border-primary/40 text-primary text-xs font-semibold tracking-wider uppercase mb-6 backdrop-blur-sm">
+          Scan · Analyze · Estimate
+        </span>
+        <h2 className="text-3xl md:text-4xl font-bold text-primary-foreground mb-5">
+          {tryItContent?.heading || "The Future of Automated Construction Estimating Begins Here"}
+        </h2>
+        <p className="text-primary-foreground/80 font-medium leading-relaxed mb-4">
+          {tryItContent?.title ||
+            "Find out why contractors are moving to smart construction company software that saves time and is more likely to boost margins."}
+        </p>
+        <p className="text-primary-foreground/65 leading-relaxed mb-8">
+          {tryItContent?.description ||
+            "Experience precision. Experience automation. Experience the CONSTIL."}
+        </p>
+        <ul className="flex flex-wrap justify-center gap-x-8 gap-y-3 mb-9">
+          {[
+            "Real-time blueprint analysis",
+            "Automated quantity takeoff",
+            "Instant cost breakdown",
+          ].map((item) => (
+            <li key={item} className="flex items-center gap-2 text-sm text-primary-foreground/80">
+              <CheckCircle2 className="w-4 h-4 text-primary flex-shrink-0" />
+              <span>{item}</span>
+            </li>
+          ))}
+        </ul>
+        <a
+          href={tryItContent?.path || "https://app.constil.com/"}
+          className="inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-xl bg-primary text-primary-foreground font-semibold hover:bg-primary-hover transition-all duration-300 glow-primary focus-visible:outline focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
         >
-          <h2 className="text-3xl text-primary md:text-4xl text-center font-bold mt-3 mb-2 text-foreground">
-            {tryItContent?.heading || "The Future of Automated Construction Estimating Begins Here"}            {/* <span className="text-primary">construction Intelligence</span> */}
-          </h2>
-          <div className="space-y-4 text-muted-foreground leading-relaxed text-lg max-w-5xl mx-auto">
-            <p className="text-foreground/90 font-medium text-center" >{tryItContent?.title || "Find out why contractors are moving to smart construction company software that saves time and is more likely to boost margins."}
-            </p>
-
-            <p className="text-center text-foreground/90 ">{tryItContent?.description}
-
-            </p>
-            <div className="flex justify-center  pt-4">
-              <Link to={tryItContent?.path}><button className=" item-center bg-primary px-3 py-2 rounded-lg text-white text-[15px]">{tryItContent?.buttonText || "Try Free Trail"} </button></Link>
-            </div>
-
-          </div>
-        </motion.div>
-
-
-      </div>
+          {tryItContent?.buttonText || "Try Free Trial"}
+          <ArrowRight className="w-4 h-4" />
+        </a>
+      </motion.div>
     </div>
   </section>
 );

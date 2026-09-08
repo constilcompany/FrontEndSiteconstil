@@ -20,7 +20,7 @@ const bannerContent = {
     title: "Constil offers a powerful Construction Client Management Software that targets builders, contractors, and real estate professionals. Manage all relationships, documentation, and interaction, simplify communication and ensure your entire client pipeline is organised with one intelligent system, which is easy to use since it starts with the first inquiry to final project completion.",
     image: future,
     btnText: "Get Started Now",
-    path: "https://app.constil.com/signup",
+    path: "https://app.constil.com/",
     description: "Constructing businesses requires more than spreadsheets. Client Management for Contractors enables your business to handle clients more effectively, confuse operations less, and create a solid base out of scalable construction operations.",
 }
 
@@ -68,7 +68,7 @@ const tryItContent = {
     title: "Get complete control of your pipeline with organised client management solutions that have been developed to grow the construction business. Keep all your leads in order, and remain in touch and control the entire process of your client journey",
     description: "",
     buttonText: "Start Free Trial",
-    path: "https://app.constil.com/signup"
+    path: "https://app.constil.com/"
 };
 
 const featureSectionData = {
@@ -192,7 +192,7 @@ const tryItContentCenter = {
     title: "Construction companies in the modern world require more than excel spreadsheet and remote communication. Elevate the way you manage your clients by organising, tracking and managing all client relationships in a structure that is geared towards growth, visibility and long term success.",
     description: "",
     buttonText: "Start Free Trial",
-    path: "https://app.constil.com/signup",
+    path: "https://app.constil.com/",
 };
 
 const integrationsSectionData = {
@@ -246,7 +246,7 @@ const tryItContentBottom = {
     title: <p>No more disconnected tools and manual tracking. Migrate to a client management platform that will provide your <Link to={'/client-management-software'}>construction company</Link> with full visibility, enhanced coordination and a uniform client experience through first touch to final handover.</p>,
     description: "And with CONSTIL, you never simply manage contacts but create systematic structures that help you grow, retain and secure long term income.",
     buttonText: "Start Free Trial",
-    path: "https://app.constil.com/signup",
+    path: "https://app.constil.com/",
 };
 
 

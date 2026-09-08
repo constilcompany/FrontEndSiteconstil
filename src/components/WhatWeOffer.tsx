@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { FileText, Calculator, Users, CreditCard, ArrowRight } from "lucide-react";
+import { FileText, Calculator, Users, ArrowRight } from "lucide-react";
 import teamImg from "@/assets/team-professionals.jpg";
 import { Link } from "react-router-dom";
 
@@ -7,7 +7,6 @@ const offers = [
   { icon: FileText, title: "Invoice Management", desc: "Automated construction estimating and invoicing capabilities in growing billing using sophisticated construction company software.", link: "/invoices-management-software" },
   { icon: Calculator, title: "Estimates & Quotes", desc: "Create precise suggestions through the use of effective construction estimating software and intelligent blueprint estimating software tools.", link: "/estimates-software" },
   { icon: Users, title: "Client Management", desc: "Small business projects should be managed using efficient construction management software to manage client data.", link: "/client-management-software" },
-  { icon: CreditCard, title: "Payment Tracking", desc: "Make certain accountability of cash flow with incorporated construction cost estimating software and financial reporting software.", link: "/payment-tracking-software" },
 ];
 
 const WhatWeOffer = () => (

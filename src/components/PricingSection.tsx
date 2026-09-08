@@ -1,7 +1,8 @@
 import { useState, useEffect, useMemo } from "react";
 import { motion } from "framer-motion";
-import { Check, Loader2, Minus } from "lucide-react";
+import { Check, Minus } from "lucide-react";
 import axios from "axios";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const API_BASE = 'https://avppbvsxayehguepyjkb.supabase.co/functions/v1/user-api';
 
@@ -88,6 +89,31 @@ const PLAN_CONTENT: Record<string, PlanContent> = {
   },
 };
 
+const PricingSkeleton = () => (
+  <div className="w-full max-w-7xl mx-auto px-0 sm:px-2">
+    <div className="grid gap-4 sm:gap-5 lg:gap-6 xl:gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
+      {[0, 1, 2, 3].map((i) => (
+        <div
+          key={i}
+          className={`flex flex-col h-full rounded-2xl p-5 sm:p-6 border border-border/60 bg-background ${i === 2 ? "shadow-card" : ""}`}
+        >
+          <Skeleton className="h-6 w-24 mb-3" />
+          <Skeleton className="h-4 w-full mb-1" />
+          <Skeleton className="h-4 w-3/4 mb-6" />
+          <Skeleton className="h-10 w-24 mb-1" />
+          <Skeleton className="h-4 w-16 mb-6" />
+          <div className="space-y-3 mb-8 flex-1">
+            {Array.from({ length: 6 }).map((_, idx) => (
+              <Skeleton key={idx} className="h-4 w-full" />
+            ))}
+          </div>
+          <Skeleton className={`h-11 w-full rounded-xl ${i === 2 ? "bg-primary/30" : ""}`} />
+        </div>
+      ))}
+    </div>
+  </div>
+);
+
 const getPlanKey = (plan: {
   name?: string;
   template_tier?: string;
@@ -161,7 +187,9 @@ const PricingSection = () => {
           transition={{ duration: 0.6 }}
           className="text-center mb-12"
         >
-          <span className="text-primary text-sm font-semibold uppercase tracking-wider">Pricing</span>
+          <span className="inline-block px-4 py-1.5 rounded-full bg-primary/15 border border-primary/30 text-primary text-xs font-semibold tracking-wider uppercase mb-4">
+            Pricing
+          </span>
           <h2 className="text-3xl md:text-4xl font-bold mt-3 mb-6 text-foreground">
             Choose Your Subscription Plan
           </h2>
@@ -183,9 +211,7 @@ const PricingSection = () => {
         </motion.div>
 
         {loading ? (
-          <div className="flex justify-center items-center h-64">
-            <Loader2 className="w-8 h-8 animate-spin text-primary" />
-          </div>
+          <PricingSkeleton />
         ) : (
           <div className="w-full max-w-7xl mx-auto px-0 sm:px-2">
             <div
@@ -220,51 +246,77 @@ const PricingSection = () => {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.5, delay: i * 0.15 }}
-                  className={`flex flex-col h-full rounded-2xl p-4 sm:p-5 md:p-6 lg:p-7 min-w-0 relative ${popular
-                    ? "bg-primary/5 border-2 border-primary glow-primary"
-                    : "card-futuristic"
+                  className={`flex flex-col h-full rounded-2xl p-5 sm:p-6 lg:p-7 pt-8 sm:pt-9 min-w-0 relative border transition-all duration-300 hover:-translate-y-1 ${popular
+                    ? "bg-navy border-primary shadow-2xl scale-[1.02] hover:shadow-primary/20"
+                    : "bg-background border-border/60 hover:border-primary/30 hover:shadow-lg"
                     }`}
                 >
                   {popular && (
-                    <span className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-primary text-primary-foreground text-xs font-bold shadow-lg">
+                    <span className="absolute -top-3.5 left-1/2 -translate-x-1/2 z-10 px-4 py-1 rounded-full bg-primary text-primary-foreground text-xs font-bold shadow-lg whitespace-nowrap">
                       Most Popular
                     </span>
                   )}
-                  <h3 className="text-lg sm:text-xl font-bold mb-2 text-foreground break-words">
-                    {content.name}
-                  </h3>
-                  <p className="text-xs sm:text-sm text-muted-foreground mb-4 leading-relaxed">
+
+                  <div className="flex items-baseline justify-between gap-2 mb-3">
+                    <h3 className={`text-lg sm:text-xl font-bold break-words ${popular ? "text-primary-foreground" : "text-foreground"}`}>
+                      {content.name}
+                    </h3>
+                    <span className={`text-[10px] font-semibold uppercase tracking-wider ${popular ? "text-primary/80" : "text-muted-foreground/70"}`}>
+                      {planKey}
+                    </span>
+                  </div>
+
+                  <p className={`text-xs sm:text-sm mb-5 leading-relaxed ${popular ? "text-primary-foreground/70" : "text-muted-foreground"}`}>
                     {content.tagline}
                   </p>
-                  <div className="mb-4 sm:mb-6">
-                    <div className="text-3xl sm:text-4xl font-extrabold text-primary">{price}</div>
-                    <div className="text-muted-foreground text-sm mt-1">{pricePeriod}</div>
+
+                  <div className="mb-6">
+                    <div className={`text-4xl sm:text-5xl font-extrabold tracking-tight ${popular ? "text-primary-foreground" : "text-foreground"}`}>
+                      {price}
+                    </div>
+                    <div className={`text-sm mt-1.5 ${popular ? "text-primary-foreground/60" : "text-muted-foreground"}`}>
+                      {pricePeriod}
+                    </div>
                   </div>
-                  <ul className="space-y-2 sm:space-y-2.5 mb-6 sm:mb-8 flex-1">
+
+                  <ul className="space-y-2.5 mb-8 flex-1">
                     {content.features.map((feature, idx) => (
                       <li
                         key={idx}
-                        className={`flex items-start gap-2 sm:gap-3 min-w-0 ${
-                          feature.included ? 'text-muted-foreground' : 'text-muted-foreground/50'
-                        }`}
+                        className={`flex items-start gap-3 min-w-0 ${feature.included
+                          ? popular ? 'text-primary-foreground/85' : 'text-muted-foreground'
+                          : 'text-muted-foreground/40'
+                          }`}
                       >
-                        {feature.included ? (
-                          <Check className="w-4 h-4 text-primary mt-0.5 shrink-0" />
-                        ) : (
-                          <Minus className="w-4 h-4 mt-0.5 shrink-0" />
-                        )}
-                        <span className="text-xs sm:text-sm min-w-0 break-words">{feature.text}</span>
+                        <span
+                          className={`w-5 h-5 rounded-full flex items-center justify-center shrink-0 mt-0.5 ${feature.included
+                            ? popular
+                              ? "bg-primary/25 text-primary"
+                              : "bg-primary/10 text-primary"
+                            : "bg-muted text-muted-foreground/50"
+                            }`}
+                        >
+                          {feature.included ? (
+                            <Check className="w-3 h-3" />
+                          ) : (
+                            <Minus className="w-3 h-3" />
+                          )}
+                        </span>
+                        <span className={`text-xs sm:text-sm min-w-0 break-words ${feature.included ? "" : "line-through"}`}>
+                          {feature.text}
+                        </span>
                       </li>
                     ))}
                   </ul>
+
                   <a
                     href="https://app.constil.com/signup"
-                    className={`mt-auto block text-center py-2.5 sm:py-3 rounded-xl text-sm sm:text-base font-semibold transition-all duration-300 ${popular
+                    className={`mt-auto block text-center py-3 rounded-xl text-sm sm:text-base font-semibold transition-all duration-300 ${popular
                       ? "bg-primary text-primary-foreground hover:bg-primary-hover glow-primary"
                       : "border-2 border-primary text-primary hover:bg-primary hover:text-primary-foreground"
                       }`}
                   >
-                    Choose Plan
+                    {isFreeTrial ? "Start Free Trial" : "Choose Plan"}
                   </a>
                 </motion.div>
               );

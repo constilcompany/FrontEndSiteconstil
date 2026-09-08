@@ -1,7 +1,7 @@
 import { useRef, useState } from "react";
 import { motion } from "framer-motion";
 import heroVideo from "@/assets/hero-video-diverse.mp4";
-import demoVideo from "@/assets/hero-video.mp4";
+import demoVideo from "@/assets/demo.mp4";
 import {
   Dialog,
   DialogContent,
@@ -14,7 +14,8 @@ const HeroSection = () => {
 
   const handleDemoOpenChange = (open: boolean) => {
     setDemoOpen(open);
-    if (!open) demoVideoRef.current?.pause();
+    if (open) demoVideoRef.current?.play();
+    else demoVideoRef.current?.pause();
   };
 
   return (
@@ -54,14 +55,15 @@ const HeroSection = () => {
             <span className="text-primary"> AI Construction Estimating Software</span>
           </h1>
           <p className="text-lg md:text-lg text-primary-foreground/70 mb-4 max-w-lg">
-            Build your projects with AI construction estimating software constructed to give you the power to take charge of your projects. CONSTIL changes the way you estimate, plan, and manage with blueprint uploads through to precise cost estimates.          </p>
+            Build your projects with AI construction estimating software constructed to give you the power to take charge of your projects. CONSTIL changes the way you estimate, plan, and manage with blueprint uploads through to precise cost estimates.
+          </p>
 
           <p className="text-lg md:text-lg text-primary-foreground/70 mb-10 max-w-lg">
             See how construction estimating will be revamped in the future with high-level automation that is seamlessly coupled with intuitive project control, all on a single smart intelligent platform that optimizes your workflow and increases your productivity.
           </p>
           <div className="flex flex-wrap gap-4">
             <a
-              href="/contact"
+              href="https://app.constil.com/signup/"
               className="inline-flex items-center justify-center px-8 py-3.5 rounded-xl bg-primary text-primary-foreground font-semibold hover:bg-primary-hover transition-all duration-300 glow-primary focus-visible:outline focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-transparent"
             >
               Get Started
@@ -86,6 +88,7 @@ const HeroSection = () => {
           <video
             ref={demoVideoRef}
             src={demoVideo}
+            autoPlay
             controls
             className="w-full h-full object-contain rounded-xl"
             playsInline

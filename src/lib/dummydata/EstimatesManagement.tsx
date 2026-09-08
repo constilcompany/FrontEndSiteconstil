@@ -59,7 +59,7 @@ const SmartClientManagement = {
 
         },
         {
-            title: <p>Contractors do not have to use disconnected tools to prepare, review, and approve all estimates; they can manage everything clearly within a single environment. This enhances teamwork in the workplace and enables starting each project with proper, clear <Link to="/payment-tracking-software">cost planning.</Link></p>,
+            title: <p>Contractors do not have to use disconnected tools to prepare, review, and approve all estimates; they can manage everything clearly within a single environment. This enhances teamwork in the workplace and enables starting each project with proper, clear cost planning.</p>,
 
         },
 
@@ -73,7 +73,7 @@ const tryItContent = {
     title: "Any successful construction project is based on accurate budgeting. The estimating software assists contractors in developing organised estimates, minimising costly calculation errors, and presenting a competent bid with ease. Start managing your project costs, increasing the precision of your estimates, and understanding your project's financials before construction starts.",
     description: "",
     buttonText: "Start Free Trial",
-    path: "https://app.constil.com/signup",
+    path: "https://app.constil.com/",
 };
 
 const featureSectionData = {
@@ -98,7 +98,7 @@ const featureSectionData = {
 
             content: (
                 <p className="text-sm text-slate-800">
-                    Minimise errors in all estimates with advanced construction project estimating software. Real-time tracking of material quantities, labour rates, and budget adjustments. <Link to="/payment-tracking-software">Automated calculations</Link> eliminate manual errors, help the contractor produce credible estimates more quickly, and ensure that each project budget reflects the correct project requirements.
+                    Minimise errors in all estimates with advanced construction project estimating software. Real-time tracking of material quantities, labour rates, and budget adjustments. Automated calculations eliminate manual errors, help the contractor produce credible estimates more quickly, and ensure that each project budget reflects the correct project requirements.
                 </p>
             )
         },
@@ -201,7 +201,7 @@ const tryItContentCenter = {
     title: "Construction companies do not just need spreadsheets and manual calculations. Our construction estimating software will allow the contractors to draw up organized estimates, control the costs of the projects, and retain financial clarity from the very initial stages of planning.",
     description: "Raise the standard of how you estimate your building projects and lay a more solid financial base for each project your team comes up with.",
     buttonText: "Start Free Trial",
-    path: "https://app.constil.com/signup",
+    path: "https://app.constil.com/",
 };
 
 const integrationsSectionData = {
@@ -210,7 +210,7 @@ const integrationsSectionData = {
     points: [
         <p>We integrate with key construction equipment using sophisticated integrations. Contractors are able to connect the <Link to={'/invoices-management-software'}>accounting software,</Link> document storage solutions, <Link to={'/client-management-software'}>Client management</Link> solutions and communication tools to form a single operational environment.</p>,
         "With construction estimator accounting software integration, the financial data would run between the estimating and accounting systems. This will remove manual data, enhance financial accuracy and keep budgets and costs of projects in check.",
-        <p>The entire cost planning, project management, and <Link to={'/payment-tracking-software'}>financial tracking</Link> are then integrated into a single connected ecosystem using your estimating software for construction.</p>
+        <p>The entire cost planning, project management, and financial tracking are then integrated into a single connected ecosystem using your estimating software for construction.</p>
     ]
 };
 

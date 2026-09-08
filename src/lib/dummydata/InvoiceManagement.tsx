@@ -18,7 +18,7 @@ const bannerContent = {
     title: "The construction businesses can use the aid of AI invoice management software to manage invoices, keep track of payments and see the clear financial streams within one unified system. Supplier invoices, approvals and records can be handled by the contractors, finance teams and project managers without the need of using disconnected spreadsheets or manual tracking systems",
     image: ai,
     description: "Through smart invoice management automation, organizations are able to digitize their invoice capture, automate invoice approval and track their financial records in real time. The system is beneficial in the management of money used in construction activities, whether it is paying suppliers or project costs, the system enhances accuracy, visibility, and efficiency in financial management.",
-    path: 'https://app.constil.com/signup',
+    path: 'https://app.constil.com/',
     btnText: "Get Started Now"
 }
 
@@ -52,11 +52,11 @@ const SmartClientManagement = {
 
         },
         {
-            title: <h2 className="mb-4 text-base leading-relaxed text-gray-600">Through an AI invoice management tool, contractors can use the software to track supplier bills, identify anomalies, and keep well-structured <Link to="/payment-tracking-software">records of payments</Link> by using artificial intelligence to manage invoices. This smart system enhances financial visibility and ease in the way project invoices are processed throughout the organisation.</h2>
+            title: <h2 className="mb-4 text-base leading-relaxed text-gray-600">Through an AI invoice management tool, contractors can use the software to track supplier bills, identify anomalies, and keep well-structured records of payments by using artificial intelligence to manage invoices. This smart system enhances financial visibility and ease in the way project invoices are processed throughout the organisation.</h2>
 
         },
     ],
-    path: '/contact',
+    path: 'https://app.constil.com/',
     btnText: "Get Started Now",
     reverse: false
 }
@@ -66,7 +66,7 @@ const tryItContent = {
     title: "Construction companies deal with hundreds of invoices from vendors, subcontractors, and suppliers and thus the manual process of tracking is slow and inefficient. Best invoice automation software assists the employees in automating the process of capturing invoices, structuring approvals, and financial operations at a single platform. Automate the invoice management and have a straightforward financial management of your projects.",
     description: "",
     buttonText: "Start Free Trial",
-    path: "https://app.constil.com/signup"
+    path: "https://app.constil.com/"
 };
 
 const featureSectionData = {
@@ -177,7 +177,7 @@ const benefitsSectionData = {
         },
         {
             title: "More Financial Transparency over Construction Projects",
-            description: <p>Contractors traced with the help of special construction invoice management software, obtain clear information about the expenses of the supplier and the <Link to="/payment-tracking-software">state of payment.</Link> This enables the construction companies to have organised financial planning in the projects.</p>,
+            description: <p>Contractors traced with the help of special construction invoice management software, obtain clear information about the expenses of the supplier and the state of payment. This enables the construction companies to have organised financial planning in the projects.</p>,
             icon: (
                 <svg className="h-6 w-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
@@ -212,7 +212,7 @@ const WhyChooseData = {
     cards: [
         {
             title: "Constructed for Financial Workflow Construction",
-            text: <p>Specialised construction invoice management software that is based on the invoicing of contractors, suppliers, <Link to="/payment-tracking-software">payment, and project expenses.</Link></p>,
+            text: <p>Specialised construction invoice management software that is based on the invoicing of contractors, suppliers, payment, and project expenses.</p>,
             dark: true
         },
         {
@@ -276,7 +276,7 @@ const tryItContentBottom = {
     title: "Every construction business needs transparency of finance. Building invoice management software enables teams to manage the supplier invoices, approvals and ensure good financial records.",
     description: "Give your finance department solid invoice management automation, enhancing efficiency and minimizing operational complexity.",
     buttonText: "Start Free Trial",
-    path: 'https://app.constil.com/signup'
+    path: 'https://app.constil.com/'
 };
 
 

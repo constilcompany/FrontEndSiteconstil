@@ -20,26 +20,18 @@ const AboutSection = () => (
           </h2>
           <p className="text-muted-foreground leading-relaxed mb-2">
             Smart construction tools should be granted to construction professionals.
-
-
           </p>
           <p className="text-muted-foreground leading-relaxed mb-4">
             CONSTIL was developed to bridge the gap between traditional and modern technologies. Our AI blueprint analysis software is technologically advanced, and it reads and analyzes plans immediately, enabling contractors to transition to the budget within minutes.
           </p>
-
-
-
-
           <p className="text-muted-foreground leading-relaxed mb-4">
-
-            It does not matter whether you are a residential construction builder or commercial contractor; we want to accomplish:          </p>
-
+            It does not matter whether you are a residential construction builder or commercial contractor; we want to accomplish:
+          </p>
           <p className="text-muted-foreground leading-relaxed mb-4">
-
             Provide construction estimating and <Link to={'/client-management-software'}>Client management</Link> software that is the most reliable, saves time, costs, and increases profits.
           </p>
           <a
-            href="https://app.constil.com/signup"
+            href="https://app.constil.com/"
             className="inline-block px-8 py-3.5 rounded-xl bg-primary  mt-4 text-primary-foreground font-semibold hover:bg-primary-hover transition-all duration-300 glow-primary"
           >
             Get Started Now

@@ -1,5 +1,4 @@
 import Navbar from "@/components/Navbar";
-import ConstilChatBot from "@/components/ConstilChatBot";
 import Footer from "@/components/Footer";
 import { motion } from "framer-motion";
 import heroImg from "@/assets/diverse-engineers.jpg";
@@ -44,7 +43,6 @@ const btnOutline =
 const ConstructionEstimatingPage = () => (
   <main className="bg-background min-h-screen scroll-smooth">
     <Navbar />
-    <ConstilChatBot />
 
     {/* Hero */}
     <section className="relative min-h-[85vh] flex items-center overflow-hidden pt-24">

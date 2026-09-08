@@ -14,7 +14,6 @@ const solutionsLinks = [
   { label: "Invoices-Management Software", to: "/invoices-management-software" },
   { label: "Client-Management Software", to: "/client-management-software" },
   { label: "Estimating Software", to: "/estimates-software" },
-  { label: "Payment-Tracking Software", to: "/payment-tracking-software" },
 ];
 
 const mainLinks = [

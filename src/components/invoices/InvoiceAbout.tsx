@@ -1,4 +1,3 @@
-import { Link } from "react-router-dom"
 import { CheckCircle } from "lucide-react";
 
 interface InvoiceAboutProps {
@@ -52,11 +51,11 @@ const InvoiceAbout: React.FC<InvoiceAboutProps> = ({ InvoiceAboutContent }) => {
               </p>
             ))}
 
-            <Link to={path}>
+            <a href={path}>
               <span className="inline-flex items-center rounded-md bg-[#448AFF] px-6 py-3 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
                {btnText}
               </span>
-            </Link>
+            </a>
           </div>
 
         </div>

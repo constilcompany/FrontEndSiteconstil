@@ -1,5 +1,4 @@
 import Navbar from "@/components/Navbar";
-import ConstilChatBot from "@/components/ConstilChatBot";
 import Footer from "@/components/Footer";
 import { motion } from "framer-motion";
 import clientHeroImg from "@/assets/team-professionals.jpg";
@@ -40,7 +39,6 @@ const btnOutline =
 const ClientManagementPage = () => (
   <main className="bg-background min-h-screen scroll-smooth">
     <Navbar />
-    <ConstilChatBot />
 
     {/* Hero / Overview – image as background */}
     <section className="relative min-h-[85vh] flex items-center overflow-hidden pt-24">
