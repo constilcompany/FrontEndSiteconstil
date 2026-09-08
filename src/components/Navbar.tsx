@@ -15,7 +15,7 @@ const solutionsLinks = [
     label: "Invoices-Management Software",
     to: "/invoices-management-software",
     icon: Receipt,
-    description: "Centralize billing, invoices & payments",
+    description: "Centralize billing, invoices",
   },
   {
     label: "Client-Management Software",
