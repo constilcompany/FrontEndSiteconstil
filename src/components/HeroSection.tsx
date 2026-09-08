@@ -29,7 +29,7 @@ const HeroSection = () => {
           setVideoFailed(true);
         }}
       >
-        <source src="/videos/hero-video-diverse.mp4" type="video/mp4" />
+        <source src="/videos/herovideodiverse.mp4" type="video/mp4" />
         {/* Fallback poster image if video fails to load */}
       </video>
 
