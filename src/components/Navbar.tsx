@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Menu, X, LogIn, UserPlus, ChevronDown } from "lucide-react";
+import { Menu, X, LogIn, UserPlus, ChevronDown, Receipt, Users, Calculator, ArrowRight } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   DropdownMenu,
@@ -11,9 +11,24 @@ import {
 
 
 const solutionsLinks = [
-  { label: "Invoices-Management Software", to: "/invoices-management-software" },
-  { label: "Client-Management Software", to: "/client-management-software" },
-  { label: "Estimating Software", to: "/estimates-software" },
+  {
+    label: "Invoices-Management Software",
+    to: "/invoices-management-software",
+    icon: Receipt,
+    description: "Centralize billing, invoices & payments",
+  },
+  {
+    label: "Client-Management Software",
+    to: "/client-management-software",
+    icon: Users,
+    description: "Organize clients, projects & partnerships",
+  },
+  {
+    label: "Estimating Software",
+    to: "/estimates-software",
+    icon: Calculator,
+    description: "AI-powered construction cost estimating",
+  },
 ];
 
 const mainLinks = [
@@ -96,8 +111,8 @@ const Navbar = () => {
             <DropdownMenuTrigger asChild>
               <button
                 className={`inline-flex items-center gap-1 text-sm font-medium px-3 py-1.5 rounded-full transition-colors duration-200 ${scrolled || isActive ? "text-foreground hover:bg-primary/10 hover:text-primary" : "text-primary-foreground/90 hover:bg-primary/10 hover:text-primary"
-                  }`}
-                aria-label="Open solutions menu"
+                  } [&>svg]:transition-transform [&[data-state=open]>svg]:rotate-180`}
+                aria-label="Open services menu"
               >
                 Services
                 <ChevronDown className="w-4 h-4 opacity-80" />
@@ -105,19 +120,48 @@ const Navbar = () => {
             </DropdownMenuTrigger>
             <DropdownMenuContent
               align="start"
-              className="min-w-[280px] w-max max-w-[min(90vw,320px)] bg-background text-foreground border border-border rounded-xl py-2 px-1 shadow-dropdown"
+              sideOffset={12}
+              className="w-[min(90vw,360px)] bg-white text-foreground border border-border rounded-2xl p-2 shadow-[0_20px_60px_-15px_hsl(220_20%_10%/0.25)] overflow-hidden"
             >
-              {solutionsLinks.map((l) => (
-                <DropdownMenuItem
-                  key={l.to}
-                  asChild
-                  className="cursor-pointer focus:bg-primary/10 focus:text-primary rounded-lg px-3 py-2.5"
+              <div className="flex items-center justify-between px-3 pt-2 pb-3">
+                <span className="text-[11px] font-bold uppercase tracking-[0.14em] text-primary">
+                  Our Solutions
+                </span>
+                <span className="h-px flex-1 mx-3 bg-primary/15" />
+              </div>
+
+              <div className="flex flex-col gap-1">
+                {solutionsLinks.map((l) => {
+                  const Icon = l.icon;
+                  return (
+                    <DropdownMenuItem
+                      key={l.to}
+                      asChild
+                      className="group cursor-pointer rounded-xl p-0 focus:bg-secondary/70 focus:text-foreground"
+                    >
+                      <Link to={l.to} className="flex items-start gap-3 px-3 py-2.5">
+                        <span className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
+                          <Icon className="h-5 w-5" />
+                        </span>
+                        <span className="flex flex-col gap-0.5">
+                          <span className="text-sm font-semibold leading-tight">{l.label}</span>
+                          <span className="text-xs text-muted-foreground leading-snug">{l.description}</span>
+                        </span>
+                      </Link>
+                    </DropdownMenuItem>
+                  );
+                })}
+              </div>
+
+              <div className="mt-2 border-t border-border/70 px-1 pt-2">
+                <a
+                  href="https://app.constil.com/signup"
+                  className="group flex items-center justify-between rounded-xl px-3 py-2.5 text-sm font-semibold text-primary transition-colors hover:bg-primary/10"
                 >
-                  <Link to={l.to} className="w-full flex items-center gap-2 text-sm whitespace-nowrap">
-                    {l.label}
-                  </Link>
-                </DropdownMenuItem>
-              ))}
+                  See all solutions
+                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                </a>
+              </div>
             </DropdownMenuContent>
           </DropdownMenu>
 

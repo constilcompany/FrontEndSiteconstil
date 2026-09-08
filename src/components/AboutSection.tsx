@@ -51,11 +51,11 @@ const AboutSection = () => (
               className="rounded-3xl shadow-2xl w-full"
             />
             {/* Floating stats */}
-            <div className="absolute -bottom-6 -left-6 bg-background rounded-2xl shadow-xl p-5 border border-border">
+            <div className="absolute -bottom-6 left-2 sm:-left-6 bg-background rounded-2xl shadow-xl p-5 border border-border">
               <div className="text-3xl font-extrabold text-primary">15min</div>
               <div className="text-xs text-muted-foreground">Blueprint Analysis</div>
             </div>
-            <div className="absolute -top-4 -right-4 bg-background rounded-2xl shadow-xl p-5 border border-border">
+            <div className="absolute -top-4 right-2 sm:-right-4 bg-background rounded-2xl shadow-xl p-5 border border-border">
               <div className="text-3xl font-extrabold text-primary">99%</div>
               <div className="text-xs text-muted-foreground">Accuracy Rate</div>
             </div>
