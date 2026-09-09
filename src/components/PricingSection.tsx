@@ -75,9 +75,9 @@ const PLAN_CONTENT: Record<string, PlanContent> = {
       { text: 'Edit any line item', included: true },
     ],
   },
-  team: {
-    name: 'Team',
-    tagline: 'For crews with multiple estimators. 3 seats included.',
+  business: {
+    name: 'Business',
+    tagline: 'For growing crews with multiple estimators. 3 seats included.',
     features: [
       { text: 'Everything in Pro', included: true },
       { text: '3 team seats', included: true },
@@ -126,7 +126,7 @@ const getPlanKey = (plan: {
 
   if (name.includes('starter')) return 'starter';
   if (name.includes('pro') || tier === 'professional') return 'pro';
-  if (name.includes('team') || tier === 'enterprise') return 'team';
+  if (name.includes('business') || name.includes('team') || tier === 'enterprise') return 'business';
 
   return 'starter';
 };
