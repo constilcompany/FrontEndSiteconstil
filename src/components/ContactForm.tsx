@@ -4,16 +4,18 @@ import { Send, Mail, User, MessageSquare, Building, MapPin, CheckCircle2 } from 
 import { useToast } from "@/hooks/use-toast";
 import diverseImg from "@/assets/diverse-engineers.jpg";
 import axios from "axios";
+import Celebration from "./Celebration";
 
 const ContactForm = () => {
   const { toast } = useToast();
-  const [form, setForm] = useState({ first_name: "", last_name: "", email: "", message: "", company_name: "" });
+  const [form, setForm] = useState({ firstName: "", lastName: "", email: "", message: "", companyName: "" });
   const [sending, setSending] = useState(false);
+  const [celebrate, setCelebrate] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!form.first_name.trim() || !form.last_name.trim() || !form.email.trim() || !form.message.trim() || !form.company_name.trim()) {
+    if (!form.firstName.trim() || !form.lastName.trim() || !form.email.trim() || !form.message.trim() || !form.companyName.trim()) {
       toast({ title: "Please fill in all fields", variant: "destructive" });
       return;
     }
@@ -24,9 +26,10 @@ const ContactForm = () => {
     }
 
     setSending(true);
-    axios.post("https://hasrpxdysyoukmsxveba.supabase.co/functions/v1/submit-support-query", form).then((response) => {
-      toast({ title: "Message sent!", description: "We'll get back to you shortly." });
-      setForm({ first_name: "", last_name: "", email: "", message: "", company_name: "" });
+    axios.post("https://avppbvsxayehguepyjkb.supabase.co/functions/v1/contact-form/submit", form).then((response) => {
+     //toast({ title: "Message sent!", description: "We'll get back to you shortly." });
+      setForm({ firstName: "", lastName: "", email: "", message: "", companyName: "" });
+      setCelebrate(true);
     }).catch((error) => {
       toast({ title: "Error", description: "Something went wrong. Please try again later.", variant: "destructive" });
     }).finally(() => {
@@ -44,6 +47,7 @@ const ContactForm = () => {
 
   return (
     <section id="contact" className="section-light py-24">
+      <Celebration open={celebrate} onDone={() => setCelebrate(false)} />
       <div className="container mx-auto px-4">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -121,8 +125,8 @@ const ContactForm = () => {
                   <User className={iconWrapClass + " w-4 h-4 text-muted-foreground"} />
                   <input
                     type="text"
-                    value={form.first_name}
-                    onChange={(e) => setForm({ ...form, first_name: e.target.value })}
+                    value={form.firstName}
+                    onChange={(e) => setForm({ ...form, firstName: e.target.value })}
                     placeholder="John"
                     maxLength={50}
                     className={inputClass}
@@ -135,8 +139,8 @@ const ContactForm = () => {
                   <User className={iconWrapClass + " w-4 h-4 text-muted-foreground"} />
                   <input
                     type="text"
-                    value={form.last_name}
-                    onChange={(e) => setForm({ ...form, last_name: e.target.value })}
+                    value={form.lastName}
+                    onChange={(e) => setForm({ ...form, lastName: e.target.value })}
                     placeholder="Smith"
                     maxLength={50}
                     className={inputClass}
@@ -151,8 +155,8 @@ const ContactForm = () => {
                 <Building className={iconWrapClass + " w-4 h-4 text-muted-foreground"} />
                 <input
                   type="text"
-                  value={form.company_name}
-                  onChange={(e) => setForm({ ...form, company_name: e.target.value })}
+                  value={form.companyName}
+                  onChange={(e) => setForm({ ...form, companyName: e.target.value })}
                   placeholder="Acme Construction"
                   maxLength={100}
                   className={inputClass}
