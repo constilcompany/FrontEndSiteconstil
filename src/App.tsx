@@ -17,6 +17,9 @@ import ContactPage from "./pages/ContactPage";
 import Blog from "./pages/Blog";
 import BlogDetail from "./pages/BlogDetail";
 import AboutPage from "./pages/AboutPage";
+import PaymentTrackingManagementPage from "./pages/PaymentTrackingManagementPage";
+import AdminLogin from "./pages/admin/AdminLogin";
+import BlogDashboard from "./pages/admin/BlogDashboard";
 import ConstilChatBot from "./components/ConstilChatBot";
 import ScrollToTop from "./components/ScrollToTop";
 
@@ -42,8 +45,13 @@ const App = () => (
           <Route path="/client-management-software" element={<ClientManagementSoftwarePage />} />
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/blogs" element={<Blog />} />
+          <Route path="/blog" element={<Blog />} />
           <Route path="/blogs/:slug" element={<BlogDetail />} />
+          <Route path="/blog/:slug" element={<BlogDetail />} />
           <Route path="/about" element={<AboutPage />} />
+          <Route path="/payment_tracking" element={<PaymentTrackingManagementPage />} />
+          <Route path="/admin" element={<AdminLogin />} />
+          <Route path="/admin/dashboard" element={<BlogDashboard />} />
 
           <Route path="*" element={<NotFound />} />
         </Routes>

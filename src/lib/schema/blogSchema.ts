@@ -1,4 +1,5 @@
 export const generateBlogSchema = (blog) => {
+    if (!blog) return null;
     const url = `https://constil.com/blogs/${blog.slug}`;
 
     return {
@@ -61,7 +62,7 @@ export const generateBlogSchema = (blog) => {
             {
                 "@type": "FAQPage",
                 "@id": `${url}#faq`,
-                mainEntity: blog.faq.map((faq) => ({
+                mainEntity: (blog.faq || []).map((faq) => ({
                     "@type": "Question",
                     name: faq.quest,
                     acceptedAnswer: {

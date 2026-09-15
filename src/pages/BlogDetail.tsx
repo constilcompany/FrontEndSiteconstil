@@ -4,14 +4,14 @@ import { motion } from "framer-motion";
 import { Calendar, ArrowLeft } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { blogPosts } from "@/mock/blogPosts";
+import { getBlogs } from "@/lib/blogStorage";
 import NotFound from "./NotFound";
 import { generateBlogSchema } from "@/lib/schema/blogSchema";
 
 const BlogDetail = () => {
     const { slug } = useParams<{ slug: string }>();
-    const post = blogPosts.find((p) => p.slug === slug);
-    const schema = generateBlogSchema(post);
+    const blogs = getBlogs();
+    const post = blogs.find((p) => p.slug === slug);
 
     const getCleanText = (value) => {
         if (!value) return "";
@@ -25,18 +25,34 @@ const BlogDetail = () => {
     };
 
     if (!post) {
-        return <NotFound />;
+        return (
+            <div className="min-h-screen flex flex-col bg-background">
+                <Navbar />
+                <div className="flex-grow flex items-center justify-center">
+                    <div className="text-center">
+                        <h1 className="text-4xl font-bold text-foreground mb-4">Blog Post Not Found</h1>
+                        <p className="text-muted-foreground mb-8">The blog post you're looking for doesn't exist or has been removed.</p>
+                        <Link to="/blogs" className="text-primary hover:underline">Return to all blogs</Link>
+                    </div>
+                </div>
+                <Footer />
+            </div>
+        );
     }
+
+    const schema = generateBlogSchema(post);
 
     return (
         <div className="min-h-screen flex flex-col bg-background selection:bg-primary/20">
             <Helmet>
-                <title>{post.metaTitle}</title>
-                <meta name="description" content={post.metaDescription} />
+                <title>{post.metaTitle || post.title}</title>
+                <meta name="description" content={post.metaDescription || post.shortDescription || post.title} />
                 <link rel="canonical" href={`https://constil.com/blogs/${post.slug}`} />
-                <script type="application/ld+json">
-                    {JSON.stringify(schema)}
-                </script>
+                {schema && (
+                    <script type="application/ld+json">
+                        {JSON.stringify(schema)}
+                    </script>
+                )}
             </Helmet>
             <Navbar />
 
@@ -73,9 +89,12 @@ const BlogDetail = () => {
                             {post.title}
                         </h1>
 
-                        <div className="prose max-w-none prose-headings:text-foreground prose-p:text-black prose-p:leading-relaxed prose-a:text-primary hover:prose-a:text-primary-hover prose-headings:mt-[18px] prose-headings:mb-[18px] prose-p:mt-[14px] prose-p:mb-[14px] ">
-
-                            {post.description && post.description.map((paragraph, index) => (
+                        <div className="prose prose-lg max-w-none prose-headings:text-foreground prose-p:text-black prose-p:leading-relaxed prose-a:text-primary hover:prose-a:text-primary-hover">
+                            {post.content ? (
+                                <div dangerouslySetInnerHTML={{ __html: post.content }} />
+                            ) : (
+                                <>
+                                    {post.description && post.description.map((paragraph, index) => (
                                 typeof paragraph === 'string' && paragraph.trim() !== "" && (
                                     <p key={index} className="text-[17px] text-black">
                                         {paragraph}
@@ -148,6 +167,8 @@ const BlogDetail = () => {
                                         </div>
                                     ))}
                                 </div>
+                            )}
+                            </>
                             )}
                         </div>
                     </motion.div>

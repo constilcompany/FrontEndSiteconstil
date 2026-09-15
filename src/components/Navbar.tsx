@@ -29,6 +29,12 @@ const solutionsLinks = [
     icon: Calculator,
     description: "AI-powered construction cost estimating",
   },
+  {
+    label: "Payment Tracking",
+    to: "/payment_tracking",
+    icon: Receipt,
+    description: "Track your payments seamlessly",
+  },
 ];
 
 const mainLinks = [
