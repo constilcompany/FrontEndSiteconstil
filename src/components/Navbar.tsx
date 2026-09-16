@@ -31,7 +31,7 @@ const solutionsLinks = [
   },
   {
     label: "Payment Tracking",
-    to: "/payment_tracking",
+    to: "/payment-tracking-software",
     icon: Receipt,
     description: "Track your payments seamlessly",
   },

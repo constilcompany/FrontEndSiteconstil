@@ -2,7 +2,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Index from "./pages/Index";
 import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
@@ -49,7 +49,8 @@ const App = () => (
           <Route path="/blogs/:slug" element={<BlogDetail />} />
           <Route path="/blog/:slug" element={<BlogDetail />} />
           <Route path="/about" element={<AboutPage />} />
-          <Route path="/payment_tracking" element={<PaymentTrackingManagementPage />} />
+          <Route path="/payment-tracking-software" element={<PaymentTrackingManagementPage />} />
+          <Route path="/payment_tracking" element={<Navigate to="/payment-tracking-software" replace />} />
           <Route path="/admin" element={<AdminLogin />} />
           <Route path="/admin/dashboard" element={<BlogDashboard />} />
 
