@@ -1,4 +1,5 @@
 import { blogPosts as dummyBlogPosts } from '@/mock/blogPosts';
+import { supabase } from './supabase';
 
 export interface BlogPost {
     id: number | string;
@@ -16,94 +17,108 @@ export interface BlogPost {
     Section?: any[];
     faqheading?: any;
     faq?: any[];
+    created_at?: string;
 }
 
-export const getCustomBlogs = (): BlogPost[] => {
-    const stored = localStorage.getItem('constil_custom_blogs');
-    if (stored) {
-        try {
-            return JSON.parse(stored);
-        } catch (e) {
-            console.error('Failed to parse custom blogs', e);
+export const getBlogs = async (): Promise<BlogPost[]> => {
+    try {
+        const { data, error } = await supabase
+            .from('blogs')
+            .select('*')
+            .order('created_at', { ascending: false });
+
+        if (error) {
+            console.error('Error fetching blogs from Supabase:', error);
+            return dummyBlogPosts as BlogPost[];
         }
+
+        const mappedDbBlogs = data.map(blog => ({
+            ...blog,
+            imageUrl: blog.image_url || blog.imageUrl,
+            shortDescription: blog.short_description || blog.shortDescription,
+            metaTitle: blog.meta_title || blog.metaTitle,
+            metaDescription: blog.meta_description || blog.metaDescription,
+        })) as BlogPost[];
+
+        return [...mappedDbBlogs, ...dummyBlogPosts];
+    } catch (e) {
+        console.error('Exception fetching blogs:', e);
+        return dummyBlogPosts as BlogPost[];
     }
-    return [];
 }
 
-export const getDeletedDummyIds = (): (number | string)[] => {
-    const stored = localStorage.getItem('constil_deleted_dummy_ids');
-    if (stored) {
-        try {
-            return JSON.parse(stored);
-        } catch (e) {
-            console.error('Failed to parse deleted dummy ids', e);
-        }
-    }
-    return [];
-}
-
-export const saveCustomBlogs = (blogs: BlogPost[]) => {
-    localStorage.setItem('constil_custom_blogs', JSON.stringify(blogs));
-}
-
-export const saveDeletedDummyIds = (ids: (number | string)[]) => {
-    localStorage.setItem('constil_deleted_dummy_ids', JSON.stringify(ids));
-}
-
-export const getBlogs = (): BlogPost[] => {
-    const customBlogs = getCustomBlogs();
-    const deletedDummyIds = getDeletedDummyIds();
-    
-    // Filter out deleted dummy blogs
-    const activeDummyBlogs = dummyBlogPosts.filter(b => !deletedDummyIds.includes(b.id)) as BlogPost[];
-    
-    // Combine custom and dummy blogs
-    return [...customBlogs, ...activeDummyBlogs];
-}
-
-export const addBlog = (blog: Omit<BlogPost, 'id'>) => {
-    const customBlogs = getCustomBlogs();
-    const newBlog = {
-        ...blog,
-        id: `custom-${Date.now()}`
-    };
-    saveCustomBlogs([newBlog, ...customBlogs]);
-}
-
-export const updateBlog = (id: number | string, updatedBlog: BlogPost) => {
-    const customBlogs = getCustomBlogs();
-    const index = customBlogs.findIndex(b => b.id === id);
-    
-    if (index !== -1) {
-        // Update existing custom blog
-        customBlogs[index] = updatedBlog;
-        saveCustomBlogs(customBlogs);
-    } else {
-        // User is editing a dummy blog. We "delete" the dummy and create a custom one with the same ID.
-        const deletedIds = getDeletedDummyIds();
-        if (!deletedIds.includes(id)) {
-            saveDeletedDummyIds([...deletedIds, id]);
+export const getBlogBySlug = async (slug: string): Promise<BlogPost | null> => {
+    try {
+        const { data, error } = await supabase
+            .from('blogs')
+            .select('*')
+            .eq('slug', slug)
+            .single();
+            
+        if (error || !data) {
+            const dummy = dummyBlogPosts.find(b => b.slug === slug);
+            return (dummy as BlogPost) || null;
         }
         
-        // Ensure we preserve the ID so URLs don't break if dependent on it (though we use slug for URLs)
-        const newCustomBlog = { ...updatedBlog, id }; 
-        saveCustomBlogs([newCustomBlog, ...customBlogs]);
+        return {
+            ...data,
+            imageUrl: data.image_url || data.imageUrl,
+            shortDescription: data.short_description || data.shortDescription,
+            metaTitle: data.meta_title || data.metaTitle,
+            metaDescription: data.meta_description || data.metaDescription,
+        } as BlogPost;
+    } catch (e) {
+        const dummy = dummyBlogPosts.find(b => b.slug === slug);
+        return (dummy as BlogPost) || null;
     }
 }
 
-export const deleteBlog = (id: number | string) => {
-    const customBlogs = getCustomBlogs();
-    const index = customBlogs.findIndex(b => b.id === id);
+export const addBlog = async (blog: Omit<BlogPost, 'id'>) => {
+    const payload = {
+        slug: blog.slug,
+        title: blog.title,
+        meta_title: blog.metaTitle,
+        meta_description: blog.metaDescription,
+        short_description: blog.shortDescription,
+        date: blog.date,
+        image_url: blog.imageUrl,
+        content: blog.content,
+    };
+    const { error } = await supabase.from('blogs').insert([payload]);
+    if (error) {
+        console.error('Error adding blog:', error);
+        throw error;
+    }
+}
+
+export const updateBlog = async (id: number | string, updatedBlog: BlogPost) => {
+    const payload = {
+        slug: updatedBlog.slug,
+        title: updatedBlog.title,
+        meta_title: updatedBlog.metaTitle,
+        meta_description: updatedBlog.metaDescription,
+        short_description: updatedBlog.shortDescription,
+        date: updatedBlog.date,
+        image_url: updatedBlog.imageUrl,
+        content: updatedBlog.content,
+    };
     
-    if (index !== -1) {
-        // Delete custom blog
-        customBlogs.splice(index, 1);
-        saveCustomBlogs(customBlogs);
-    } else {
-        // Delete dummy blog
-        const deletedIds = getDeletedDummyIds();
-        if (!deletedIds.includes(id)) {
-            saveDeletedDummyIds([...deletedIds, id]);
-        }
+    // First try to update
+    const { error } = await supabase
+        .from('blogs')
+        .update(payload)
+        .eq('id', id);
+
+    if (error) {
+        console.error('Error updating blog:', error);
+        throw error;
+    }
+}
+
+export const deleteBlog = async (id: number | string) => {
+    const { error } = await supabase.from('blogs').delete().eq('id', id);
+    if (error) {
+        console.error('Error deleting blog:', error);
+        throw error;
     }
 }

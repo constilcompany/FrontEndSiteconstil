@@ -8,6 +8,7 @@ const BlogDashboard = () => {
     const [blogs, setBlogs] = useState<BlogPost[]>([]);
     const [isEditing, setIsEditing] = useState(false);
     const [currentBlog, setCurrentBlog] = useState<Partial<BlogPost>>({});
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         if (localStorage.getItem('constil_admin_auth') !== 'true') {
@@ -17,7 +18,12 @@ const BlogDashboard = () => {
         loadBlogs();
     }, [navigate]);
 
-    const loadBlogs = () => setBlogs(getBlogs());
+    const loadBlogs = async () => {
+        setLoading(true);
+        const fetchedBlogs = await getBlogs();
+        setBlogs(fetchedBlogs);
+        setLoading(false);
+    };
 
     const handleLogout = () => {
         localStorage.removeItem('constil_admin_auth');
@@ -46,7 +52,7 @@ const BlogDashboard = () => {
         }
     };
 
-    const handleSave = (e: React.FormEvent) => {
+    const handleSave = async (e: React.FormEvent) => {
         e.preventDefault();
         
         if (!currentBlog.title || !currentBlog.slug || !currentBlog.date) {
@@ -54,15 +60,20 @@ const BlogDashboard = () => {
             return;
         }
 
-        if (currentBlog.id) {
-            updateBlog(currentBlog.id, currentBlog as BlogPost);
-        } else {
-            addBlog(currentBlog as Omit<BlogPost, 'id'>);
+        try {
+            if (currentBlog.id) {
+                await updateBlog(currentBlog.id, currentBlog as BlogPost);
+            } else {
+                await addBlog(currentBlog as Omit<BlogPost, 'id'>);
+            }
+            
+            setIsEditing(false);
+            setCurrentBlog({});
+            await loadBlogs();
+        } catch (error: any) {
+            alert(`Failed to save blog. Error: ${error?.message || JSON.stringify(error)}`);
+            console.error(error);
         }
-        
-        setIsEditing(false);
-        setCurrentBlog({});
-        loadBlogs();
     };
 
     const handleEdit = (blog: BlogPost) => {
@@ -70,10 +81,15 @@ const BlogDashboard = () => {
         setIsEditing(true);
     };
 
-    const handleDelete = (id: string | number) => {
+    const handleDelete = async (id: string | number) => {
         if (window.confirm('Are you sure you want to delete this blog?')) {
-            deleteBlog(id);
-            loadBlogs();
+            try {
+                await deleteBlog(id);
+                await loadBlogs();
+            } catch (error) {
+                alert('Failed to delete blog.');
+                console.error(error);
+            }
         }
     };
 
@@ -191,7 +207,12 @@ const BlogDashboard = () => {
                             <h2 className="text-xl font-semibold text-foreground">All Blogs</h2>
                             <button onClick={() => setIsEditing(true)} className="bg-primary text-primary-foreground px-5 py-2 rounded-lg hover:opacity-90 font-medium transition-opacity">Add New Blog</button>
                         </div>
-                        <ul className="divide-y divide-border">
+                        {loading ? (
+                            <div className="p-12 flex justify-center">
+                                <div className="w-10 h-10 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+                            </div>
+                        ) : (
+                            <ul className="divide-y divide-border">
                             {blogs.map(blog => (
                                 <li key={blog.id} className="flex justify-between items-center p-6 hover:bg-slate-50 transition-colors">
                                     <div className="flex gap-4 items-center">
@@ -211,6 +232,7 @@ const BlogDashboard = () => {
                             ))}
                             {blogs.length === 0 && <li className="p-8 text-center text-slate-500">No blogs found.</li>}
                         </ul>
+                        )}
                     </div>
                 )}
             </div>

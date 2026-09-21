@@ -1,17 +1,29 @@
+import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { Helmet } from "react-helmet";
 import { motion } from "framer-motion";
 import { Calendar, ArrowLeft } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { getBlogs } from "@/lib/blogStorage";
+import { getBlogBySlug, BlogPost } from "@/lib/blogStorage";
 import NotFound from "./NotFound";
 import { generateBlogSchema } from "@/lib/schema/blogSchema";
 
 const BlogDetail = () => {
     const { slug } = useParams<{ slug: string }>();
-    const blogs = getBlogs();
-    const post = blogs.find((p) => p.slug === slug);
+    const [post, setPost] = useState<BlogPost | null>(null);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchPost = async () => {
+            if (slug) {
+                const fetchedPost = await getBlogBySlug(slug);
+                setPost(fetchedPost);
+                setLoading(false);
+            }
+        };
+        fetchPost();
+    }, [slug]);
 
     const getCleanText = (value) => {
         if (!value) return "";
@@ -23,6 +35,18 @@ const BlogDetail = () => {
 
         return "";
     };
+
+    if (loading) {
+        return (
+            <div className="min-h-screen flex flex-col bg-background">
+                <Navbar />
+                <div className="flex-grow flex items-center justify-center">
+                    <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+                </div>
+                <Footer />
+            </div>
+        );
+    }
 
     if (!post) {
         return (

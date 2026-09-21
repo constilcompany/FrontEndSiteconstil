@@ -1,11 +1,17 @@
-import { Linkedin, Instagram, Facebook, Twitter, Mail, MapPin } from "lucide-react";
+import { Linkedin, Instagram, Facebook, Mail, MapPin } from "lucide-react";
 import { Link } from "react-router-dom";
+
+const XLogo = ({ className }: { className?: string }) => (
+  <svg viewBox="0 0 24 24" fill="currentColor" className={className} aria-hidden>
+    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+  </svg>
+);
 
 const socialLinks = [
   { href: "https://www.facebook.com/constilapp", icon: Facebook, label: "Facebook" },
   { href: "https://www.linkedin.com/company/constilapp/", icon: Linkedin, label: "LinkedIn" },
   { href: "https://www.instagram.com/constilapp", icon: Instagram, label: "Instagram" },
-  { href: "https://x.com/Constilapp", icon: Twitter, label: "Twitter" },
+  { href: "https://x.com/Constilapp", isX: true, label: "X (Twitter)" },
 ];
 
 const navLinks = [
@@ -107,7 +113,11 @@ const Footer = () => (
                 className="w-9 h-9 rounded-lg bg-primary-foreground/10 border border-primary-foreground/10 flex items-center justify-center text-primary-foreground/60 hover:text-primary hover:border-primary/30 hover:bg-primary/10 transition-all duration-200"
                 aria-label={item.label}
               >
-                <item.icon className="w-4 h-4" />
+                {item.isX ? (
+                  <XLogo className="w-4 h-4" />
+                ) : (
+                  <item.icon className="w-4 h-4" />
+                )}
               </a>
             ))}
           </div>
