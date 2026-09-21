@@ -244,3 +244,10 @@
 .blog-content-body img[style*="float: left"] { margin-right: 1.5rem; }
 .blog-content-body img[style*="float: right"] { margin-left: 1.5rem; }
 .blog-content-body p { line-height: 1.8; margin-bottom: 1rem; }
+
+.blog-content-body strong,
+.blog-content-body b,
+.tox .tox-edit-area strong,
+.tox .tox-edit-area b {
+  font-weight: 700 !important;
+}

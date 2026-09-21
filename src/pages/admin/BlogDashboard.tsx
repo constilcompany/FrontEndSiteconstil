@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getBlogs, addBlog, updateBlog, deleteBlog, BlogPost } from '@/lib/blogStorage';
-import { Editor } from '@tinymce/tinymce-react';
+import { TipTapEditor } from '@/components/TipTapEditor';
 
 const BlogDashboard = () => {
     const navigate = useNavigate();
@@ -160,44 +160,9 @@ const BlogDashboard = () => {
                                     {currentBlog.id && !currentBlog.content && <span className="text-amber-500 font-normal">Legacy dummy blog format detected. Editing this will overwrite it as custom content.</span>}
                                 </label>
                                 <div className="bg-white rounded-lg">
-                                    <Editor
-                                        apiKey="kyrv8941ooxavcuzj3qazxq6kkae3g2ykpjz27qd4h96cr1x"
-                                        value={currentBlog.content || ''}
-                                        onEditorChange={(content) => setCurrentBlog({...currentBlog, content})}
-                                        init={{
-                                            height: 500,
-                                            menubar: true,
-                                            plugins: [
-                                                'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview', 'anchor', 
-                                                'searchreplace', 'visualblocks', 'code', 'fullscreen', 'insertdatetime', 'media', 'table', 'help', 'wordcount'
-                                            ],
-                                            toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline forecolor backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image media table | removeformat',
-                                            content_style: 'body { font-family:Inter,sans-serif; font-size:16px; } img { max-width: 100%; height: auto; display: inline-block; border-radius: 8px; margin: 1rem 0; } img[style*="float: left"] { margin-right: 1.5rem; } img[style*="float: right"] { margin-left: 1.5rem; } p { line-height: 1.8; margin-bottom: 1rem; }',
-                                            image_advtab: true,
-                                            paste_data_images: true,
-                                            image_title: true,
-                                            automatic_uploads: true,
-                                            file_picker_types: 'image',
-                                            file_picker_callback: (cb, value, meta) => {
-                                                const input = document.createElement('input');
-                                                input.setAttribute('type', 'file');
-                                                input.setAttribute('accept', 'image/*');
-                                                input.onchange = function () {
-                                                    const file = (this as any).files[0];
-                                                    const reader = new FileReader();
-                                                    reader.onload = function () {
-                                                        const id = 'blobid' + (new Date()).getTime();
-                                                        const blobCache = (window as any).tinymce.activeEditor.editorUpload.blobCache;
-                                                        const base64 = (reader.result as string).split(',')[1];
-                                                        const blobInfo = blobCache.create(id, file, base64);
-                                                        blobCache.add(blobInfo);
-                                                        cb(blobInfo.blobUri(), { title: file.name });
-                                                    };
-                                                    reader.readAsDataURL(file);
-                                                };
-                                                input.click();
-                                            }
-                                        }}
+                                    <TipTapEditor 
+                                        content={currentBlog.content || ''} 
+                                        onChange={(content) => setCurrentBlog({...currentBlog, content})} 
                                     />
                                 </div>
                             </div>
