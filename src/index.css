@@ -238,3 +238,9 @@
   72% { top: -4px; }
   100% { top: -4px; opacity: 0; }
 }
+
+/* Blog Content Body Styles */
+.blog-content-body img { max-width: 100%; height: auto; display: inline-block; border-radius: 8px; margin: 1rem 0; }
+.blog-content-body img[style*="float: left"] { margin-right: 1.5rem; }
+.blog-content-body img[style*="float: right"] { margin-left: 1.5rem; }
+.blog-content-body p { line-height: 1.8; margin-bottom: 1rem; }

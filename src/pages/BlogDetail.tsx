@@ -91,7 +91,7 @@ const BlogDetail = () => {
 
                         <div className="prose prose-lg max-w-none prose-headings:text-foreground prose-p:text-black prose-p:leading-relaxed prose-a:text-primary hover:prose-a:text-primary-hover">
                             {post.content ? (
-                                <div dangerouslySetInnerHTML={{ __html: post.content }} />
+                                <div className="blog-content-body max-w-none text-slate-800" dangerouslySetInnerHTML={{ __html: post.content }} />
                             ) : (
                                 <>
                                     {post.description && post.description.map((paragraph, index) => (
