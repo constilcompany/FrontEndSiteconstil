@@ -1,4 +1,5 @@
 import { useEditor, EditorContent } from '@tiptap/react';
+import { Extension } from '@tiptap/core';
 import StarterKit from '@tiptap/starter-kit';
 import Link from '@tiptap/extension-link';
 import TextAlign from '@tiptap/extension-text-align';
@@ -9,10 +10,64 @@ import ResizeImage from 'tiptap-extension-resize-image';
 import { 
     Bold, Italic, Underline as UnderlineIcon, 
     List, ListOrdered, AlignLeft, AlignCenter, AlignRight, 
-    ImageIcon, Undo, Redo, Heading1, Heading2, Heading3, 
+    ImageIcon, Undo, Redo, 
     Quote, Link as LinkIcon, Unlink 
 } from 'lucide-react';
 import { useCallback } from 'react';
+
+declare module '@tiptap/core' {
+  interface Commands<ReturnType> {
+    fontSize: {
+      setFontSize: (size: string) => ReturnType
+      unsetFontSize: () => ReturnType
+    }
+  }
+}
+
+export const FontSize = Extension.create({
+  name: 'fontSize',
+  addOptions() {
+    return {
+      types: ['textStyle'],
+    };
+  },
+  addGlobalAttributes() {
+    return [
+      {
+        types: this.options.types,
+        attributes: {
+          fontSize: {
+            default: null,
+            parseHTML: element => element.style.fontSize.replace(/['"]+/g, ''),
+            renderHTML: attributes => {
+              if (!attributes.fontSize) {
+                return {};
+              }
+              return {
+                style: `font-size: ${attributes.fontSize}`,
+              };
+            },
+          },
+        },
+      },
+    ];
+  },
+  addCommands() {
+    return {
+      setFontSize: fontSize => ({ chain }) => {
+        return chain()
+          .setMark('textStyle', { fontSize })
+          .run();
+      },
+      unsetFontSize: () => ({ chain }) => {
+        return chain()
+          .setMark('textStyle', { fontSize: null })
+          .removeEmptyTextStyle()
+          .run();
+      },
+    };
+  },
+});
 
 const MenuBar = ({ editor }: { editor: any }) => {
     if (!editor) {
@@ -59,16 +114,39 @@ const MenuBar = ({ editor }: { editor: any }) => {
     );
 
     return (
-        <div className="flex flex-wrap gap-1 p-2 border-b border-slate-200 bg-slate-50 rounded-t-lg items-center">
+        <div className="sticky top-0 z-10 flex flex-wrap gap-1 p-2 border-b border-slate-200 bg-slate-50 rounded-t-lg items-center">
             <ToolbarButton onClick={() => editor.chain().focus().undo().run()} disabled={!editor.can().undo()} title="Undo"><Undo size={18} /></ToolbarButton>
             <ToolbarButton onClick={() => editor.chain().focus().redo().run()} disabled={!editor.can().redo()} title="Redo"><Redo size={18} /></ToolbarButton>
             
             <div className="w-px h-6 bg-slate-300 mx-1"></div>
 
-            <ToolbarButton onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()} isActive={editor.isActive('heading', { level: 1 })} title="Heading 1"><Heading1 size={18} /></ToolbarButton>
-            <ToolbarButton onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()} isActive={editor.isActive('heading', { level: 2 })} title="Heading 2"><Heading2 size={18} /></ToolbarButton>
-            <ToolbarButton onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()} isActive={editor.isActive('heading', { level: 3 })} title="Heading 3"><Heading3 size={18} /></ToolbarButton>
-
+            <select
+                className="mx-1 border border-slate-300 rounded p-1.5 text-sm bg-white text-slate-700 focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary"
+                onChange={(e) => {
+                    const level = e.target.value;
+                    if (level === 'p') {
+                        editor.chain().focus().setParagraph().run();
+                    } else {
+                        editor.chain().focus().setHeading({ level: parseInt(level) }).run();
+                    }
+                }}
+                value={
+                    editor.isActive('heading', { level: 1 }) ? '1' :
+                    editor.isActive('heading', { level: 2 }) ? '2' :
+                    editor.isActive('heading', { level: 3 }) ? '3' :
+                    editor.isActive('heading', { level: 4 }) ? '4' :
+                    editor.isActive('heading', { level: 5 }) ? '5' :
+                    editor.isActive('heading', { level: 6 }) ? '6' : 'p'
+                }
+            >
+                <option value="p">Normal Text</option>
+                <option value="1">Heading 1</option>
+                <option value="2">Heading 2</option>
+                <option value="3">Heading 3</option>
+                <option value="4">Heading 4</option>
+                <option value="5">Heading 5</option>
+                <option value="6">Heading 6</option>
+            </select>
             <div className="w-px h-6 bg-slate-300 mx-1"></div>
 
             <ToolbarButton onClick={() => editor.chain().focus().toggleBold().run()} isActive={editor.isActive('bold')} title="Bold"><Bold size={18} /></ToolbarButton>
@@ -100,6 +178,28 @@ const MenuBar = ({ editor }: { editor: any }) => {
                 className="w-6 h-6 rounded-full border border-slate-300 ml-1"
                 style={{ backgroundColor: editor.getAttributes('textStyle').color || '#000000' }}
             />
+
+            <select
+                className="ml-2 border border-slate-300 rounded p-1.5 text-sm bg-white text-slate-700 focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary"
+                onChange={(e) => {
+                    const size = e.target.value;
+                    if (size) {
+                        editor.chain().focus().setFontSize(size).run();
+                    } else {
+                        editor.chain().focus().unsetFontSize().run();
+                    }
+                }}
+                value={editor.getAttributes('textStyle').fontSize || ''}
+            >
+                <option value="">Font Size (Default)</option>
+                <option value="12px">12px - Small</option>
+                <option value="14px">14px</option>
+                <option value="16px">16px - Normal</option>
+                <option value="18px">18px</option>
+                <option value="20px">20px - Large</option>
+                <option value="24px">24px - Huge</option>
+                <option value="32px">32px - Giant</option>
+            </select>
         </div>
     );
 };
@@ -111,6 +211,7 @@ export const TipTapEditor = ({ content, onChange }: { content: string, onChange:
             Underline,
             TextStyle,
             Color,
+            FontSize,
             Link.configure({
                 openOnClick: false,
                 HTMLAttributes: {
@@ -121,7 +222,7 @@ export const TipTapEditor = ({ content, onChange }: { content: string, onChange:
                 types: ['heading', 'paragraph', 'image'],
             }),
             ResizeImage.configure({
-                inline: true,
+                inline: false,
                 allowBase64: true,
                 HTMLAttributes: {
                     class: 'rounded-lg max-w-full h-auto',
@@ -161,7 +262,7 @@ export const TipTapEditor = ({ content, onChange }: { content: string, onChange:
     });
 
     return (
-        <div className="border border-border rounded-lg bg-white overflow-hidden flex flex-col shadow-sm">
+        <div className="border border-border rounded-lg bg-white flex flex-col shadow-sm">
             <MenuBar editor={editor} />
             <div className="bg-white flex-grow cursor-text blog-content-body" onClick={() => editor?.commands.focus()}>
                 <EditorContent editor={editor} />
