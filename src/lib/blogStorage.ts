@@ -25,7 +25,7 @@ export const getBlogs = async (): Promise<BlogPost[]> => {
         const { data, error } = await supabase
             .from('blogs')
             .select('*')
-            .order('created_at', { ascending: true });
+            .order('created_at', { ascending: false });
 
         if (error) {
             console.error('Supabase fetch error:', error);
@@ -42,7 +42,18 @@ export const getBlogs = async (): Promise<BlogPost[]> => {
             date: blog.publish_date || blog.created_at || blog.date,
         })) as BlogPost[];
 
-        return [...dummyBlogPosts, ...mappedDbBlogs];
+        const allBlogs = [...mappedDbBlogs, ...dummyBlogPosts];
+
+        allBlogs.sort((a, b) => {
+            const dateA = new Date(a.date).getTime();
+            const dateB = new Date(b.date).getTime();
+            // Handle invalid dates just in case by defaulting to 0
+            const timeA = isNaN(dateA) ? 0 : dateA;
+            const timeB = isNaN(dateB) ? 0 : dateB;
+            return timeB - timeA; // Descending (newest first)
+        });
+
+        return allBlogs;
     } catch (e) {
         console.error('Exception fetching blogs:', e);
         return dummyBlogPosts as BlogPost[];
