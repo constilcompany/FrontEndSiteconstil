@@ -15,14 +15,21 @@ const BlogDetail = () => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
+        let isMounted = true;
         const fetchPost = async () => {
-            if (slug) {
+            if (!slug) return;
+            try {
+                setLoading(true);
                 const fetchedPost = await getBlogBySlug(slug);
-                setPost(fetchedPost);
-                setLoading(false);
+                if (isMounted) setPost(fetchedPost);
+            } catch (err) {
+                console.error("Fetch error:", err);
+            } finally {
+                if (isMounted) setLoading(false);
             }
         };
         fetchPost();
+        return () => { isMounted = false; };
     }, [slug]);
 
     const getCleanText = (value) => {

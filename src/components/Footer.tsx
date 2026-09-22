@@ -25,6 +25,7 @@ const serviceLinks = [
   { to: "/invoices-management-software", label: "Invoicing Software" },
   { to: "/client-management-software", label: "Client Management" },
   { to: "/estimates-software", label: "Estimates Software" },
+  { to: "/payment-tracking-software", label: "Payment Tracking" },
 ];
 
 

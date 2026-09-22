@@ -25,22 +25,24 @@ export const getBlogs = async (): Promise<BlogPost[]> => {
         const { data, error } = await supabase
             .from('blogs')
             .select('*')
-            .order('created_at', { ascending: false });
+            .order('created_at', { ascending: true });
 
         if (error) {
-            console.error('Error fetching blogs from Supabase:', error);
+            console.error('Supabase fetch error:', error);
             return dummyBlogPosts as BlogPost[];
         }
+        console.log("Supabase blogs fetched:", data);
 
         const mappedDbBlogs = data.map(blog => ({
             ...blog,
-            imageUrl: blog.image_url || blog.imageUrl,
-            shortDescription: blog.short_description || blog.shortDescription,
+            imageUrl: blog.cover_image || blog.image_url || blog.imageUrl || '/placeholder.svg',
+            shortDescription: blog.short_description || blog.shortDescription || '',
             metaTitle: blog.meta_title || blog.metaTitle,
             metaDescription: blog.meta_description || blog.metaDescription,
+            date: blog.publish_date || blog.created_at || blog.date,
         })) as BlogPost[];
 
-        return [...mappedDbBlogs, ...dummyBlogPosts];
+        return [...dummyBlogPosts, ...mappedDbBlogs];
     } catch (e) {
         console.error('Exception fetching blogs:', e);
         return dummyBlogPosts as BlogPost[];
@@ -53,7 +55,7 @@ export const getBlogBySlug = async (slug: string): Promise<BlogPost | null> => {
             .from('blogs')
             .select('*')
             .eq('slug', slug)
-            .single();
+            .maybeSingle();
             
         if (error || !data) {
             const dummy = dummyBlogPosts.find(b => b.slug === slug);
@@ -62,10 +64,11 @@ export const getBlogBySlug = async (slug: string): Promise<BlogPost | null> => {
         
         return {
             ...data,
-            imageUrl: data.image_url || data.imageUrl,
-            shortDescription: data.short_description || data.shortDescription,
+            imageUrl: data.cover_image || data.image_url || data.imageUrl || '/placeholder.svg',
+            shortDescription: data.short_description || data.shortDescription || '',
             metaTitle: data.meta_title || data.metaTitle,
             metaDescription: data.meta_description || data.metaDescription,
+            date: data.publish_date || data.created_at || data.date,
         } as BlogPost;
     } catch (e) {
         const dummy = dummyBlogPosts.find(b => b.slug === slug);
@@ -80,8 +83,8 @@ export const addBlog = async (blog: Omit<BlogPost, 'id'>) => {
         meta_title: blog.metaTitle,
         meta_description: blog.metaDescription,
         short_description: blog.shortDescription,
-        date: blog.date,
-        image_url: blog.imageUrl,
+        publish_date: blog.date,
+        cover_image: blog.imageUrl,
         content: blog.content,
     };
     const { error } = await supabase.from('blogs').insert([payload]);
@@ -98,8 +101,8 @@ export const updateBlog = async (id: number | string, updatedBlog: BlogPost) => 
         meta_title: updatedBlog.metaTitle,
         meta_description: updatedBlog.metaDescription,
         short_description: updatedBlog.shortDescription,
-        date: updatedBlog.date,
-        image_url: updatedBlog.imageUrl,
+        publish_date: updatedBlog.date,
+        cover_image: updatedBlog.imageUrl,
         content: updatedBlog.content,
     };
     

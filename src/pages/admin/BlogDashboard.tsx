@@ -61,15 +61,24 @@ const BlogDashboard = () => {
         }
 
         try {
+            const isNew = !currentBlog.id;
+            
             if (currentBlog.id) {
                 await updateBlog(currentBlog.id, currentBlog as BlogPost);
+                setBlogs(prev => prev.map(b => b.id === currentBlog.id ? { ...b, ...currentBlog } as BlogPost : b));
             } else {
                 await addBlog(currentBlog as Omit<BlogPost, 'id'>);
+                setBlogs(prev => [{ ...currentBlog, id: Date.now().toString() } as BlogPost, ...prev]);
             }
             
             setIsEditing(false);
             setCurrentBlog({});
-            await loadBlogs();
+            
+            if (isNew) {
+                navigate(`/blogs/${currentBlog.slug}`);
+            } else {
+                getBlogs().then(fetchedBlogs => setBlogs(fetchedBlogs));
+            }
         } catch (error: any) {
             alert(`Failed to save blog. Error: ${error?.message || JSON.stringify(error)}`);
             console.error(error);
