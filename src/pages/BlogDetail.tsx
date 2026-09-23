@@ -43,9 +43,37 @@ const BlogDetail = () => {
         return "";
     };
 
+    const formatSlugToTitle = (slugStr: string) => {
+        if (!slugStr) return "Blog Post";
+        return slugStr.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+    };
+
+    const renderHelmet = () => {
+        if (post) {
+            const schema = generateBlogSchema(post);
+            return (
+                <Helmet>
+                    <title>{post.metaTitle || post.title}</title>
+                    <meta name="description" content={post.metaDescription || post.shortDescription || post.title} />
+                    <link rel="canonical" href={`https://constil.com/blogs/${post.slug}`} />
+                    {schema && (
+                        <script type="application/ld+json">
+                            {JSON.stringify(schema)}
+                        </script>
+                    )}
+                </Helmet>
+            );
+        }
+        
+        // During loading, we don't inject any fallback title/description so we don't 
+        // overwrite the correct metadata that might have been injected by the server (PHP).
+        return <Helmet />;
+    };
+
     if (loading) {
         return (
             <div className="min-h-screen flex flex-col bg-background">
+                {renderHelmet()}
                 <Navbar />
                 <div className="flex-grow flex items-center justify-center">
                     <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
@@ -58,6 +86,9 @@ const BlogDetail = () => {
     if (!post) {
         return (
             <div className="min-h-screen flex flex-col bg-background">
+                <Helmet>
+                    <title>Blog Not Found | CONSTIL</title>
+                </Helmet>
                 <Navbar />
                 <div className="flex-grow flex items-center justify-center">
                     <div className="text-center">
@@ -71,20 +102,9 @@ const BlogDetail = () => {
         );
     }
 
-    const schema = generateBlogSchema(post);
-
     return (
         <div className="min-h-screen flex flex-col bg-background selection:bg-primary/20">
-            <Helmet>
-                <title>{post.metaTitle || post.title}</title>
-                <meta name="description" content={post.metaDescription || post.shortDescription || post.title} />
-                <link rel="canonical" href={`https://constil.com/blogs/${post.slug}`} />
-                {schema && (
-                    <script type="application/ld+json">
-                        {JSON.stringify(schema)}
-                    </script>
-                )}
-            </Helmet>
+            {renderHelmet()}
             <Navbar />
 
             <main className="flex-grow pt-24 pb-16">
