@@ -2,6 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import { createClient } from '@supabase/supabase-js';
 import { fileURLToPath } from 'url';
+import WebSocket from 'ws';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -30,8 +31,6 @@ if (!supabaseUrl || !supabaseKey) {
   process.exit(1);
 }
 
-import WebSocket from 'ws';
-
 const supabase = createClient(supabaseUrl, supabaseKey, {
   auth: {
     persistSession: false
@@ -52,50 +51,40 @@ if (!fs.existsSync(PUBLIC_DIR)) {
   fs.mkdirSync(PUBLIC_DIR, { recursive: true });
 }
 
+function formatDate(dateString) {
+  const d = new Date(dateString);
+  // Format as YYYY-MM-DDTHH:mm:ss+00:00
+  return d.toISOString().split('.')[0] + '+00:00';
+}
+
 async function generateSitemaps() {
-  const now = new Date().toISOString();
+  const nowISO = new Date().toISOString();
+  const nowStr = formatDate(nowISO);
 
-  // 1. Master Sitemap
-  const sitemapIndex = `<?xml version="1.0" encoding="UTF-8"?>
-<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <sitemap>
-    <loc>${BASE_URL}/pages-sitemap.xml</loc>
-    <lastmod>${now}</lastmod>
-  </sitemap>
-  <sitemap>
-    <loc>${BASE_URL}/blogs-sitemap.xml</loc>
-    <lastmod>${now}</lastmod>
-  </sitemap>
-</sitemapindex>`;
+  let urls = [];
 
-  fs.writeFileSync(path.join(PUBLIC_DIR, 'sitemap.xml'), sitemapIndex);
-
-  // 2. Pages Sitemap
+  // Pages
   const pages = [
-    { url: '/', priority: '1.0' },
-    { url: '/invoices-management-software', priority: '0.8' },
-    { url: '/client-management-software', priority: '0.8' },
-    { url: '/estimates-software', priority: '0.8' },
-    { url: '/payment-tracking-software', priority: '0.8' },
-    { url: '/blogs', priority: '0.9' },
-    { url: '/contact', priority: '0.8' },
-    { url: '/about', priority: '0.8' },
-    { url: '/price', priority: '0.8' },
+    { url: '/', priority: '1.0000' },
+    { url: '/invoices-management-software', priority: '0.8000' },
+    { url: '/client-management-software', priority: '0.8000' },
+    { url: '/estimates-software', priority: '0.8000' },
+    { url: '/payment-tracking-software', priority: '0.8000' },
+    { url: '/blogs', priority: '0.9000' },
+    { url: '/contact', priority: '0.8000' },
+    { url: '/about', priority: '0.8000' },
+    { url: '/price', priority: '0.8000' },
   ];
 
-  const pagesXml = `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${pages.map(p => `  <url>
-    <loc>${BASE_URL}${p.url}</loc>
-    <lastmod>${now}</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>${p.priority}</priority>
-  </url>`).join('\n')}
-</urlset>`;
+  pages.forEach(p => {
+    urls.push(`  <url>
+       <loc>${BASE_URL}${p.url}</loc>
+       <lastmod>${nowStr}</lastmod>
+       <priority>${p.priority}</priority>
+  </url>`);
+  });
 
-  fs.writeFileSync(path.join(PUBLIC_DIR, 'pages-sitemap.xml'), pagesXml);
-
-  // 3. Blogs Sitemap
+  // Blogs
   let blogs = [];
   try {
     const { data, error } = await supabase
@@ -111,58 +100,60 @@ ${pages.map(p => `  <url>
     console.error("Failed to fetch blogs from Supabase:", err);
   }
 
-  // Static blogs requested by user
   const staticBlogs = [
-    { slug: 'what-is-ai-construction-estimating-software', date: now },
-    { slug: 'how-ai-construction-takeoff-software-improves-estimating-accuracy', date: now }
+    { slug: 'what-is-ai-construction-estimating-software', date: nowISO },
+    { slug: 'how-ai-construction-takeoff-software-improves-estimating-accuracy', date: nowISO }
   ];
 
   const blogEntries = [];
-  
-  // Add static blogs first
   staticBlogs.forEach(sb => {
-    // only add if not already in dynamic blogs
     if (!blogs.find(b => b.slug === sb.slug)) {
       blogEntries.push({
         url: `/blogs/${sb.slug}`,
-        lastmod: sb.date,
-        priority: '0.8'
+        lastmod: formatDate(sb.date),
+        priority: '0.8000'
       });
     }
   });
 
-  // Add dynamic blogs
   blogs.forEach(b => {
-    const date = b.publish_date || b.created_at || now;
-    // ensure date is valid ISO
-    let isoDate = now;
+    const date = b.publish_date || b.created_at || nowISO;
+    let formattedDate = nowStr;
     try {
-      if (date) {
-        isoDate = new Date(date).toISOString();
-      }
-    } catch(e) {
-      // fallback
-    }
+      if (date) formattedDate = formatDate(date);
+    } catch(e) {}
     blogEntries.push({
       url: `/blogs/${b.slug}`,
-      lastmod: isoDate,
-      priority: '0.8'
+      lastmod: formattedDate,
+      priority: '0.8000'
     });
   });
 
-  const blogsXml = `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${blogEntries.map(b => `  <url>
-    <loc>${BASE_URL}${b.url}</loc>
-    <lastmod>${b.lastmod}</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>${b.priority}</priority>
-  </url>`).join('\n')}
+  blogEntries.forEach(b => {
+    urls.push(`  <url>
+       <loc>${BASE_URL}${b.url}</loc>
+       <lastmod>${b.lastmod}</lastmod>
+       <priority>${b.priority}</priority>
+  </url>`);
+  });
+
+  const sitemapXml = `<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/css" href="https://www.xml-sitemaps.com/css/sitemap.css"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+${urls.join('\n')}
 </urlset>`;
 
-  fs.writeFileSync(path.join(PUBLIC_DIR, 'blogs-sitemap.xml'), blogsXml);
+  fs.writeFileSync(path.join(PUBLIC_DIR, 'sitemap.xml'), sitemapXml);
+  
+  // Optionally delete the old ones so they don't linger
+  if (fs.existsSync(path.join(PUBLIC_DIR, 'pages-sitemap.xml'))) {
+      fs.unlinkSync(path.join(PUBLIC_DIR, 'pages-sitemap.xml'));
+  }
+  if (fs.existsSync(path.join(PUBLIC_DIR, 'blogs-sitemap.xml'))) {
+      fs.unlinkSync(path.join(PUBLIC_DIR, 'blogs-sitemap.xml'));
+  }
 
-  console.log('✅ Sitemaps generated successfully.');
+  console.log('✅ Single Sitemap generated successfully.');
 }
 
 generateSitemaps().catch(console.error);
