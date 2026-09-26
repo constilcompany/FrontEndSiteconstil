@@ -26,7 +26,7 @@ const ContactForm = () => {
     }
 
     setSending(true);
-    axios.post("https://avppbvsxayehguepyjkb.supabase.co/functions/v1/contact-form/submit", form).then((response) => {
+    axios.post("https://avppbvsxayehguepyjkb.supabase.co/functions/v1/contact-form", form).then((response) => {
      //toast({ title: "Message sent!", description: "We'll get back to you shortly." });
       setForm({ firstName: "", lastName: "", email: "", message: "", companyName: "" });
       setCelebrate(true);
