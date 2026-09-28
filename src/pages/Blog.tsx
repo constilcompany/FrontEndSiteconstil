@@ -33,8 +33,10 @@ const Blog = () => {
     return (
         <div className="min-h-screen flex flex-col bg-background selection:bg-primary/20">
             <Helmet>
-                <title>Blog - Constil</title>
+                <title>Blogs | Constil</title>
                 <meta name="description" content="Read the latest articles, insights, and updates from Constil on construction estimating, project management, and industry trends." />
+                <meta property="og:title" content="Blogs | Constil" />
+                <meta name="twitter:title" content="Blogs | Constil" />
                 <link rel="canonical" href="https://constil.com/blogs"></link>
             </Helmet>
             <Navbar />

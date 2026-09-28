@@ -73,13 +73,14 @@ async function generateSitemaps() {
     const routeRegex = /<Route[^>]+path=["']([^"']+)["']/g;
     let match;
     const excludePatterns = ['*', ':', '/admin', '/login', '/signup', '/payment_tracking'];
+    const exactExcludePaths = ['/blog'];
     const addedPaths = new Set();
 
     while ((match = routeRegex.exec(appTsxContent)) !== null) {
       const routePath = match[1];
       
       // Exclude dynamic routes, admin routes, auth routes, and redirects
-      const shouldExclude = excludePatterns.some(pattern => routePath.includes(pattern));
+      const shouldExclude = excludePatterns.some(pattern => routePath.includes(pattern)) || exactExcludePaths.includes(routePath);
       
       if (!shouldExclude && !addedPaths.has(routePath)) {
         addedPaths.add(routePath);
