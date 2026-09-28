@@ -1,21 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<?xml-stylesheet type="text/css" href="https://www.xml-sitemaps.com/css/sitemap.css"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://constil.com/blogs/what-is-ai-construction-estimating-software</loc>
-    <lastmod>2026-09-28T00:00:00+00:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
+       <loc>https://constil.com/blogs/what-is-ai-construction-estimating-software</loc>
+       <lastmod>2026-09-28T15:37:00+00:00</lastmod>
+       <priority>0.8000</priority>
   </url>
   <url>
-    <loc>https://constil.com/blogs/how-ai-construction-takeoff-software-improves-estimating-accuracy</loc>
-    <lastmod>2026-09-28T00:00:00+00:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
+       <loc>https://constil.com/blogs/how-ai-construction-takeoff-software-improves-estimating-accuracy</loc>
+       <lastmod>2026-09-28T15:37:00+00:00</lastmod>
+       <priority>0.8000</priority>
   </url>
   <url>
-    <loc>https://constil.com/blogs/how-ai-construction-estimating-software-reduces-costly-estimating-mistakes</loc>
-    <lastmod>2026-09-22T00:00:00+00:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
+       <loc>https://constil.com/blogs/how-ai-construction-estimating-software-reduces-costly-estimating-mistakes</loc>
+       <lastmod>2026-09-22T00:00:00+00:00</lastmod>
+       <priority>0.8000</priority>
   </url>
 </urlset>

@@ -61,7 +61,8 @@ async function generateSitemaps() {
   const nowISO = new Date().toISOString();
   const nowStr = formatDate(nowISO);
 
-  let urls = [];
+  let pageUrls = [];
+  let blogUrls = [];
 
   // Pages
   const pages = [
@@ -77,7 +78,7 @@ async function generateSitemaps() {
   ];
 
   pages.forEach(p => {
-    urls.push(`  <url>
+    pageUrls.push(`  <url>
        <loc>${BASE_URL}${p.url}</loc>
        <lastmod>${nowStr}</lastmod>
        <priority>${p.priority}</priority>
@@ -130,30 +131,39 @@ async function generateSitemaps() {
   });
 
   blogEntries.forEach(b => {
-    urls.push(`  <url>
+    blogUrls.push(`  <url>
        <loc>${BASE_URL}${b.url}</loc>
        <lastmod>${b.lastmod}</lastmod>
        <priority>${b.priority}</priority>
   </url>`);
   });
 
-  const sitemapXml = `<?xml version="1.0" encoding="UTF-8"?>
+  const generateSitemapFile = (urls) => `<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/css" href="https://www.xml-sitemaps.com/css/sitemap.css"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
 ${urls.join('\n')}
 </urlset>`;
 
-  fs.writeFileSync(path.join(PUBLIC_DIR, 'sitemap.xml'), sitemapXml);
-  
-  // Optionally delete the old ones so they don't linger
-  if (fs.existsSync(path.join(PUBLIC_DIR, 'pages-sitemap.xml'))) {
-      fs.unlinkSync(path.join(PUBLIC_DIR, 'pages-sitemap.xml'));
-  }
-  if (fs.existsSync(path.join(PUBLIC_DIR, 'blogs-sitemap.xml'))) {
-      fs.unlinkSync(path.join(PUBLIC_DIR, 'blogs-sitemap.xml'));
-  }
+  const pagesSitemapXml = generateSitemapFile(pageUrls);
+  const blogsSitemapXml = generateSitemapFile(blogUrls);
 
-  console.log('✅ Single Sitemap generated successfully.');
+  const indexSitemapXml = `<?xml version="1.0" encoding="UTF-8"?>
+<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <sitemap>
+    <loc>${BASE_URL}/pages-sitemap.xml</loc>
+    <lastmod>${nowStr}</lastmod>
+  </sitemap>
+  <sitemap>
+    <loc>${BASE_URL}/blogs-sitemap.xml</loc>
+    <lastmod>${nowStr}</lastmod>
+  </sitemap>
+</sitemapindex>`;
+
+  fs.writeFileSync(path.join(PUBLIC_DIR, 'pages-sitemap.xml'), pagesSitemapXml);
+  fs.writeFileSync(path.join(PUBLIC_DIR, 'blogs-sitemap.xml'), blogsSitemapXml);
+  fs.writeFileSync(path.join(PUBLIC_DIR, 'sitemap.xml'), indexSitemapXml);
+
+  console.log('✅ Split Sitemaps (index, pages, blogs) generated successfully.');
 }
 
 generateSitemaps().catch(console.error);
