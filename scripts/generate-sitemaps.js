@@ -64,34 +64,17 @@ async function generateSitemaps() {
   let pageUrls = [];
   let blogUrls = [];
 
-  // Pages: Automatically read from App.tsx
-  let pages = [];
-  const appTsxPath = path.resolve(__dirname, '../src/App.tsx');
-  
-  if (fs.existsSync(appTsxPath)) {
-    const appTsxContent = fs.readFileSync(appTsxPath, 'utf-8');
-    const routeRegex = /<Route[^>]+path=["']([^"']+)["']/g;
-    let match;
-    const excludePatterns = ['*', ':', '/admin', '/login', '/signup', '/payment_tracking'];
-    const exactExcludePaths = ['/blog'];
-    const addedPaths = new Set();
-
-    while ((match = routeRegex.exec(appTsxContent)) !== null) {
-      const routePath = match[1];
-      
-      // Exclude dynamic routes, admin routes, auth routes, and redirects
-      const shouldExclude = excludePatterns.some(pattern => routePath.includes(pattern)) || exactExcludePaths.includes(routePath);
-      
-      if (!shouldExclude && !addedPaths.has(routePath)) {
-        addedPaths.add(routePath);
-        let priority = '0.8000';
-        if (routePath === '/') priority = '1.0000';
-        if (routePath.includes('/blogs')) priority = '0.9000';
-        
-        pages.push({ url: routePath, priority });
-      }
-    }
-  }
+  // Pages: Strictly 8 hardcoded URLs
+  const pages = [
+    { url: '/', priority: '1.0000' },
+    { url: '/invoices-management-software', priority: '0.8000' },
+    { url: '/client-management-software', priority: '0.8000' },
+    { url: '/estimates-software', priority: '0.8000' },
+    { url: '/payment-tracking-software', priority: '0.8000' },
+    { url: '/about', priority: '0.8000' },
+    { url: '/contact', priority: '0.8000' },
+    { url: '/blogs', priority: '0.9000' }
+  ];
 
   pages.forEach(p => {
     pageUrls.push(`  <url>
