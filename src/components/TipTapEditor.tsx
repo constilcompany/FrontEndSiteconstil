@@ -7,6 +7,10 @@ import Underline from '@tiptap/extension-underline';
 import { TextStyle } from '@tiptap/extension-text-style';
 import { Color } from '@tiptap/extension-color';
 import ResizeImage from 'tiptap-extension-resize-image';
+import { Table } from '@tiptap/extension-table';
+import { TableRow } from '@tiptap/extension-table-row';
+import { TableCell } from '@tiptap/extension-table-cell';
+import { TableHeader } from '@tiptap/extension-table-header';
 import { 
     Bold, Italic, Underline as UnderlineIcon, 
     List, ListOrdered, AlignLeft, AlignCenter, AlignRight, 
@@ -212,6 +216,27 @@ export const TipTapEditor = ({ content, onChange }: { content: string, onChange:
             TextStyle,
             Color,
             FontSize,
+            Table.configure({
+                resizable: true,
+                HTMLAttributes: {
+                    class: 'w-full border-collapse border border-slate-300 my-4',
+                },
+            }),
+            TableRow.configure({
+                HTMLAttributes: {
+                    class: 'border-b border-slate-300',
+                },
+            }),
+            TableHeader.configure({
+                HTMLAttributes: {
+                    class: 'border border-slate-300 p-2 bg-slate-100 font-bold text-left',
+                },
+            }),
+            TableCell.configure({
+                HTMLAttributes: {
+                    class: 'border border-slate-300 p-2',
+                },
+            }),
             Link.configure({
                 openOnClick: false,
                 HTMLAttributes: {
@@ -237,6 +262,42 @@ export const TipTapEditor = ({ content, onChange }: { content: string, onChange:
             attributes: {
                 class: 'prose prose-lg max-w-none focus:outline-none min-h-[400px] p-6 text-slate-800 [&_ul]:list-disc [&_ol]:list-decimal [&_li_p]:m-0',
             },
+            handlePaste: function(view, event, slice) {
+                const items = event.clipboardData?.items;
+                if (!items) return false;
+
+                // Check for Word's blocked local file images
+                const html = event.clipboardData?.getData('text/html');
+                if (html && html.includes('src="file:///')) {
+                    alert('Browser Security Warning:\n\nMicrosoft Word tried to paste an image using a local computer path (file:///) which web browsers block for security.\n\nTo paste this image, please do one of the following:\n1. Take a screenshot of the image and paste the screenshot.\n2. Right-click the image in Word, click "Save as Picture...", then drag and drop the saved file here.');
+                    // Don't return true, let the text parts paste, just the image will be broken as usual but now they know why.
+                }
+
+                let imageHandled = false;
+                for (let i = 0; i < items.length; i++) {
+                    const item = items[i];
+                    if (item.type.indexOf('image') === 0) {
+                        event.preventDefault();
+                        imageHandled = true;
+                        const file = item.getAsFile();
+                        if (file) {
+                            const reader = new FileReader();
+                            reader.readAsDataURL(file);
+                            reader.onload = () => {
+                                const src = reader.result as string;
+                                const { schema } = view.state;
+                                const imageNode = schema.nodes.imageResize || schema.nodes.image;
+                                if (imageNode) {
+                                    const node = imageNode.create({ src });
+                                    const transaction = view.state.tr.replaceSelectionWith(node);
+                                    view.dispatch(transaction);
+                                }
+                            };
+                        }
+                    }
+                }
+                return imageHandled;
+            },
             handleDrop: function(view, event, slice, moved) {
                 if (!moved && event.dataTransfer && event.dataTransfer.files && event.dataTransfer.files[0]) {
                     let file = event.dataTransfer.files[0];
@@ -248,9 +309,12 @@ export const TipTapEditor = ({ content, onChange }: { content: string, onChange:
                             const { schema } = view.state;
                             const coordinates = view.posAtCoords({ left: event.clientX, top: event.clientY });
                             if (coordinates) {
-                                const node = schema.nodes.image.create({ src });
-                                const transaction = view.state.tr.insert(coordinates.pos, node);
-                                view.dispatch(transaction);
+                                const imageNode = schema.nodes.imageResize || schema.nodes.image;
+                                if (imageNode) {
+                                    const node = imageNode.create({ src });
+                                    const transaction = view.state.tr.insert(coordinates.pos, node);
+                                    view.dispatch(transaction);
+                                }
                             }
                         };
                         return true;
