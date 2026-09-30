@@ -281,18 +281,25 @@ export const TipTapEditor = ({ content, onChange }: { content: string, onChange:
                         imageHandled = true;
                         const file = item.getAsFile();
                         if (file) {
-                            const reader = new FileReader();
-                            reader.readAsDataURL(file);
-                            reader.onload = () => {
-                                const src = reader.result as string;
-                                const { schema } = view.state;
-                                const imageNode = schema.nodes.imageResize || schema.nodes.image;
-                                if (imageNode) {
-                                    const node = imageNode.create({ src });
-                                    const transaction = view.state.tr.replaceSelectionWith(node);
-                                    view.dispatch(transaction);
-                                }
-                            };
+                            import('browser-image-compression').then((module) => {
+                                const imageCompression = module.default;
+                                return imageCompression(file, { maxSizeMB: 0.5, maxWidthOrHeight: 1920, useWebWorker: true });
+                            }).then(compressedFile => {
+                                const reader = new FileReader();
+                                reader.readAsDataURL(compressedFile);
+                                reader.onload = () => {
+                                    const src = reader.result as string;
+                                    const { schema } = view.state;
+                                    const imageNode = schema.nodes.imageResize || schema.nodes.image;
+                                    if (imageNode) {
+                                        const node = imageNode.create({ src });
+                                        const transaction = view.state.tr.replaceSelectionWith(node);
+                                        view.dispatch(transaction);
+                                    }
+                                };
+                            }).catch(err => {
+                                console.error('Image compression error:', err);
+                            });
                         }
                     }
                 }
@@ -302,21 +309,28 @@ export const TipTapEditor = ({ content, onChange }: { content: string, onChange:
                 if (!moved && event.dataTransfer && event.dataTransfer.files && event.dataTransfer.files[0]) {
                     let file = event.dataTransfer.files[0];
                     if (file.type.startsWith('image/')) {
-                        let reader = new FileReader();
-                        reader.readAsDataURL(file);
-                        reader.onload = () => {
-                            let src = reader.result as string;
-                            const { schema } = view.state;
-                            const coordinates = view.posAtCoords({ left: event.clientX, top: event.clientY });
-                            if (coordinates) {
-                                const imageNode = schema.nodes.imageResize || schema.nodes.image;
-                                if (imageNode) {
-                                    const node = imageNode.create({ src });
-                                    const transaction = view.state.tr.insert(coordinates.pos, node);
-                                    view.dispatch(transaction);
+                        import('browser-image-compression').then((module) => {
+                            const imageCompression = module.default;
+                            return imageCompression(file, { maxSizeMB: 0.5, maxWidthOrHeight: 1920, useWebWorker: true });
+                        }).then(compressedFile => {
+                            let reader = new FileReader();
+                            reader.readAsDataURL(compressedFile);
+                            reader.onload = () => {
+                                let src = reader.result as string;
+                                const { schema } = view.state;
+                                const coordinates = view.posAtCoords({ left: event.clientX, top: event.clientY });
+                                if (coordinates) {
+                                    const imageNode = schema.nodes.imageResize || schema.nodes.image;
+                                    if (imageNode) {
+                                        const node = imageNode.create({ src });
+                                        const transaction = view.state.tr.insert(coordinates.pos, node);
+                                        view.dispatch(transaction);
+                                    }
                                 }
-                            }
-                        };
+                            };
+                        }).catch(err => {
+                            console.error('Image drop compression error:', err);
+                        });
                         return true;
                     }
                 }

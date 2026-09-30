@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getBlogs, addBlog, updateBlog, deleteBlog, BlogPost } from '@/lib/blogStorage';
 import { TipTapEditor } from '@/components/TipTapEditor';
+import { compressHtmlBase64Images } from '@/lib/htmlCompressor';
 
 const BlogDashboard = () => {
     const navigate = useNavigate();
@@ -9,6 +10,7 @@ const BlogDashboard = () => {
     const [isEditing, setIsEditing] = useState(false);
     const [currentBlog, setCurrentBlog] = useState<Partial<BlogPost>>({});
     const [loading, setLoading] = useState(true);
+    const [isSaving, setIsSaving] = useState(false);
 
     useEffect(() => {
         if (localStorage.getItem('constil_admin_auth') !== 'true') {
@@ -60,15 +62,24 @@ const BlogDashboard = () => {
             return;
         }
 
+        setIsSaving(true);
         try {
             const isNew = !currentBlog.id;
             
+            // Compress any large existing base64 images embedded in the rich text
+            let processedContent = currentBlog.content;
+            if (processedContent) {
+                processedContent = await compressHtmlBase64Images(processedContent);
+            }
+            
+            const blogToSave = { ...currentBlog, content: processedContent } as BlogPost;
+            
             if (currentBlog.id) {
-                await updateBlog(currentBlog.id, currentBlog as BlogPost);
-                setBlogs(prev => prev.map(b => b.id === currentBlog.id ? { ...b, ...currentBlog } as BlogPost : b));
+                await updateBlog(currentBlog.id, blogToSave);
+                setBlogs(prev => prev.map(b => b.id === currentBlog.id ? { ...b, ...blogToSave } as BlogPost : b));
             } else {
-                await addBlog(currentBlog as Omit<BlogPost, 'id'>);
-                setBlogs(prev => [{ ...currentBlog, id: Date.now().toString() } as BlogPost, ...prev]);
+                await addBlog(blogToSave as Omit<BlogPost, 'id'>);
+                setBlogs(prev => [{ ...blogToSave, id: Date.now().toString() } as BlogPost, ...prev]);
             }
             
             setIsEditing(false);
@@ -82,6 +93,8 @@ const BlogDashboard = () => {
         } catch (error: any) {
             alert(`Failed to save blog. Error: ${error?.message || JSON.stringify(error)}`);
             console.error(error);
+        } finally {
+            setIsSaving(false);
         }
     };
 
@@ -102,19 +115,21 @@ const BlogDashboard = () => {
         }
     };
 
-    const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (file) {
-            // Check file size (e.g. 2MB max to not blow up localStorage)
-            if (file.size > 2 * 1024 * 1024) {
-                alert('File is too large. Please select an image under 2MB.');
-                return;
+            try {
+                const imageCompression = (await import('browser-image-compression')).default;
+                const compressedFile = await imageCompression(file, { maxSizeMB: 0.5, maxWidthOrHeight: 1920, useWebWorker: true });
+                const reader = new FileReader();
+                reader.onloadend = () => {
+                    setCurrentBlog({...currentBlog, imageUrl: reader.result as string});
+                };
+                reader.readAsDataURL(compressedFile);
+            } catch (error) {
+                console.error("Cover image compression failed:", error);
+                alert("Failed to process image.");
             }
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                setCurrentBlog({...currentBlog, imageUrl: reader.result as string});
-            };
-            reader.readAsDataURL(file);
         }
     };
 
@@ -205,8 +220,10 @@ const BlogDashboard = () => {
                                 </div>
                             </div>
                             <div className="md:col-span-2 flex gap-4 mt-2">
-                                <button type="submit" className="bg-primary text-primary-foreground px-6 py-2.5 rounded-lg font-semibold hover:opacity-90 transition-opacity">Save Blog</button>
-                                <button type="button" onClick={() => { setIsEditing(false); setCurrentBlog({}); }} className="bg-slate-100 text-slate-700 px-6 py-2.5 rounded-lg font-semibold hover:bg-slate-200 transition-colors">Cancel</button>
+                                <button type="submit" disabled={isSaving} className="bg-primary text-primary-foreground px-6 py-2.5 rounded-lg font-semibold hover:opacity-90 transition-opacity disabled:opacity-50">
+                                    {isSaving ? 'Saving...' : 'Save Blog'}
+                                </button>
+                                <button type="button" disabled={isSaving} onClick={() => { setIsEditing(false); setCurrentBlog({}); }} className="bg-slate-100 text-slate-700 px-6 py-2.5 rounded-lg font-semibold hover:bg-slate-200 transition-colors disabled:opacity-50">Cancel</button>
                             </div>
                         </form>
                     </div>
