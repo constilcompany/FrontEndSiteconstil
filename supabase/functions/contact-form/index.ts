@@ -2,7 +2,7 @@ import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2"
 import { corsHeaders } from "../_shared/cors.ts"
 
-const SENDGRID_API_KEY = Deno.env.get("SENDGRID_API_KEY")
+const sendgridApiKey = Deno.env.get("SENDGRID_API_KEYnew") || Deno.env.get("SENDGRID_API_KEY");
 
 serve(async (req) => {
   // Handle CORS preflight requests
@@ -30,12 +30,12 @@ serve(async (req) => {
 
     // 2. Send email using SendGrid
     let emailResponse = null;
-    if (SENDGRID_API_KEY) {
+    if (sendgridApiKey) {
       const res = await fetch("https://api.sendgrid.com/v3/mail/send", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${SENDGRID_API_KEY}`,
+          "Authorization": `Bearer ${sendgridApiKey}`,
         },
         body: JSON.stringify({
           personalizations: [
@@ -75,7 +75,7 @@ serve(async (req) => {
       }
       emailResponse = { success: true }
     } else {
-      console.log("No SENDGRID_API_KEY found, skipping email notification.")
+      console.log("No sendgridApiKey found, skipping email notification.")
     }
 
     return new Response(
