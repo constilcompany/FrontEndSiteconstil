@@ -2,7 +2,7 @@ import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2"
 import { corsHeaders } from "../_shared/cors.ts"
 
-const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY")
+const SENDGRID_API_KEY = Deno.env.get("SENDGRID_API_KEY")
 
 serve(async (req) => {
   // Handle CORS preflight requests
@@ -28,35 +28,54 @@ serve(async (req) => {
       console.log("Error inserting into DB (table might not exist yet):", dbError)
     }
 
-    // 2. Send email using Resend
+    // 2. Send email using SendGrid
     let emailResponse = null;
-    if (RESEND_API_KEY) {
-      const res = await fetch("https://api.resend.com/emails", {
+    if (SENDGRID_API_KEY) {
+      const res = await fetch("https://api.sendgrid.com/v3/mail/send", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${RESEND_API_KEY}`,
+          "Authorization": `Bearer ${SENDGRID_API_KEY}`,
         },
         body: JSON.stringify({
-          from: "Constil Contact Form <onboarding@resend.dev>", // Replace with your verified domain
-          to: "marketing@constil.com",
-          subject: `New Contact Form Submission from ${firstName} ${lastName}`,
-          html: `
-            <h2>New Contact Form Submission</h2>
-            <p><strong>Name:</strong> ${firstName} ${lastName}</p>
-            <p><strong>Email:</strong> ${email}</p>
-            <p><strong>Company:</strong> ${companyName}</p>
-            <p><strong>Message:</strong></p>
-            <p>${message}</p>
-          `,
+          personalizations: [
+            {
+              to: [
+                {
+                  email: "marketing@constil.com"
+                }
+              ],
+              subject: "New Contact Form Inquiry from Constil Website"
+            }
+          ],
+          from: {
+            email: "support@constil.com"
+          },
+          reply_to: {
+            email: email
+          },
+          content: [
+            {
+              type: "text/html",
+              value: `
+                <p><strong>Full Name:</strong> ${firstName} ${lastName}</p>
+                <p><strong>Company:</strong> ${companyName}</p>
+                <p><strong>User Email:</strong> ${email}</p>
+                <p><strong>Message:</strong></p>
+                <p>${message}</p>
+              `
+            }
+          ]
         }),
       })
 
-      const data = await res.json()
-      if (!res.ok) throw new Error(JSON.stringify(data))
-      emailResponse = data
+      if (!res.ok) {
+        const data = await res.text()
+        throw new Error(data)
+      }
+      emailResponse = { success: true }
     } else {
-      console.log("No RESEND_API_KEY found, skipping email notification.")
+      console.log("No SENDGRID_API_KEY found, skipping email notification.")
     }
 
     return new Response(
