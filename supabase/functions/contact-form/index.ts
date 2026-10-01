@@ -11,7 +11,7 @@ serve(async (req) => {
   }
 
   try {
-    const { firstName, lastName, email, message, companyName } = await req.json()
+    const { firstName, lastName, email, phoneNumber, message, companyName } = await req.json()
 
     // 1. Insert into Supabase database (optional but recommended)
     try {
@@ -22,7 +22,7 @@ serve(async (req) => {
       )
       
       await supabaseClient.from('contact_messages').insert([
-        { first_name: firstName, last_name: lastName, email, message, company_name: companyName }
+        { first_name: firstName, last_name: lastName, email, phone_number: phoneNumber, message, company_name: companyName }
       ])
     } catch (dbError) {
       console.log("Error inserting into DB (table might not exist yet):", dbError)
@@ -59,8 +59,9 @@ serve(async (req) => {
               type: "text/html",
               value: `
                 <p><strong>Full Name:</strong> ${firstName} ${lastName}</p>
-                <p><strong>Company:</strong> ${companyName}</p>
-                <p><strong>User Email:</strong> ${email}</p>
+                <p><strong>Company Name:</strong> ${companyName}</p>
+                <p><strong>Email Address:</strong> ${email}</p>
+                <p><strong>Phone Number:</strong> ${phoneNumber}</p>
                 <p><strong>Message:</strong></p>
                 <p>${message}</p>
               `

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Send, Mail, User, MessageSquare, Building, MapPin, CheckCircle2 } from "lucide-react";
+import { Send, Mail, User, MessageSquare, Building, MapPin, CheckCircle2, Phone } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import diverseImg from "@/assets/diverse-engineers.jpg";
 import axios from "axios";
@@ -8,14 +8,14 @@ import Celebration from "./Celebration";
 
 const ContactForm = () => {
   const { toast } = useToast();
-  const [form, setForm] = useState({ firstName: "", lastName: "", email: "", message: "", companyName: "" });
+  const [form, setForm] = useState({ firstName: "", lastName: "", email: "", phoneNumber: "", message: "", companyName: "" });
   const [sending, setSending] = useState(false);
   const [celebrate, setCelebrate] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!form.firstName.trim() || !form.lastName.trim() || !form.email.trim() || !form.message.trim() || !form.companyName.trim()) {
+    if (!form.firstName.trim() || !form.lastName.trim() || !form.email.trim() || !form.phoneNumber.trim() || !form.message.trim() || !form.companyName.trim()) {
       toast({ title: "Please fill in all fields", variant: "destructive" });
       return;
     }
@@ -28,7 +28,7 @@ const ContactForm = () => {
     setSending(true);
     axios.post("https://avppbvsxayehguepyjkb.supabase.co/functions/v1/contact-form", form).then((response) => {
       toast({ title: "Message sent successfully!", description: "We'll get back to you shortly." });
-      setForm({ firstName: "", lastName: "", email: "", message: "", companyName: "" });
+      setForm({ firstName: "", lastName: "", email: "", phoneNumber: "", message: "", companyName: "" });
       setCelebrate(true);
     }).catch((error) => {
       toast({ title: "Error", description: "Something went wrong. Please try again later.", variant: "destructive" });
@@ -174,6 +174,21 @@ const ContactForm = () => {
                   onChange={(e) => setForm({ ...form, email: e.target.value })}
                   placeholder="john@company.com"
                   maxLength={255}
+                  className={inputClass}
+                />
+              </div>
+            </div>
+
+            <div>
+              <label className="text-sm font-medium text-foreground mb-1.5 block">Phone Number</label>
+              <div className="relative">
+                <Phone className={iconWrapClass + " w-4 h-4 text-muted-foreground"} />
+                <input
+                  type="tel"
+                  value={form.phoneNumber}
+                  onChange={(e) => setForm({ ...form, phoneNumber: e.target.value })}
+                  placeholder="+1 (555) 000-0000"
+                  maxLength={20}
                   className={inputClass}
                 />
               </div>
