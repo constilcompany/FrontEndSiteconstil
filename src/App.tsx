@@ -22,13 +22,12 @@ import AdminLogin from "./pages/admin/AdminLogin";
 import BlogDashboard from "./pages/admin/BlogDashboard";
 import ConstilChatBot from "./components/ConstilChatBot";
 import ScrollToTop from "./components/ScrollToTop";
-import GeoBlocker from "./components/GeoBlocker";
+
 
 const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <GeoBlocker>
       <TooltipProvider>
       <Toaster />
       <Sonner />
@@ -60,7 +59,6 @@ const App = () => (
         </Routes>
       </BrowserRouter>
     </TooltipProvider>
-    </GeoBlocker>
   </QueryClientProvider>
 );
 
