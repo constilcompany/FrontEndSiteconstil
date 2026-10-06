@@ -218,6 +218,9 @@ export const TipTapEditor = ({ content, onChange }: { content: string, onChange:
             FontSize,
             Table.configure({
                 resizable: true,
+                handleWidth: 5,
+                cellMinWidth: 50,
+                lastColumnResizable: true,
                 HTMLAttributes: {
                     class: 'w-full border-collapse border border-slate-300 my-4',
                 },

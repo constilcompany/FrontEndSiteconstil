@@ -265,11 +265,12 @@
   position: absolute;
   right: -2px;
   top: 0;
-  bottom: 0;
+  bottom: -2px;
   width: 4px;
   background-color: #3b82f6;
   pointer-events: none;
 }
-.ProseMirror table.resize-cursor {
-  cursor: col-resize;
+.ProseMirror table.resize-cursor,
+.ProseMirror table.resize-cursor * {
+  cursor: col-resize !important;
 }
