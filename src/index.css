@@ -251,3 +251,25 @@
 .tox .tox-edit-area b {
   font-weight: 700 !important;
 }
+
+/* TipTap Table Resizing */
+.ProseMirror table {
+  table-layout: fixed;
+  width: 100%;
+}
+.ProseMirror table th,
+.ProseMirror table td {
+  position: relative;
+}
+.ProseMirror table .column-resize-handle {
+  position: absolute;
+  right: -2px;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background-color: #3b82f6;
+  pointer-events: none;
+}
+.ProseMirror table.resize-cursor {
+  cursor: col-resize;
+}
