@@ -255,11 +255,16 @@
 /* TipTap Table Resizing */
 .ProseMirror table {
   table-layout: fixed;
+  margin: 1rem 0;
+}
+.ProseMirror table:not(:has(col[style*="width"])) {
   width: 100%;
 }
 .ProseMirror table th,
 .ProseMirror table td {
   position: relative;
+  overflow: hidden;
+  word-break: break-word;
 }
 .ProseMirror table .column-resize-handle {
   position: absolute;

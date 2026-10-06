@@ -17,7 +17,7 @@ import {
     ImageIcon, Undo, Redo, 
     Quote, Link as LinkIcon, Unlink 
 } from 'lucide-react';
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 
 declare module '@tiptap/core' {
   interface Commands<ReturnType> {
@@ -27,6 +27,46 @@ declare module '@tiptap/core' {
     }
   }
 }
+
+const CustomTable = Table.extend({
+    addAttributes() {
+        return {
+            ...this.parent?.(),
+            style: {
+                default: null,
+                parseHTML: element => element.getAttribute('style'),
+                renderHTML: attributes => {
+                    if (!attributes.style) {
+                        return {};
+                    }
+                    return {
+                        style: attributes.style,
+                    };
+                },
+            },
+        };
+    },
+});
+
+const CustomTableRow = TableRow.extend({
+    addAttributes() {
+        return {
+            ...this.parent?.(),
+            style: {
+                default: null,
+                parseHTML: element => element.getAttribute('style'),
+                renderHTML: attributes => {
+                    if (!attributes.style) {
+                        return {};
+                    }
+                    return {
+                        style: attributes.style,
+                    };
+                },
+            },
+        };
+    },
+});
 
 export const FontSize = Extension.create({
   name: 'fontSize',
@@ -216,16 +256,16 @@ export const TipTapEditor = ({ content, onChange }: { content: string, onChange:
             TextStyle,
             Color,
             FontSize,
-            Table.configure({
+            CustomTable.configure({
                 resizable: true,
                 handleWidth: 5,
                 cellMinWidth: 50,
                 lastColumnResizable: true,
                 HTMLAttributes: {
-                    class: 'w-full border-collapse border border-slate-300 my-4',
+                    class: 'border-collapse border border-slate-300 my-4',
                 },
             }),
-            TableRow.configure({
+            CustomTableRow.configure({
                 HTMLAttributes: {
                     class: 'border-b border-slate-300',
                 },
@@ -341,6 +381,273 @@ export const TipTapEditor = ({ content, onChange }: { content: string, onChange:
             }
         },
     });
+
+    useEffect(() => {
+        if (!editor) return;
+
+        const container = document.querySelector('.blog-content-body') as HTMLElement;
+        if (!container) return;
+
+        let isResizing = false;
+        let isTableCornerResizing = false;
+        let startY = 0;
+        let startX = 0;
+        let startHeight = 0;
+        let startTableWidth = 0;
+        let startColWidths: number[] = [];
+        let resizeRow: HTMLTableRowElement | null = null;
+        let resizeTable: HTMLTableElement | null = null;
+        let resizeNodePos: number | null = null;
+        let resizeTableNodePos: number | null = null;
+        let resizeHandleLine: HTMLDivElement | null = null;
+        let currentHoverTable: HTMLTableElement | null = null;
+        let tableCornerHandle: HTMLDivElement | null = null;
+
+        const handleMouseDown = (e: MouseEvent) => {
+            const target = e.target as HTMLElement;
+
+            if (target.classList.contains('table-corner-resize-handle')) {
+                isTableCornerResizing = true;
+                startY = e.clientY;
+                startX = e.clientX;
+                resizeTable = target.closest('table');
+                if (resizeTable) {
+                    startHeight = resizeTable.getBoundingClientRect().height;
+                    startTableWidth = resizeTable.getBoundingClientRect().width;
+                    
+                    startColWidths = [];
+                    const cols = resizeTable.querySelectorAll('col');
+                    cols.forEach(col => {
+                        const w = parseFloat(col.style.width || col.getAttribute('width') || '0');
+                        startColWidths.push(w);
+                    });
+                    
+                    const view = editor.view;
+                    try {
+                        const pos = view.posAtDOM(resizeTable, 0);
+                        resizeTableNodePos = pos > 0 ? pos - 1 : null;
+                    } catch (err) {
+                        resizeTableNodePos = null;
+                    }
+                }
+                e.preventDefault();
+                return;
+            }
+            const cell = target.closest('td, th');
+            if (cell) {
+                const rect = cell.getBoundingClientRect();
+                // Check if near bottom border
+                if (rect.bottom - e.clientY <= 5 && rect.bottom - e.clientY >= -1) {
+                    isResizing = true;
+                    startY = e.clientY;
+                    resizeRow = cell.parentElement as HTMLTableRowElement;
+                    startHeight = resizeRow.getBoundingClientRect().height;
+                    
+                    const view = editor.view;
+                    try {
+                        const pos = view.posAtDOM(resizeRow, 0);
+                        resizeNodePos = pos > 0 ? pos - 1 : null;
+                    } catch (err) {
+                        resizeNodePos = null;
+                    }
+
+                    const table = resizeRow.closest('table');
+                    if (table) {
+                        table.style.position = 'relative';
+                        resizeHandleLine = document.createElement('div');
+                        resizeHandleLine.style.position = 'absolute';
+                        resizeHandleLine.style.left = '-2px';
+                        resizeHandleLine.style.right = '-2px';
+                        resizeHandleLine.style.height = '4px';
+                        resizeHandleLine.style.backgroundColor = '#3b82f6';
+                        resizeHandleLine.style.pointerEvents = 'none';
+                        resizeHandleLine.style.zIndex = '50';
+                        table.appendChild(resizeHandleLine);
+
+                        const tableRect = table.getBoundingClientRect();
+                        const rowRect = resizeRow.getBoundingClientRect();
+                        const initialTopOffset = rowRect.bottom - tableRect.top;
+                        
+                        resizeHandleLine.style.top = `${initialTopOffset - 2}px`;
+
+                        const updateLinePosition = (diffY: number) => {
+                            if (!resizeHandleLine) return;
+                            const maxDiff = 24 - startHeight;
+                            const effectiveDiff = Math.max(diffY, maxDiff);
+                            resizeHandleLine.style.top = `${initialTopOffset - 2 + effectiveDiff}px`;
+                        };
+                        (resizeHandleLine as any).updatePosition = updateLinePosition;
+                    }
+
+                    e.preventDefault();
+                }
+            }
+        };
+
+        const handleMouseMove = (e: MouseEvent) => {
+            if (isTableCornerResizing && resizeTable) {
+                const diffX = e.clientX - startX;
+                const diffY = e.clientY - startY;
+                const newWidth = Math.max(150, startTableWidth + diffX);
+                const newHeight = Math.max(50, startHeight + diffY);
+                const scaleX = newWidth / startTableWidth;
+
+                resizeTable.style.width = `${newWidth}px`;
+                resizeTable.style.height = `${newHeight}px`;
+
+                const cols = resizeTable.querySelectorAll('col');
+                cols.forEach((col, idx) => {
+                    if (startColWidths[idx]) {
+                        col.style.width = `${Math.max(25, startColWidths[idx] * scaleX)}px`;
+                    }
+                });
+
+                document.body.style.userSelect = 'none';
+                return;
+            }
+
+            if (isResizing && resizeRow) {
+                const diffY = e.clientY - startY;
+                document.body.style.userSelect = 'none';
+                if (resizeHandleLine && (resizeHandleLine as any).updatePosition) {
+                    (resizeHandleLine as any).updatePosition(diffY);
+                }
+            } else {
+                const target = e.target as HTMLElement;
+                const cell = target.closest('td, th') as HTMLElement;
+                if (cell) {
+                    const rect = cell.getBoundingClientRect();
+                    const isNearRight = rect.right - e.clientX <= 5;
+                    
+                    if (rect.bottom - e.clientY <= 5 && rect.bottom - e.clientY >= -1 && !isNearRight) {
+                        cell.style.cursor = 'row-resize';
+                    } else if (cell.style.cursor === 'row-resize') {
+                        cell.style.cursor = '';
+                    }
+                }
+                
+                const table = target.closest('table');
+                if (table && table !== currentHoverTable && !isTableCornerResizing && !isResizing) {
+                    if (tableCornerHandle) tableCornerHandle.remove();
+                    currentHoverTable = table;
+                    table.style.position = 'relative';
+                    
+                    tableCornerHandle = document.createElement('div');
+                    tableCornerHandle.className = 'table-corner-resize-handle';
+                    tableCornerHandle.style.position = 'absolute';
+                    tableCornerHandle.style.bottom = '-6px';
+                    tableCornerHandle.style.right = '-6px';
+                    tableCornerHandle.style.width = '12px';
+                    tableCornerHandle.style.height = '12px';
+                    tableCornerHandle.style.backgroundColor = '#3b82f6';
+                    tableCornerHandle.style.border = '2px solid white';
+                    tableCornerHandle.style.cursor = 'nwse-resize';
+                    tableCornerHandle.style.zIndex = '60';
+                    table.appendChild(tableCornerHandle);
+                } else if (!table && currentHoverTable && !isTableCornerResizing && !isResizing) {
+                    if (!target.classList.contains('table-corner-resize-handle')) {
+                        if (tableCornerHandle) tableCornerHandle.remove();
+                        tableCornerHandle = null;
+                        currentHoverTable = null;
+                    }
+                }
+            }
+        };
+
+        const handleMouseUp = (e: MouseEvent) => {
+            if (isTableCornerResizing && resizeTable && resizeTableNodePos !== null) {
+                const diffX = e.clientX - startX;
+                const diffY = e.clientY - startY;
+                const newWidth = Math.max(150, startTableWidth + diffX);
+                const newHeight = Math.max(50, startHeight + diffY);
+                const scaleX = newWidth / startTableWidth;
+                
+                resizeTable.style.width = `${newWidth}px`;
+                resizeTable.style.height = `${newHeight}px`;
+
+                const { state, dispatch } = editor.view;
+                let tr = state.tr;
+                
+                const tableNode = state.doc.nodeAt(resizeTableNodePos);
+                if (tableNode && tableNode.type.name === 'table') {
+                    const existingStyle = tableNode.attrs.style || '';
+                    const styleMap = new Map();
+                    existingStyle.split(';').forEach((s: string) => {
+                        const [k, v] = s.split(':');
+                        if (k && v) styleMap.set(k.trim(), v.trim());
+                    });
+                    styleMap.set('width', `${newWidth}px`);
+                    styleMap.set('height', `${newHeight}px`);
+                    
+                    const newStyle = Array.from(styleMap.entries()).map(([k, v]) => `${k}: ${v}`).join('; ');
+                    
+                    tr = tr.setNodeMarkup(resizeTableNodePos, undefined, {
+                        ...tableNode.attrs,
+                        style: newStyle
+                    });
+
+                    // Update colwidths for cells
+                    tableNode.descendants((node, pos) => {
+                        if (node.type.name === 'tableCell' || node.type.name === 'tableHeader') {
+                            if (node.attrs.colwidth) {
+                                const newColwidths = node.attrs.colwidth.map((w: number) => Math.max(25, Math.round(w * scaleX)));
+                                tr = tr.setNodeMarkup(resizeTableNodePos! + 1 + pos, undefined, {
+                                    ...node.attrs,
+                                    colwidth: newColwidths
+                                });
+                            }
+                        }
+                    });
+                    
+                    dispatch(tr);
+                }
+                
+                isTableCornerResizing = false;
+                resizeTable = null;
+                resizeTableNodePos = null;
+                document.body.style.userSelect = '';
+                return;
+            }
+
+            if (isResizing) {
+                if (resizeRow && resizeNodePos !== null) {
+                    const diffY = e.clientY - startY;
+                    const newHeight = Math.max(24, startHeight + diffY);
+                    
+                    resizeRow.style.height = `${newHeight}px`;
+
+                    const { state, dispatch } = editor.view;
+                    const node = state.doc.nodeAt(resizeNodePos);
+                    if (node && node.type.name === 'tableRow') {
+                        const tr = state.tr.setNodeMarkup(resizeNodePos, undefined, {
+                            ...node.attrs,
+                            style: `height: ${newHeight}px`
+                        });
+                        dispatch(tr);
+                    }
+                }
+                isResizing = false;
+                resizeRow = null;
+                resizeNodePos = null;
+                if (resizeHandleLine) {
+                    resizeHandleLine.remove();
+                    resizeHandleLine = null;
+                }
+                document.body.style.userSelect = '';
+            }
+        };
+
+        container.addEventListener('mousedown', handleMouseDown);
+        window.addEventListener('mousemove', handleMouseMove);
+        window.addEventListener('mouseup', handleMouseUp);
+
+        return () => {
+            container.removeEventListener('mousedown', handleMouseDown);
+            window.removeEventListener('mousemove', handleMouseMove);
+            window.removeEventListener('mouseup', handleMouseUp);
+            document.body.style.userSelect = '';
+        };
+    }, [editor]);
 
     return (
         <div className="border border-border rounded-lg bg-white flex flex-col shadow-sm">
