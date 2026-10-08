@@ -1,3 +1,6 @@
+Redirect 301 /estimates_software /estimates-software
+Redirect 301 /invoices_management /invoices-management-software
+
 <IfModule mod_rewrite.c>
   RewriteEngine On
   RewriteBase /

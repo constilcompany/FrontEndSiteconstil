@@ -52,6 +52,8 @@ const App = () => (
           <Route path="/about" element={<AboutPage />} />
           <Route path="/payment-tracking-software" element={<PaymentTrackingManagementPage />} />
           <Route path="/payment_tracking" element={<Navigate to="/payment-tracking-software" replace />} />
+          <Route path="/estimates_software" element={<Navigate to="/estimates-software" replace />} />
+          <Route path="/invoices_management" element={<Navigate to="/invoices-management-software" replace />} />
           <Route path="/admin" element={<AdminLogin />} />
           <Route path="/admin/dashboard" element={<BlogDashboard />} />
 
