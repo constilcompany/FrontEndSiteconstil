@@ -7,7 +7,7 @@ declare global {
   }
 }
 
-export const PIXEL_ID = import.meta.env.VITE_META_PIXEL_ID;
+export const PIXEL_ID = import.meta.env.VITE_META_PIXEL_ID || '1394045752925191';
 
 export const initPixel = (hasConsent: boolean) => {
   if (!hasConsent) return;
