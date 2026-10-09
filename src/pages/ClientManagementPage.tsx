@@ -1,3 +1,4 @@
+import { PageTracker } from "@/components/PageTracker";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { motion } from "framer-motion";
@@ -39,6 +40,7 @@ const btnOutline =
 const ClientManagementPage = () => (
   <main className="bg-background min-h-screen scroll-smooth">
     <Navbar />
+    <PageTracker contentName="Client Management Software" />
 
     {/* Hero / Overview – image as background */}
     <section className="relative min-h-[85vh] flex items-center overflow-hidden pt-24">

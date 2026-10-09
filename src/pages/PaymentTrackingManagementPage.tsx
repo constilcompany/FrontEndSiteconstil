@@ -1,3 +1,4 @@
+import { PageTracker } from "@/components/PageTracker";
 import Footer from '@/components/Footer'
 import BannerInvoice from '@/components/invoices/BannerInvoice'
 import Benefits from '@/components/invoices/Benefits'
@@ -19,6 +20,7 @@ const PaymentTrackingManagementPage = () => {
     return (
         <>
             <Navbar />
+    <PageTracker contentName="Payment Tracking Software" />
             <BannerInvoice bannerContent={bannerContent} />
             <InvoiceAbout InvoiceAboutContent={InvoiceAboutContent} />
             <FeatureSetion {...featureSectionData} />

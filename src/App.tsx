@@ -1,8 +1,12 @@
+import { useState } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { MetaPixel } from "./components/MetaPixel";
+import { CookieConsent } from "./components/CookieConsent";
+import { ConsentProvider } from "./contexts/ConsentContext";
 import Index from "./pages/Index";
 import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
@@ -26,15 +30,20 @@ import ScrollToTop from "./components/ScrollToTop";
 
 const queryClient = new QueryClient();
 
-const App = () => (
-  <QueryClientProvider client={queryClient}>
+const App = () => {
+  const [hasConsent, setHasConsent] = useState(false);
+
+  return (
+    <QueryClientProvider client={queryClient}>
       <TooltipProvider>
       <Toaster />
       <Sonner />
       <BrowserRouter>
         <ScrollToTop />
         <ConstilChatBot />
-        <Routes>
+        <ConsentProvider hasConsent={hasConsent}>
+          <MetaPixel hasConsent={hasConsent} />
+          <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/smart-construction" element={<SmartConstructionPage />} />
           <Route path="/client-management" element={<ClientManagementPage />} />
@@ -58,10 +67,13 @@ const App = () => (
           <Route path="/admin/dashboard" element={<BlogDashboard />} />
 
           <Route path="*" element={<NotFound />} />
-        </Routes>
+          </Routes>
+        </ConsentProvider>
+        <CookieConsent onConsentChange={setHasConsent} />
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
-);
+  );
+};
 
 export default App;

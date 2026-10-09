@@ -1,3 +1,4 @@
+import { PageTracker } from "@/components/PageTracker";
 import Footer from '@/components/Footer'
 import BannerInvoice from '@/components/invoices/BannerInvoice'
 import Benefits from '@/components/invoices/Benefits'
@@ -53,6 +54,7 @@ const ClientManagementSoftwarePage = () => {
             </Helmet>
 
             <Navbar />
+    <PageTracker contentName="Invoices Management Software" />
             <BannerInvoice bannerContent={bannerContent} />
             <InvoiceAbout InvoiceAboutContent={InvoiceAboutContent} />
             <InvoiceAbout InvoiceAboutContent={SmartClientManagement} />

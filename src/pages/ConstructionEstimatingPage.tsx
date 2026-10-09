@@ -1,3 +1,4 @@
+import { PageTracker } from "@/components/PageTracker";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { motion } from "framer-motion";
@@ -43,6 +44,7 @@ const btnOutline =
 const ConstructionEstimatingPage = () => (
   <main className="bg-background min-h-screen scroll-smooth">
     <Navbar />
+    <PageTracker contentName="Construction Estimating Software" />
 
     {/* Hero */}
     <section className="relative min-h-[85vh] flex items-center overflow-hidden pt-24">
