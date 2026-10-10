@@ -72,7 +72,7 @@ serve(async (req) => {
     }
     
     const body = JSON.parse(bodyText);
-    const { event_name, event_id, event_source_url, content_name, fbp, fbc } = body
+    const { event_name, event_id, event_source_url, content_name, fbp, fbc, user_data: clientUserData } = body
 
     // 4. Validate event_source_url against allowed domains
     if (!event_source_url || typeof event_source_url !== 'string') {
@@ -94,7 +94,7 @@ serve(async (req) => {
     }
 
     // Prevent malicious or random event injection (Whitelist)
-    const allowedEvents = ['PageView', 'ViewContent'];
+    const allowedEvents = ['PageView', 'ViewContent', 'Lead'];
     if (!allowedEvents.includes(event_name)) {
       return new Response(JSON.stringify({ error: "Unauthorized event type", ip: clientIp }), { status: 403, headers: corsHeaders })
     }
@@ -128,9 +128,20 @@ serve(async (req) => {
       client_user_agent: userAgent
     }
 
-    // Meta expects strict formats, only attach if valid
-    if (fbp && typeof fbp === 'string' && fbp.length < 50) user_data.fbp = fbp
-    if (fbc && typeof fbc === 'string' && fbc.length < 200) user_data.fbc = fbc
+    // Merge EMQ identifiers safely from clientUserData if present
+    if (clientUserData && typeof clientUserData === 'object') {
+      if (typeof clientUserData.em === 'string') user_data.em = clientUserData.em;
+      if (typeof clientUserData.ph === 'string') user_data.ph = clientUserData.ph;
+      if (typeof clientUserData.fn === 'string') user_data.fn = clientUserData.fn;
+      if (typeof clientUserData.ln === 'string') user_data.ln = clientUserData.ln;
+      
+      if (typeof clientUserData.fbp === 'string' && clientUserData.fbp.length < 50) user_data.fbp = clientUserData.fbp;
+      if (typeof clientUserData.fbc === 'string' && clientUserData.fbc.length < 200) user_data.fbc = clientUserData.fbc;
+    }
+
+    // Fallbacks for fbp/fbc if they were sent at the payload root (legacy compatibility)
+    if (!user_data.fbp && fbp && typeof fbp === 'string' && fbp.length < 50) user_data.fbp = fbp
+    if (!user_data.fbc && fbc && typeof fbc === 'string' && fbc.length < 200) user_data.fbc = fbc
 
     // Prepare custom data
     const custom_data: any = {}

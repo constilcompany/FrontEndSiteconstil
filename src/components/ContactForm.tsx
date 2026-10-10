@@ -4,10 +4,14 @@ import { Send, Mail, User, MessageSquare, Building, MapPin, CheckCircle2, Phone 
 import { useToast } from "@/hooks/use-toast";
 import diverseImg from "@/assets/diverse-engineers.jpg";
 import axios from "axios";
+import { v4 as uuidv4 } from "uuid";
+import { trackLead, hashMetaField, getMetaCookies } from "@/utils/pixel";
+import { useConsent } from "@/contexts/ConsentContext";
 import Celebration from "./Celebration";
 
 const ContactForm = () => {
   const { toast } = useToast();
+  const hasConsent = useConsent();
   const [form, setForm] = useState({ firstName: "", lastName: "", email: "", phoneNumber: "", message: "", companyName: "" });
   const [sending, setSending] = useState(false);
   const [celebrate, setCelebrate] = useState(false);
@@ -26,8 +30,45 @@ const ContactForm = () => {
     }
 
     setSending(true);
-    axios.post("https://avppbvsxayehguepyjkb.supabase.co/functions/v1/contact-form", form).then((response) => {
+    axios.post("https://avppbvsxayehguepyjkb.supabase.co/functions/v1/contact-form", form).then(async (response) => {
       toast({ title: "Message sent successfully!", description: "We'll get back to you shortly." });
+      
+      try {
+        if (hasConsent) {
+          const eventId = uuidv4();
+          // Fire browser event
+          trackLead({}, eventId);
+
+          // Prepare server-side EMQ payload
+          const hashedEmail = await hashMetaField(form.email, 'email');
+          const hashedPhone = await hashMetaField(form.phoneNumber, 'phone');
+          const hashedFirstName = await hashMetaField(form.firstName, 'text');
+          const hashedLastName = await hashMetaField(form.lastName, 'text');
+          const cookies = getMetaCookies();
+
+          // Fire server event non-blocking
+          fetch("https://avppbvsxayehguepyjkb.supabase.co/functions/v1/meta-capi", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              event_name: "Lead",
+              event_id: eventId,
+              event_source_url: window.location.href,
+              user_data: {
+                em: hashedEmail,
+                ph: hashedPhone,
+                fn: hashedFirstName,
+                ln: hashedLastName,
+                fbp: cookies.fbp,
+                fbc: cookies.fbc,
+              }
+            }),
+          }).catch(err => console.error("Meta CAPI delivery error", err));
+        }
+      } catch (trackingErr) {
+        console.error("Meta tracking preparation error", trackingErr);
+      }
+
       setForm({ firstName: "", lastName: "", email: "", phoneNumber: "", message: "", companyName: "" });
       setCelebrate(true);
     }).catch((error) => {
