@@ -59,14 +59,28 @@ export const updateConsent = (hasConsent: boolean) => {
   }
 };
 
-export const trackPageView = () => {
+export const trackPageView = (eventId?: string) => {
   if (typeof window !== 'undefined' && window.fbq) {
-    window.fbq('track', 'PageView');
+    window.fbq('track', 'PageView', {}, { eventID: eventId });
   }
 };
 
-export const trackViewContent = (data: Record<string, unknown> = {}) => {
+export const trackViewContent = (data: Record<string, unknown> = {}, eventId?: string) => {
   if (typeof window !== 'undefined' && window.fbq) {
-    window.fbq('track', 'ViewContent', data);
+    window.fbq('track', 'ViewContent', data, { eventID: eventId });
   }
+};
+
+export const getMetaCookies = () => {
+  if (typeof document === 'undefined') return { fbp: undefined, fbc: undefined };
+  
+  const getCookie = (name: string) => {
+    const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+    return match ? match[2] : undefined;
+  };
+  
+  return {
+    fbp: getCookie('_fbp'),
+    fbc: getCookie('_fbc')
+  };
 };
