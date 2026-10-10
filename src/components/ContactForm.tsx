@@ -7,6 +7,7 @@ import axios from "axios";
 import { v4 as uuidv4 } from "uuid";
 import { trackLead, hashMetaField, getMetaCookies } from "@/utils/pixel";
 import { useConsent } from "@/contexts/ConsentContext";
+import { supabase } from "@/lib/supabase";
 import Celebration from "./Celebration";
 
 const ContactForm = () => {
@@ -47,10 +48,8 @@ const ContactForm = () => {
           const cookies = getMetaCookies();
 
           // Fire server event non-blocking
-          fetch("https://avppbvsxayehguepyjkb.supabase.co/functions/v1/meta-capi", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
+          supabase.functions.invoke('meta-capi', {
+            body: {
               event_name: "Lead",
               event_id: eventId,
               event_source_url: window.location.href,
@@ -62,7 +61,7 @@ const ContactForm = () => {
                 fbp: cookies.fbp,
                 fbc: cookies.fbc,
               }
-            }),
+            }
           }).catch(err => console.error("Meta CAPI delivery error", err));
         }
       } catch (trackingErr) {
