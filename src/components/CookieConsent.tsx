@@ -3,9 +3,11 @@ import { updateConsent, initPixel } from '../utils/pixel';
 
 export const CookieConsent = ({ onConsentChange }: { onConsentChange: (consent: boolean) => void }) => {
   const [isVisible, setIsVisible] = useState(false);
+  const [currentStatus, setCurrentStatus] = useState<string | null>(null);
 
   useEffect(() => {
     const consent = localStorage.getItem('cookieConsent');
+    setCurrentStatus(consent);
     if (consent === 'accepted') {
       onConsentChange(true);
       initPixel(true);
@@ -18,8 +20,21 @@ export const CookieConsent = ({ onConsentChange }: { onConsentChange: (consent: 
     }
   }, [onConsentChange]);
 
+  useEffect(() => {
+    const handleOpen = () => {
+      const consent = localStorage.getItem('cookieConsent');
+      setCurrentStatus(consent);
+      setIsVisible(true);
+    };
+    window.addEventListener('openCookiePreferences', handleOpen);
+    return () => {
+      window.removeEventListener('openCookiePreferences', handleOpen);
+    };
+  }, []);
+
   const handleAccept = () => {
     localStorage.setItem('cookieConsent', 'accepted');
+    setCurrentStatus('accepted');
     setIsVisible(false);
     onConsentChange(true);
     updateConsent(true);
@@ -27,6 +42,7 @@ export const CookieConsent = ({ onConsentChange }: { onConsentChange: (consent: 
 
   const handleReject = () => {
     localStorage.setItem('cookieConsent', 'rejected');
+    setCurrentStatus('rejected');
     setIsVisible(false);
     onConsentChange(false);
     updateConsent(false);
@@ -40,6 +56,11 @@ export const CookieConsent = ({ onConsentChange }: { onConsentChange: (consent: 
         We use cookies and similar technologies to improve your browsing experience, 
         analyze site traffic, and personalize content. By clicking "Accept", you consent 
         to our use of tracking technologies like Meta Pixel.
+        {currentStatus && (
+          <span className="block mt-1 text-xs text-primary font-medium">
+            Current preference: {currentStatus === 'accepted' ? 'Tracking Accepted' : 'Tracking Declined'}
+          </span>
+        )}
       </div>
       <div className="flex gap-2 shrink-0">
         <button onClick={handleReject} className="px-4 py-2 text-sm border rounded-md hover:bg-muted font-medium transition-colors">

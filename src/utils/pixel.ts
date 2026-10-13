@@ -79,9 +79,23 @@ export const getMetaCookies = () => {
     return match ? match[2] : undefined;
   };
   
+  let fbc = getCookie('_fbc');
+  // Fallback: If _fbc cookie is not set yet, extract fbclid from URL if available
+  if (!fbc && typeof window !== 'undefined' && window.location) {
+    try {
+      const urlParams = new URLSearchParams(window.location.search);
+      const fbclid = urlParams.get('fbclid');
+      if (fbclid) {
+        fbc = `fb.1.${Date.now()}.${fbclid}`;
+      }
+    } catch {
+      // Ignore query parsing errors
+    }
+  }
+
   return {
     fbp: getCookie('_fbp'),
-    fbc: getCookie('_fbc')
+    fbc: fbc
   };
 };
 
@@ -104,8 +118,12 @@ export const hashMetaField = async (value: string, type: 'email' | 'phone' | 'te
     normalized = value.trim().toLowerCase();
   } else if (type === 'phone') {
     // Remove all non-numeric characters (including '+', '-', spaces, parens)
-    // Meta requires the country code to be included (e.g., 15551234567 for US).
     normalized = value.replace(/\D/g, '');
+    // If a 10-digit US phone number is provided without country code (e.g., 5551234567),
+    // prepend '1' to conform to Meta's strict country code requirement for US campaigns.
+    if (normalized.length === 10) {
+      normalized = '1' + normalized;
+    }
   } else {
     // For first/last name: lowercase, trim, remove punctuation
     normalized = value.trim().toLowerCase().replace(/[^\w\s\u00C0-\u024F]/g, '');

@@ -125,9 +125,18 @@ const Footer = () => (
         </div>
       </div>
 
-      {/* Divider + Copyright */}
-      <div className="mt-10 md:mt-12 pt-6 md:pt-8 border-t border-primary-foreground/10 text-center text-xs text-primary-foreground/40">
-        &copy; {new Date().getFullYear()} CONSTIL. All rights reserved.
+      {/* Divider + Copyright & Cookie Preferences */}
+      <div className="mt-10 md:mt-12 pt-6 md:pt-8 border-t border-primary-foreground/10 text-center text-xs text-primary-foreground/40 flex flex-col sm:flex-row items-center justify-center gap-2">
+        <span>&copy; {new Date().getFullYear()} CONSTIL. All rights reserved.</span>
+        <span className="hidden sm:inline">&bull;</span>
+        <button
+          type="button"
+          onClick={() => window.dispatchEvent(new CustomEvent('openCookiePreferences'))}
+          className="hover:text-primary text-primary-foreground/60 transition-colors cursor-pointer underline underline-offset-2"
+          aria-label="Manage Cookie Preferences"
+        >
+          Cookie Preferences
+        </button>
       </div>
     </div>
   </footer>
