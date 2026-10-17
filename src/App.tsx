@@ -24,7 +24,6 @@ import AboutPage from "./pages/AboutPage";
 import PaymentTrackingManagementPage from "./pages/PaymentTrackingManagementPage";
 import AdminLogin from "./pages/admin/AdminLogin";
 import BlogDashboard from "./pages/admin/BlogDashboard";
-import ConstilChatBot from "./components/ConstilChatBot";
 import ScrollToTop from "./components/ScrollToTop";
 
 
@@ -40,7 +39,6 @@ const App = () => {
       <Sonner />
       <BrowserRouter>
         <ScrollToTop />
-        <ConstilChatBot />
         <ConsentProvider hasConsent={hasConsent}>
           <MetaPixel hasConsent={hasConsent} />
           <Routes>
