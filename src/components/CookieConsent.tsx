@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { updateConsent, initPixel } from '../utils/pixel';
+import { updateGA4Consent, initGA4 } from '../utils/analytics';
 
 export const CookieConsent = ({ onConsentChange }: { onConsentChange: (consent: boolean) => void }) => {
   const [isVisible, setIsVisible] = useState(false);
@@ -11,11 +12,14 @@ export const CookieConsent = ({ onConsentChange }: { onConsentChange: (consent: 
     if (consent === 'accepted') {
       onConsentChange(true);
       initPixel(true);
+      initGA4(true);
     } else if (consent === 'rejected') {
       onConsentChange(false);
       initPixel(false);
+      initGA4(false);
     } else {
       initPixel(false);
+      initGA4(false);
       setIsVisible(true);
     }
   }, [onConsentChange]);
@@ -38,6 +42,7 @@ export const CookieConsent = ({ onConsentChange }: { onConsentChange: (consent: 
     setIsVisible(false);
     onConsentChange(true);
     updateConsent(true);
+    updateGA4Consent(true);
   };
 
   const handleReject = () => {
@@ -46,6 +51,7 @@ export const CookieConsent = ({ onConsentChange }: { onConsentChange: (consent: 
     setIsVisible(false);
     onConsentChange(false);
     updateConsent(false);
+    updateGA4Consent(false);
   };
 
   if (!isVisible) return null;
@@ -55,7 +61,7 @@ export const CookieConsent = ({ onConsentChange }: { onConsentChange: (consent: 
       <div className="text-sm text-muted-foreground flex-1">
         We use cookies and similar technologies to improve your browsing experience, 
         analyze site traffic, and personalize content. By clicking "Accept", you consent 
-        to our use of tracking technologies like Meta Pixel.
+        to our use of tracking technologies like Meta Pixel and Google Analytics.
         {currentStatus && (
           <span className="block mt-1 text-xs text-primary font-medium">
             Current preference: {currentStatus === 'accepted' ? 'Tracking Accepted' : 'Tracking Declined'}

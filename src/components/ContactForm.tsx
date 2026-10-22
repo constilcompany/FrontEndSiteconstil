@@ -6,6 +6,7 @@ import diverseImg from "@/assets/diverse-engineers.jpg";
 import axios from "axios";
 import { v4 as uuidv4 } from "uuid";
 import { trackLead, hashMetaField, getMetaCookies } from "@/utils/pixel";
+import { trackGAGenerateLead } from "@/utils/analytics";
 import { useConsent } from "@/contexts/ConsentContext";
 import { supabase } from "@/lib/supabase";
 import Celebration from "./Celebration";
@@ -39,6 +40,11 @@ const ContactForm = () => {
           const eventId = uuidv4();
           // Fire browser event
           trackLead({}, eventId);
+
+          // Fire Google Analytics 4 generate_lead event
+          trackGAGenerateLead({
+            form_name: "contact_form",
+          });
 
           // Prepare server-side EMQ payload
           const hashedEmail = await hashMetaField(form.email, 'email');
