@@ -9,7 +9,12 @@ export const MetaPixel = ({ hasConsent }: { hasConsent: boolean }) => {
   const trackedLocation = useRef<string>('');
 
   useEffect(() => {
-    if (hasConsent && trackedLocation.current !== location.pathname) {
+    if (!hasConsent) {
+      trackedLocation.current = '';
+      return;
+    }
+
+    if (trackedLocation.current !== location.pathname) {
       trackedLocation.current = location.pathname;
       const eventId = uuidv4();
       

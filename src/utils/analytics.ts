@@ -1,3 +1,5 @@
+import { getStoredAttribution, decorateUrlWithAttribution } from './attribution';
+
 declare global {
   interface Window {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -122,9 +124,26 @@ export const initGA4 = (
 
   window.gtag('js', new Date());
 
+  const attribution = getStoredAttribution();
+
   const configOptions: Record<string, unknown> = {
     send_page_view: false, // Prevents duplicate initial page views on React SPA
   };
+
+  if (typeof window !== 'undefined') {
+    const pageLocation = decorateUrlWithAttribution(window.location.href, attribution);
+    if (pageLocation) {
+      configOptions.page_location = pageLocation;
+    }
+  }
+
+  // Pass official GA4 campaign parameters at config level for native Session attribution
+  if (attribution.utm_campaign) configOptions.campaign_name = attribution.utm_campaign;
+  if (attribution.utm_source) configOptions.campaign_source = attribution.utm_source;
+  if (attribution.utm_medium) configOptions.campaign_medium = attribution.utm_medium;
+  if (attribution.utm_term) configOptions.campaign_term = attribution.utm_term;
+  if (attribution.utm_content) configOptions.campaign_content = attribution.utm_content;
+  if (attribution.utm_id) configOptions.campaign_id = attribution.utm_id;
 
   if (isDebugMode()) {
     configOptions.debug_mode = true;
@@ -165,23 +184,139 @@ export const updateGA4Consent = (
 
 /**
  * Tracks route navigation as page_view events without duplicates.
+ * Enriches event parameters with active campaign attribution (e.g. constil_usa_traffic_oct2026,
+ * fb/ig paid_social) when available.
  */
-export const trackGAPageView = (path: string, title?: string) => {
+export const trackGAPageView = (
+  path: string,
+  title?: string,
+  customParams: Record<string, unknown> = {}
+) => {
   if (typeof window === 'undefined' || !window.gtag) return;
   if (window[`ga-disable-${GA_MEASUREMENT_ID}`]) return;
 
+  const attribution = getStoredAttribution();
+  const pageLocation = typeof window !== 'undefined'
+    ? decorateUrlWithAttribution(window.location.href, attribution)
+    : '';
+
   const eventParams: Record<string, unknown> = {
     page_path: path,
-    page_location: window.location.href,
+    page_location: pageLocation || (typeof window !== 'undefined' ? window.location.href : ''),
     page_title: title || (typeof document !== 'undefined' ? document.title : ''),
     send_to: GA_MEASUREMENT_ID,
+    ...customParams,
   };
+
+  // Official GA4 campaign parameters for native Session attribution
+  if (attribution.utm_campaign) {
+    eventParams.campaign_name = attribution.utm_campaign;
+    eventParams.campaign = attribution.utm_campaign;
+  }
+  if (attribution.utm_source) {
+    eventParams.campaign_source = attribution.utm_source;
+    eventParams.source = attribution.utm_source;
+  }
+  if (attribution.utm_medium) {
+    eventParams.campaign_medium = attribution.utm_medium;
+    eventParams.medium = attribution.utm_medium;
+  }
+  if (attribution.utm_term) {
+    eventParams.campaign_term = attribution.utm_term;
+    eventParams.term = attribution.utm_term;
+  }
+  if (attribution.utm_content) {
+    eventParams.campaign_content = attribution.utm_content;
+    eventParams.content = attribution.utm_content;
+  }
+  if (attribution.utm_id) {
+    eventParams.campaign_id = attribution.utm_id;
+  }
 
   if (isDebugMode()) {
     eventParams.debug_mode = true;
   }
 
   window.gtag('event', 'page_view', eventParams);
+};
+
+/**
+ * Tracks user initiating signup (e.g., clicking on CTA to app.constil.com/signup or viewing signup form)
+ */
+export const trackGASignupStarted = (customParams: Record<string, unknown> = {}) => {
+  if (typeof window === 'undefined' || !window.gtag) return;
+  if (window[`ga-disable-${GA_MEASUREMENT_ID}`]) return;
+
+  const attribution = getStoredAttribution();
+
+  const eventParams: Record<string, unknown> = {
+    send_to: GA_MEASUREMENT_ID,
+    ...customParams,
+  };
+
+  if (attribution.utm_campaign) eventParams.campaign = attribution.utm_campaign;
+  if (attribution.utm_source) eventParams.source = attribution.utm_source;
+  if (attribution.utm_medium) eventParams.medium = attribution.utm_medium;
+
+  if (isDebugMode()) {
+    eventParams.debug_mode = true;
+  }
+
+  window.gtag('event', 'signup_started', eventParams);
+};
+
+/**
+ * Tracks verified signup completion
+ */
+export const trackGASignupCompleted = (customParams: Record<string, unknown> = {}) => {
+  if (typeof window === 'undefined' || !window.gtag) return;
+  if (window[`ga-disable-${GA_MEASUREMENT_ID}`]) return;
+
+  const attribution = getStoredAttribution();
+
+  const eventParams: Record<string, unknown> = {
+    method: 'email',
+    send_to: GA_MEASUREMENT_ID,
+    ...customParams,
+  };
+
+  if (attribution.utm_campaign) eventParams.campaign = attribution.utm_campaign;
+  if (attribution.utm_source) eventParams.source = attribution.utm_source;
+  if (attribution.utm_medium) eventParams.medium = attribution.utm_medium;
+
+  if (isDebugMode()) {
+    eventParams.debug_mode = true;
+  }
+
+  window.gtag('event', 'sign_up', eventParams);
+};
+
+/**
+ * Tracks custom analytics events while attaching attribution context
+ */
+export const trackGACustomEvent = (
+  eventName: string,
+  customParams: Record<string, unknown> = {}
+) => {
+  if (typeof window === 'undefined' || !window.gtag) return;
+  if (window[`ga-disable-${GA_MEASUREMENT_ID}`]) return;
+
+  const attribution = getStoredAttribution();
+
+  const eventParams: Record<string, unknown> = {
+    send_to: GA_MEASUREMENT_ID,
+    ...customParams,
+  };
+
+  if (attribution.utm_campaign) eventParams.campaign = attribution.utm_campaign;
+  if (attribution.utm_source) eventParams.source = attribution.utm_source;
+  if (attribution.utm_medium) eventParams.medium = attribution.utm_medium;
+
+  if (isDebugMode()) {
+    eventParams.debug_mode = true;
+  }
+
+  window.gtag('event', eventName, eventParams);
 };
 
 /**

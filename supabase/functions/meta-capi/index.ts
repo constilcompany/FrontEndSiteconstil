@@ -164,7 +164,7 @@ serve(async (req) => {
 
     // 2. Origin Verification (CORS protection)
     const origin = req.headers.get('origin') || req.headers.get('referer') || '';
-    const isAllowed = origin === '' || origin.startsWith('http://localhost:') || origin.startsWith('https://constil.com') || origin.startsWith('https://www.constil.com') || origin.startsWith('https://lovable.dev');
+    const isAllowed = origin === '' || origin.startsWith('http://localhost:') || origin.startsWith('https://constil.com') || origin.startsWith('https://www.constil.com') || origin.startsWith('https://app.constil.com') || origin.startsWith('https://lovable.dev');
     
     if (!isAllowed) {
       return new Response(JSON.stringify({ error: "Forbidden Origin" }), { status: 403, headers: corsHeaders })
@@ -186,7 +186,7 @@ serve(async (req) => {
     try {
       const parsedUrl = new URL(event_source_url);
       const hostname = parsedUrl.hostname;
-      if (hostname !== 'localhost' && hostname !== 'constil.com' && hostname !== 'www.constil.com' && !hostname.endsWith('.lovable.dev')) {
+      if (hostname !== 'localhost' && hostname !== 'constil.com' && hostname !== 'www.constil.com' && hostname !== 'app.constil.com' && !hostname.endsWith('.lovable.dev')) {
         return new Response(JSON.stringify({ error: "Invalid event_source_url domain" }), { status: 403, headers: corsHeaders })
       }
     } catch {
@@ -199,7 +199,18 @@ serve(async (req) => {
     }
 
     // Prevent malicious or random event injection (Whitelist)
-    const allowedEvents = ['PageView', 'ViewContent', 'Lead'];
+    const allowedEvents = [
+      'PageView',
+      'ViewContent',
+      'Lead',
+      'CompleteRegistration',
+      'signup_started',
+      'blueprint_upload_started',
+      'blueprint_uploaded',
+      'generate_estimate_clicked',
+      'estimate_generated',
+      'estimate_failed'
+    ];
     if (!allowedEvents.includes(event_name)) {
       return new Response(JSON.stringify({ error: "Unauthorized event type", ip: ipResult.ip, verified: ipResult.isVerified }), { status: 403, headers: corsHeaders })
     }

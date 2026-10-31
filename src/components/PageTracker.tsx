@@ -9,7 +9,12 @@ export const PageTracker = ({ contentName }: { contentName: string }) => {
   const tracked = useRef(false);
 
   useEffect(() => {
-    if (hasConsent && !tracked.current) {
+    if (!hasConsent) {
+      tracked.current = false;
+      return;
+    }
+
+    if (!tracked.current) {
       const eventId = uuidv4();
       
       // Fire browser pixel event with deduplication ID

@@ -7,19 +7,35 @@ export const CookieConsent = ({ onConsentChange }: { onConsentChange: (consent: 
   const [currentStatus, setCurrentStatus] = useState<string | null>(null);
 
   useEffect(() => {
+    const preferencesRaw = localStorage.getItem('cookiePreferences');
+    if (preferencesRaw) {
+      try {
+        const prefs = JSON.parse(preferencesRaw);
+        const hasAnalytics = Boolean(prefs.analytics);
+        const hasAdvertising = Boolean(prefs.advertising);
+        setCurrentStatus(hasAnalytics || hasAdvertising ? 'accepted' : 'rejected');
+        onConsentChange(hasAnalytics || hasAdvertising);
+        initPixel(hasAdvertising);
+        initGA4(hasAnalytics, hasAdvertising);
+        return;
+      } catch {
+        // Fallback to legacy string format
+      }
+    }
+
     const consent = localStorage.getItem('cookieConsent');
     setCurrentStatus(consent);
     if (consent === 'accepted') {
       onConsentChange(true);
       initPixel(true);
-      initGA4(true);
+      initGA4(true, true);
     } else if (consent === 'rejected') {
       onConsentChange(false);
       initPixel(false);
-      initGA4(false);
+      initGA4(false, false);
     } else {
       initPixel(false);
-      initGA4(false);
+      initGA4(false, false);
       setIsVisible(true);
     }
   }, [onConsentChange]);
@@ -38,20 +54,22 @@ export const CookieConsent = ({ onConsentChange }: { onConsentChange: (consent: 
 
   const handleAccept = () => {
     localStorage.setItem('cookieConsent', 'accepted');
+    localStorage.setItem('cookiePreferences', JSON.stringify({ analytics: true, advertising: true }));
     setCurrentStatus('accepted');
     setIsVisible(false);
     onConsentChange(true);
     updateConsent(true);
-    updateGA4Consent(true);
+    updateGA4Consent(true, true);
   };
 
   const handleReject = () => {
     localStorage.setItem('cookieConsent', 'rejected');
+    localStorage.setItem('cookiePreferences', JSON.stringify({ analytics: false, advertising: false }));
     setCurrentStatus('rejected');
     setIsVisible(false);
     onConsentChange(false);
     updateConsent(false);
-    updateGA4Consent(false);
+    updateGA4Consent(false, false);
   };
 
   if (!isVisible) return null;

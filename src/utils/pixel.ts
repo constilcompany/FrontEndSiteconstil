@@ -1,3 +1,5 @@
+import { getStoredAttribution } from './attribution';
+
 declare global {
   interface Window {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -8,6 +10,25 @@ declare global {
 }
 
 export const PIXEL_ID = import.meta.env.VITE_META_PIXEL_ID || '1394045752925191';
+
+/**
+ * Safely writes a cookie scoped to the root domain in production (.constil.com)
+ */
+const writeMetaCookie = (name: string, value: string, maxAgeSeconds: number = 7776000) => {
+  if (typeof document === 'undefined') return;
+  try {
+    let cookieStr = `${name}=${value}; max-age=${maxAgeSeconds}; path=/; SameSite=Lax`;
+    if (typeof window !== 'undefined' && window.location) {
+      const hostname = window.location.hostname;
+      if (hostname.endsWith('constil.com') && !hostname.startsWith('localhost')) {
+        cookieStr += '; domain=.constil.com';
+      }
+    }
+    document.cookie = cookieStr;
+  } catch {
+    // Ignore cookie write errors in sandboxed environments
+  }
+};
 
 export const initPixel = (hasConsent: boolean) => {
   if (!hasConsent) return;
@@ -79,14 +100,30 @@ export const getMetaCookies = () => {
     return match ? match[2] : undefined;
   };
   
+  let fbp = getCookie('_fbp');
+  // If _fbp is not yet populated by fbevents.js, generate standard Meta _fbp
+  // so browser events and server CAPI share the exact same identifier from first event
+  if (!fbp && typeof window !== 'undefined') {
+    fbp = `fb.1.${Date.now()}.${Math.floor(1000000000 + Math.random() * 9000000000)}`;
+    writeMetaCookie('_fbp', fbp);
+  }
+
   let fbc = getCookie('_fbc');
-  // Fallback: If _fbc cookie is not set yet, extract fbclid from URL if available
+  // Fallback: If _fbc cookie is not set yet, extract fbclid from URL or stored attribution
   if (!fbc && typeof window !== 'undefined' && window.location) {
     try {
-      const urlParams = new URLSearchParams(window.location.search);
-      const fbclid = urlParams.get('fbclid');
+      let fbclid: string | null = null;
+      if (window.location.search) {
+        const urlParams = new URLSearchParams(window.location.search);
+        fbclid = urlParams.get('fbclid');
+      }
+      if (!fbclid) {
+        const stored = getStoredAttribution();
+        fbclid = stored.fbclid || null;
+      }
       if (fbclid) {
         fbc = `fb.1.${Date.now()}.${fbclid}`;
+        writeMetaCookie('_fbc', fbc);
       }
     } catch {
       // Ignore query parsing errors
@@ -94,14 +131,26 @@ export const getMetaCookies = () => {
   }
 
   return {
-    fbp: getCookie('_fbp'),
-    fbc: fbc
+    fbp,
+    fbc
   };
 };
 
 export const trackLead = (data: Record<string, unknown> = {}, eventId?: string) => {
   if (typeof window !== 'undefined' && window.fbq) {
     window.fbq('track', 'Lead', data, { eventID: eventId });
+  }
+};
+
+export const trackCompleteRegistration = (data: Record<string, unknown> = {}, eventId?: string) => {
+  if (typeof window !== 'undefined' && window.fbq) {
+    window.fbq('track', 'CompleteRegistration', data, { eventID: eventId });
+  }
+};
+
+export const trackCustomEvent = (eventName: string, data: Record<string, unknown> = {}, eventId?: string) => {
+  if (typeof window !== 'undefined' && window.fbq) {
+    window.fbq('trackCustom', eventName, data, { eventID: eventId });
   }
 };
 
