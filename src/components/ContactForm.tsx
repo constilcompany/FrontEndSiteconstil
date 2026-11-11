@@ -7,6 +7,8 @@ import axios from "axios";
 import { v4 as uuidv4 } from "uuid";
 import { trackLead, hashMetaField, getMetaCookies } from "@/utils/pixel";
 import { trackGAGenerateLead } from "@/utils/analytics";
+import { trackGAEvent } from "@/lib/analytics";
+import { getGA4VisitorParams } from "@/lib/visitorContext";
 import { useConsent } from "@/contexts/ConsentContext";
 import { supabase } from "@/lib/supabase";
 import Celebration from "./Celebration";
@@ -45,6 +47,10 @@ const ContactForm = () => {
           trackGAGenerateLead({
             form_name: "contact_form",
           });
+          trackGAEvent('lead_form_submitted', {
+            form_name: 'contact_page',
+            ...getGA4VisitorParams(),
+          });
 
           // Prepare server-side EMQ payload
           const hashedEmail = await hashMetaField(form.email, 'email');
@@ -59,6 +65,7 @@ const ContactForm = () => {
               event_name: "Lead",
               event_id: eventId,
               event_source_url: window.location.href,
+              consent: true,
               user_data: {
                 em: hashedEmail,
                 ph: hashedPhone,

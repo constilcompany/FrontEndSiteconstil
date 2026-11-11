@@ -5,8 +5,16 @@ import {
   updateGA4Consent,
   trackGAPageView,
   trackGAGenerateLead,
+  trackGAEvent,
   GA_MEASUREMENT_ID,
 } from '../utils/analytics';
+import {
+  getVisitorContextSync,
+  getGA4VisitorParams,
+  getFullForensicLeadPayload,
+  recordNavigationBreadcrumb,
+  getNavigationHistory,
+} from '../lib/visitorContext';
 
 describe('Google Analytics 4 (GA4) Production Readiness Audit', () => {
   beforeEach(() => {
@@ -214,6 +222,216 @@ describe('Google Analytics 4 (GA4) Production Readiness Audit', () => {
   describe('7 & 8. Measurement ID Validation', () => {
     it('uses the active production measurement ID G-E16MPY5M0L', () => {
       expect(GA_MEASUREMENT_ID).toBe('G-E16MPY5M0L');
+    });
+  });
+
+  describe('9. Centralized trackGAEvent and Comprehensive Event Emitters', () => {
+    it('safely calls window.gtag("event", ...) when gtag is available', () => {
+      initConsentDefaults();
+      initGA4(true);
+
+      const gtagSpy = vi.fn();
+      window.gtag = gtagSpy;
+
+      trackGAEvent('page_dwell_time', {
+        page_path: '/estimates-software',
+        duration_seconds: 45,
+      });
+
+      expect(gtagSpy).toHaveBeenCalledWith(
+        'event',
+        'page_dwell_time',
+        expect.objectContaining({
+          page_path: '/estimates-software',
+          duration_seconds: 45,
+          send_to: GA_MEASUREMENT_ID,
+        })
+      );
+    });
+
+    it('emits lead_form_submitted for all form sources', () => {
+      initConsentDefaults();
+      initGA4(true);
+
+      const gtagSpy = vi.fn();
+      window.gtag = gtagSpy;
+
+      trackGAEvent('lead_form_submitted', { form_name: 'lead_modal' });
+      trackGAEvent('lead_form_submitted', { form_name: 'salesbot' });
+      trackGAEvent('lead_form_submitted', { form_name: 'contact_page' });
+
+      expect(gtagSpy).toHaveBeenCalledTimes(3);
+      expect(gtagSpy).toHaveBeenNthCalledWith(1, 'event', 'lead_form_submitted', expect.objectContaining({ form_name: 'lead_modal' }));
+      expect(gtagSpy).toHaveBeenNthCalledWith(2, 'event', 'lead_form_submitted', expect.objectContaining({ form_name: 'salesbot' }));
+      expect(gtagSpy).toHaveBeenNthCalledWith(3, 'event', 'lead_form_submitted', expect.objectContaining({ form_name: 'contact_page' }));
+    });
+
+    it('emits scroll_milestone events correctly', () => {
+      initConsentDefaults();
+      initGA4(true);
+
+      const gtagSpy = vi.fn();
+      window.gtag = gtagSpy;
+
+      trackGAEvent('scroll_milestone', { percent: 50, page_path: '/' });
+
+      expect(gtagSpy).toHaveBeenCalledWith(
+        'event',
+        'scroll_milestone',
+        expect.objectContaining({
+          percent: 50,
+          page_path: '/',
+        })
+      );
+    });
+
+    it('emits cta_button_click and form_start events correctly', () => {
+      initConsentDefaults();
+      initGA4(true);
+
+      const gtagSpy = vi.fn();
+      window.gtag = gtagSpy;
+
+      trackGAEvent('cta_button_click', {
+        button_text: 'Get Started',
+        destination: 'signup_or_contact',
+        page_path: '/',
+      });
+
+      trackGAEvent('form_start', {
+        form_name: 'lead_modal',
+        form_id: 'lead_modal',
+        page_path: '/',
+      });
+
+      expect(gtagSpy).toHaveBeenCalledWith(
+        'event',
+        'cta_button_click',
+        expect.objectContaining({
+          button_text: 'Get Started',
+          destination: 'signup_or_contact',
+        })
+      );
+
+      expect(gtagSpy).toHaveBeenCalledWith(
+        'event',
+        'form_start',
+        expect.objectContaining({
+          form_name: 'lead_modal',
+        })
+      );
+    });
+
+    it('does not emit events when user consent is revoked / disabled', () => {
+      initConsentDefaults();
+      initGA4(false);
+
+      const gtagSpy = vi.fn();
+      window.gtag = gtagSpy;
+
+      trackGAEvent('cta_button_click', { button_text: 'Get Started' });
+      expect(gtagSpy).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('Deep Visitor Forensics & Journey Tracking', () => {
+    beforeEach(() => {
+      localStorage.clear();
+      sessionStorage.clear();
+    });
+
+    it('persists a unique visitor_id across calls and detects new vs returning visitors', () => {
+      // First visit
+      const ctx1 = getVisitorContextSync();
+      expect(ctx1.visitor_id).toBeDefined();
+      expect(ctx1.is_new_user).toBe(true);
+      expect(ctx1.session_count).toBe(1);
+
+      // Subsequent call in the same session
+      const ctx2 = getVisitorContextSync();
+      expect(ctx2.visitor_id).toBe(ctx1.visitor_id);
+      expect(ctx2.is_new_user).toBe(false); // Already stored
+      expect(ctx2.session_count).toBe(1);
+    });
+
+    it('tracks journey breadcrumbs without immediate duplicate repeats', () => {
+      recordNavigationBreadcrumb('/');
+      recordNavigationBreadcrumb('/services');
+      recordNavigationBreadcrumb('/services'); // should not duplicate
+      recordNavigationBreadcrumb('/pricing');
+      recordNavigationBreadcrumb('/contact');
+
+      const history = getNavigationHistory();
+      expect(history).toEqual(['/', '/services', '/pricing', '/contact']);
+    });
+
+    it('ensures getGA4VisitorParams complies with Google Analytics TOS by NOT including raw IP address', () => {
+      sessionStorage.setItem('constil_geo_cache', JSON.stringify({
+        ip_address: '198.51.100.42',
+        city: 'Dallas',
+        region: 'Texas',
+        country: 'United States',
+      }));
+
+      const gaParams = getGA4VisitorParams();
+
+      // STRICT PRIVACY CHECK: raw IP must never be passed to GA4
+      expect(gaParams).not.toHaveProperty('ip_address');
+      expect(gaParams).not.toHaveProperty('ip');
+      expect(gaParams.geo_city).toBe('Dallas');
+      expect(gaParams.geo_country).toBe('United States');
+      expect(gaParams.visitor_id).toBeDefined();
+    });
+
+    it('getFullForensicLeadPayload returns complete internal forensics including IP and breadcrumbs', async () => {
+      sessionStorage.setItem('constil_geo_cache', JSON.stringify({
+        ip_address: '203.0.113.195',
+        city: 'Chicago',
+        region: 'Illinois',
+        country: 'United States',
+        asn_org: 'AS15169 Google LLC',
+      }));
+
+      recordNavigationBreadcrumb('/');
+      recordNavigationBreadcrumb('/pricing');
+
+      const leadPayload = await getFullForensicLeadPayload();
+
+      expect(leadPayload.ip_address).toBe('203.0.113.195');
+      expect(leadPayload.city).toBe('Chicago');
+      expect(leadPayload.country).toBe('United States');
+      expect(leadPayload.navigation_history).toEqual(['/', '/pricing']);
+      expect(leadPayload.visitor_id).toBeDefined();
+      expect(leadPayload.screen_resolution).toBeDefined();
+    });
+
+    it('emits page_navigation event with journey and dwell metadata', () => {
+      initConsentDefaults();
+      initGA4(true);
+
+      const gtagSpy = vi.fn();
+      window.gtag = gtagSpy;
+
+      trackGAEvent('page_navigation', {
+        from_path: '/',
+        to_path: '/pricing',
+        dwell_time_seconds: 42,
+        scroll_depth_percent: 75,
+        is_new_visitor: true,
+        referrer: 'https://google.com',
+      });
+
+      expect(gtagSpy).toHaveBeenCalledWith(
+        'event',
+        'page_navigation',
+        expect.objectContaining({
+          from_path: '/',
+          to_path: '/pricing',
+          dwell_time_seconds: 42,
+          scroll_depth_percent: 75,
+          is_new_visitor: true,
+        })
+      );
     });
   });
 });

@@ -27,6 +27,8 @@ import PaymentTrackingManagementPage from "./pages/PaymentTrackingManagementPage
 import AdminLogin from "./pages/admin/AdminLogin";
 import BlogDashboard from "./pages/admin/BlogDashboard";
 import ScrollToTop from "./components/ScrollToTop";
+import { LeadCaptureModal } from "./components/LeadCaptureModal";
+import { SalesBotWidget } from "./components/SalesBotWidget";
 
 
 const queryClient = new QueryClient();
@@ -57,6 +59,8 @@ const App = () => {
         <ConsentProvider hasConsent={hasConsent}>
           <MetaPixel hasConsent={hasConsent} />
           <GoogleAnalytics hasConsent={hasConsent} />
+          <LeadCaptureModal />
+          <SalesBotWidget />
           <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/smart-construction" element={<SmartConstructionPage />} />

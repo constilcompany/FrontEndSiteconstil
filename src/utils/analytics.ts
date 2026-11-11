@@ -339,3 +339,6 @@ export const trackGAGenerateLead = (customParams: Record<string, unknown> = {}) 
 
   window.gtag('event', 'generate_lead', eventParams);
 };
+
+export { trackGAEvent } from '../lib/analytics';
+

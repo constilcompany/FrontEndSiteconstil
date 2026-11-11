@@ -30,6 +30,7 @@ export const MetaPixel = ({ hasConsent }: { hasConsent: boolean }) => {
           event_source_url: window.location.href,
           fbp: cookies.fbp,
           fbc: cookies.fbc,
+          consent: true,
         }
       }).catch(err => console.error('CAPI Error:', err));
     }

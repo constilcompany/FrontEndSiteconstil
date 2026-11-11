@@ -30,6 +30,7 @@ export const PageTracker = ({ contentName }: { contentName: string }) => {
           content_name: contentName,
           fbp: cookies.fbp,
           fbc: cookies.fbc,
+          consent: true,
         }
       }).catch(err => console.error('CAPI Error:', err));
       
