@@ -26,6 +26,7 @@ import AboutPage from "./pages/AboutPage";
 import PaymentTrackingManagementPage from "./pages/PaymentTrackingManagementPage";
 import AdminLogin from "./pages/admin/AdminLogin";
 import BlogDashboard from "./pages/admin/BlogDashboard";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
 import ScrollToTop from "./components/ScrollToTop";
 import { LeadCaptureModal } from "./components/LeadCaptureModal";
 import { SalesBotWidget } from "./components/SalesBotWidget";
@@ -83,6 +84,9 @@ const App = () => {
           <Route path="/invoices_management" element={<PreserveQueryNavigate to="/invoices-management-software" />} />
           <Route path="/admin" element={<AdminLogin />} />
           <Route path="/admin/dashboard" element={<BlogDashboard />} />
+          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+          <Route path="/privacy" element={<PreserveQueryNavigate to="/privacy-policy" />} />
+          <Route path="/privacypolicy" element={<PreserveQueryNavigate to="/privacy-policy" />} />
 
           <Route path="*" element={<NotFound />} />
           </Routes>

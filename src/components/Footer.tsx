@@ -19,6 +19,7 @@ const navLinks = [
   { to: "/about", label: "About" },
   { to: "/contact", label: "Contact" },
   { to: "/blogs", label: "Blogs" },
+  { to: "/privacy-policy", label: "Privacy Policy" },
 ];
 
 const serviceLinks = [
@@ -59,7 +60,12 @@ const Footer = () => (
           <SectionTitle>Company</SectionTitle>
           <nav className="flex flex-col items-start gap-2.5">
             {navLinks.map((link) => (
-              <Link key={link.to} to={link.to} className={linkClass}>
+              <Link
+                key={link.to}
+                to={link.to}
+                onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+                className={linkClass}
+              >
                 {link.label}
               </Link>
             ))}
@@ -128,6 +134,14 @@ const Footer = () => (
       {/* Divider + Copyright & Cookie Preferences */}
       <div className="mt-10 md:mt-12 pt-6 md:pt-8 border-t border-primary-foreground/10 text-center text-xs text-primary-foreground/40 flex flex-col sm:flex-row items-center justify-center gap-2">
         <span>&copy; {new Date().getFullYear()} CONSTIL. All rights reserved.</span>
+        <span className="hidden sm:inline">&bull;</span>
+        <Link
+          to="/privacy-policy"
+          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+          className="hover:text-primary text-primary-foreground/60 transition-colors cursor-pointer underline underline-offset-2"
+        >
+          Privacy Policy
+        </Link>
         <span className="hidden sm:inline">&bull;</span>
         <button
           type="button"
