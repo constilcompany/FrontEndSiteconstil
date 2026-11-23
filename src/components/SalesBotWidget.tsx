@@ -14,6 +14,7 @@ import axios from "axios";
 import { supabase } from "@/lib/supabase";
 import { trackGAEvent } from "@/lib/analytics";
 import { getFullForensicLeadPayload, getGA4VisitorParams } from "@/lib/visitorContext";
+import { useToast } from "@/hooks/use-toast";
 
 interface ActionLink {
   label: string;
@@ -526,6 +527,7 @@ export const SalesBotWidget: React.FC = () => {
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const { toast } = useToast();
 
   // 1. Auto-Open on Page Visit (Automatically pop up 6 to 8 seconds after landing)
   useEffect(() => {
@@ -670,12 +672,18 @@ export const SalesBotWidget: React.FC = () => {
       ...getGA4VisitorParams(),
     });
 
-    // Explicit alert and log as requested
     if (result.error) {
-      alert("Lead submitted: " + (result.error.message || JSON.stringify(result.error)));
+      toast({
+        title: "We couldn't save your details",
+        description: "Please try again in a moment — your information hasn't been sent yet.",
+        variant: "destructive",
+      });
       console.error("Chatbot lead submission error:", result.error);
     } else {
-      alert("Lead submitted: SUCCESS");
+      toast({
+        title: "You're all set! 🎉",
+        description: "Your details were received. Your test credits are being set up and Alex will be right with you.",
+      });
       console.log("Chatbot lead submission SUCCESS:", result.data);
 
       setIsLeadCaptured(true);
@@ -832,8 +840,8 @@ export const SalesBotWidget: React.FC = () => {
 
   return (
     <>
-      {/* Floating Toggle Button (Positioned at bottom-[88px] right-6 directly above the bottom chat button) */}
-      <div className="fixed bottom-[88px] right-6 z-50">
+      {/* Floating Toggle Button (bottom-right corner) */}
+      <div className="fixed bottom-6 right-6 z-50">
         <button
           onClick={() => {
             if (isOpen) {
@@ -878,7 +886,7 @@ export const SalesBotWidget: React.FC = () => {
         </button>
       </div>
 
-      {/* Floating Chat Card (Positioned cleanly at bottom-[152px] right-4 sm:right-6 above both buttons) */}
+      {/* Floating Chat Card (sits just above the toggle button) */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
@@ -886,7 +894,7 @@ export const SalesBotWidget: React.FC = () => {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
             transition={{ duration: 0.22, ease: "easeOut" }}
-            className="fixed bottom-[152px] right-4 sm:right-6 z-50 w-[calc(100vw-2rem)] sm:w-[410px] h-[580px] max-h-[calc(100vh-170px)] bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-800 flex flex-col overflow-hidden"
+            className="fixed bottom-[88px] right-4 sm:right-6 z-50 w-[calc(100vw-2rem)] sm:w-[410px] h-[580px] max-h-[calc(100vh-112px)] bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-800 flex flex-col overflow-hidden"
           >
             {/* Header */}
             <div className="flex items-center justify-between px-4 py-3.5 bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 text-white border-b border-slate-700/50">
